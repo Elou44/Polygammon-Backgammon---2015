@@ -3,14 +3,15 @@ Project realised by engineering students of Polytech'Nantes (French engineering 
 
 Voilà , il est temps de s'y mettre ! 
 
-Récapitulatif des tâches : 
+## Récapitulatif des tâches : 
 
-Groupe 1 : Freddy & Varou 
+#### Groupe IA : Freddy & Varou 
+- les deux zozos sur l'IA
 
 
-
-Groupe 2 : Elou, Ambre & Oliver
-
+#### Groupe IHM & Arbitre : Elou, Ambre & Oliver
+- Elou & Oliver : Graphisme et interface
+- Ambre : Arbitre
 
 ### Commandes Git: ###
 
