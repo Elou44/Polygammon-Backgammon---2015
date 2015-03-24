@@ -1,4 +1,5 @@
 # Polygammon-Backgammon---2015
+# PS : Windows c'est de la merde !! (Ambre dira pas le contraire)
 Project realised by engineering students of Polytech'Nantes (French engineering school)
 
 Voilà , il est temps de s'y mettre ! 
