@@ -11,7 +11,7 @@
 #if OS == 0
    #include <windows.h>
 #elif OS == 1
-   #include <dlfnc.h>
+   #include <dlfcn.h>
 #endif
 
 // Include Windows //
