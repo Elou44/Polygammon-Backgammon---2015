@@ -6,7 +6,7 @@
 #include <time.h>
 #include "functions.h"
 
-#define OS 0 // 0 = Windows | 1 = Linux
+#define OS 1 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -129,7 +129,7 @@ int main ( int argc, char** argv )
             return(false);
         }
 
-        if((InitLibrary=(pfInitLibrary)dlsym(lib,"InitLabrary"))==NULL)
+        if((InitLibrary=(pfInitLibrary)dlsym(lib,"InitLibrary"))==NULL)
         {
             printf("could not locate the function InitLibrary");
             return EXIT_FAILURE;
