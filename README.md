@@ -17,7 +17,7 @@ Voilà , il est temps de s'y mettre !
 ## Compilation :
 - gcc -o PolygammonLinux main.c \`sdl-config --cflags --libs\`  (sous Linux)
 - compiler seulement avec CodeBlocks (une fois paramétré) 
-\n(pour obtenir le caractère " ` " taper ALTGR + 7 (PAS celui du pavé numérique) puis ESPACE)
+- (pour obtenir le caractère " ` " taper ALTGR + 7 (PAS celui du pavé numérique) puis ESPACE)
 
 ## Paramétrage de CodeBlocks :
 vous pouvez coder sur CodeBlocks (sous Windows)  mais pour que ça marche, il faut d'abord configurer votre CodeBlocks
