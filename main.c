@@ -4,6 +4,15 @@
 #include <unistd.h>
 #include <SDL/SDL.h>
 #include <time.h>
+#include "functions.h"
+
+#define OS 0 // 0 = Windows | 1 = Linux
+
+#if OS == 0
+   #include <windows.h>
+#elif OS == 1
+   #include <dlfnc.h>
+#endif
 
 // Include Windows //
 
@@ -42,6 +51,69 @@ void rectDirAlloc(SDL_Rect *dstrectTab, int **tabDir, int nbRect)
 
 int main ( int argc, char** argv )
 {
+
+    //************** CHARGEMENT DE L'API ***************//
+
+    #if OS == 0
+    // ON WINDOWS
+        HINSTANCE hGetProcIDDLL = LoadLibrary("backgammonAPI.dll");
+
+        if (!hGetProcIDDLL) {
+            printf("could not load the lib");
+            return EXIT_FAILURE;
+        }
+
+        // resolve function address here
+
+        pfInitLibrary InitLibrary = (pfInitLibrary)GetProcAddress(hGetProcIDDLL, "InitLibrary");
+        if (!InitLibrary) {
+            printf("could not locate the function InitLibrary");
+            return EXIT_FAILURE;
+        }
+        pfStartMatch StartMatch = (pfStartMatch)GetProcAddress(hGetProcIDDLL, "StartMatch");
+        if (!StartMatch) {
+            printf("could not locate the function StartMatch");
+            return EXIT_FAILURE;
+        }
+        pfStartGame StartGame = (pfStartGame)GetProcAddress(hGetProcIDDLL, "StartGame");
+        if (!StartGame) {
+            printf("could not locate the function StartGame");
+            return EXIT_FAILURE;
+        }
+        pfEndGame EndGame = (pfEndGame)GetProcAddress(hGetProcIDDLL, "EndGame");
+        if (!EndGame) {
+            printf("could not locate the function EndGame");
+            return EXIT_FAILURE;
+        }
+        pfEndMatch EndMatch = (pfEndMatch)GetProcAddress(hGetProcIDDLL, "EndMatch");
+        if (!EndMatch) {
+            printf("could not locate the function EndMatch");
+            return EXIT_FAILURE;
+        }
+        pfDoubleStack DoubleStack = (pfDoubleStack)GetProcAddress(hGetProcIDDLL, "DoubleStack");
+        if (!DoubleStack) {
+            printf("could not locate the function DoubleStack");
+            return EXIT_FAILURE;
+        }
+        pfTakeDouble TakeDouble = (pfTakeDouble)GetProcAddress(hGetProcIDDLL, "TakeDouble");
+        if (!TakeDouble) {
+            printf("could not locate the function TakeDouble");
+            return EXIT_FAILURE;
+        }
+        pfPlayTurn PlayTurn = (pfPlayTurn)GetProcAddress(hGetProcIDDLL, "PlayTurn");
+        if (!PlayTurn) {
+            printf("could not locate the function PlayTurn");
+            return EXIT_FAILURE;
+        }
+    #elif OS == 1
+
+    // ON LINUX
+
+
+    #endif // if
+
+    EndGame();
+
     // initialize SDL video
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
@@ -52,7 +124,7 @@ int main ( int argc, char** argv )
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-    int sWidth=640, sHeigth=320;
+    int sWidth=640, sHeigth=640;
     // create a new window
     SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 16,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
@@ -138,6 +210,7 @@ int main ( int argc, char** argv )
 
         // finally, update the screen :)
         SDL_Flip(screen);
+        SDL_Delay(30);
     } // end main loop
 
     // free loaded bitmap
