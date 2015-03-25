@@ -24,8 +24,8 @@ Suivez les instructions suivantes :
 - Copy SDL.dll from inside the bin folder to the your compilers bin directory (ie C:\Mingw\bin) This allows the compiler to find the dll at runtime time without having to put it in the same folder as your program or in the windows folder.
 - Copy the contents of lib to your compiler's lib folder. If MinGW is installed under C:\MinGW, then this will be C:\MinGW\lib.
 - Copy the complete folder SDL from inside the folder include to your compiler's include directory (for example C:\MinGW\include). Be sure to copy the folder, not the individual files.
--Optionally, copy SDL.dll to C:\Windows, too. This will save you from copying the dll to each and every project directory while developing. Be cautious, however, not to find yourself in DLL hell afterwards.
-    Screw the rest (in particular, forget about sdlconfig - it will not work) 
+- Optionally, copy SDL.dll to C:\Windows, too. This will save you from copying the dll to each and every project directory while developing. Be cautious, however, not to find yourself in DLL hell afterwards.
+
 
 ### Commandes Git: ###
 
