@@ -15,7 +15,7 @@ Voilà , il est temps de s'y mettre !
 - Ambre : Arbitre
 
 ## Compilation :
-- gcc -o PolygammonLinux main.c \`sdl-config --cflags --libs\`  (sous Linux)
+- gcc -o PolygammonLinux main.c \`sdl-config --cflags --libs\` -ldl  (sous Linux)
 - compiler seulement avec CodeBlocks (une fois paramétré) 
 - (pour obtenir le caractère " ` " taper ALTGR + 7 (PAS celui du pavé numérique) puis ESPACE)
 
