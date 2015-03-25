@@ -1,0 +1,4 @@
+#!/bin/bash
+gcc -Wall -o PolygammonLinux main.c `sdl-config --cflags --libs` -ldl
+
+echo "PolygammonLinux has been compiled successfully"
