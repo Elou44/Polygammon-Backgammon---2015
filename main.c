@@ -55,6 +55,7 @@ int main ( int argc, char** argv )
     //************** CHARGEMENT DE L'API ***************//
 
     #if OS == 0
+
     // ON WINDOWS
         HINSTANCE hGetProcIDDLL = LoadLibrary("backgammonAPI.dll");
 
@@ -105,10 +106,69 @@ int main ( int argc, char** argv )
             printf("could not locate the function PlayTurn");
             return EXIT_FAILURE;
         }
+
     #elif OS == 1
 
     // ON LINUX
 
+        void * lib;
+
+        pfInitLibrary InitLibrary;
+        pfStartMatch StartMatch;
+        pfStartGame StartGame;
+        pfEndGame EndGame;
+        pfEndMatch EndMatch;
+        pfDoubleStack DoubleStack;
+        pfTakeDouble TakeDouble;
+        pfPlayTurn PlayTurn;
+
+        if((lib=dlopen("backgammonAPI.so", RTLD_LAZY))==NULL)
+        {
+            // Erreur de chargement de la librairie
+            printf("error chargement lib");
+            return(false);
+        }
+
+        if((InitLibrary=(pfInitLibrary)dlsym(lib,"InitLabrary"))==NULL)
+        {
+            printf("could not locate the function InitLibrary");
+            return EXIT_FAILURE;
+        }
+        if((StartMatch=(pfStartMatch)dlsym(lib,"StartMatch"))==NULL)
+        {
+            printf("could not locate the function StartMatch");
+            return EXIT_FAILURE;
+        }
+        if((StartGame=(pfStartGame)dlsym(lib,"StartGame"))==NULL)
+        {
+            printf("could not locate the function StartGame");
+            return EXIT_FAILURE;
+        }
+        if((EndGame=(pfEndGame)dlsym(lib,"EndGame"))==NULL)
+        {
+            printf("could not locate the function EndGame");
+            return EXIT_FAILURE;
+        }
+        if((EndMatch=(pfEndMatch)dlsym(lib,"EndMatch"))==NULL)
+        {
+            printf("could not locate the function EndMatch");
+            return EXIT_FAILURE;
+        }
+        if((DoubleStack=(pfDoubleStack)dlsym(lib,"DoubleStack"))==NULL)
+        {
+            printf("could not locate the function DoubleStack");
+            return EXIT_FAILURE;
+        }
+        if((TakeDouble=(pfTakeDouble)dlsym(lib,"TakeDouble"))==NULL)
+        {
+            printf("could not locate the function TakeDouble");
+            return EXIT_FAILURE;
+        }
+        if((PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTurn"))==NULL)
+        {
+            printf("could not locate the function PlayTurn");
+            return EXIT_FAILURE;
+        }
 
     #endif // if
 
