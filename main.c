@@ -52,7 +52,7 @@ int main ( int argc, char** argv )
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-    int sWidth=1280, sHeigth=720;
+    int sWidth=640, sHeigth=320;
     // create a new window
     SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 16,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
@@ -73,7 +73,7 @@ int main ( int argc, char** argv )
     // centre the bitmap on screen
 
     srand(time(NULL));
-    int nbRect = 100,i;
+    int nbRect = 20,i;
     SDL_Rect *dstrectTab = (SDL_Rect*) calloc (nbRect,sizeof(SDL_Rect));;
     int **tabDir = (int**) calloc (nbRect,sizeof(int*));
     rectDirAlloc(dstrectTab,tabDir,nbRect);
