@@ -15,6 +15,7 @@ Voilà , il est temps de s'y mettre !
 - Ambre : Arbitre
 
 ## Compilation :
+export LD_LIBRARY_PATH=. (ajouter le répertoire courant pour chercher les librairies)
 - gcc -o PolygammonLinux main.c \`sdl-config --cflags --libs\` -ldl  (sous Linux)
 - compiler seulement avec CodeBlocks (une fois paramétré) 
 - (pour obtenir le caractère " ` " taper ALTGR + 7 (PAS celui du pavé numérique) puis ESPACE)
