@@ -1,6 +1,12 @@
 
 // DECLARATION DES POINTEURS DE FONCTIONS DE L'API //
 
+typedef struct {
+    unsigned int coulor; // 0 blanche 1 noire
+    SDL_Rect *rectDame; // position de l'image
+    SDL_Surface *dameSurf;
+} Dame;
+
 /**
  * @brief Définit quel joueur contrôle la case.
  *
