@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1427303954 source:d:\elouarn\etudes\sem 6\backgammon\git_repo\polygammon-backgammon---2015\main.c
+1427554275 source:d:\elouarn\etudes\sem 6\backgammon\git_repo\polygammon-backgammon---2015\main.c
 	<stdlib.h>
 	<stdio.h>
 	<stdbool.h>
@@ -8,7 +8,7 @@
 	<time.h>
 	"functions.h"
 	<windows.h>
-	<dlfnc.h>
+	<dlfcn.h>
 
 1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl.h
 	"SDL_main.h"

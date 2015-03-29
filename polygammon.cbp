@@ -42,6 +42,10 @@
 			<Add library="dxguid" />
 			<Add directory="A:/Logiciels/SDL/DevLib/SDL-1.2.15/lib" />
 		</Linker>
+		<Unit filename="functions.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -6,7 +6,7 @@
 #include <time.h>
 #include "functions.h"
 
-#define OS 1 // 0 = Windows | 1 = Linux
+#define OS 0 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -15,6 +15,11 @@
 #endif
 
 // Include Windows //
+
+typedef struct {
+    unsigned int coulor; // 0 blanche 1 noire
+    SDL_Rect *rectDame; // position de l'image
+} Dame;
 
 void drawMultipleRect(SDL_Surface* bmp,SDL_Surface* screen,SDL_Rect *dstrectTab, int nbRect)
 {
@@ -205,7 +210,7 @@ int main ( int argc, char** argv )
     // centre the bitmap on screen
 
     srand(time(NULL));
-    int nbRect = 20,i;
+    int nbRect = 5,i;
     SDL_Rect *dstrectTab = (SDL_Rect*) calloc (nbRect,sizeof(SDL_Rect));;
     int **tabDir = (int**) calloc (nbRect,sizeof(int*));
     rectDirAlloc(dstrectTab,tabDir,nbRect);
@@ -236,10 +241,24 @@ int main ( int argc, char** argv )
                         done = true;
                     break;
                 }
+            case SDL_MOUSEMOTION:
+                {
+                    if(event.button.button == SDL_BUTTON_LEFT)
+                    {
+                        printf("mouse position : %d %d\n",event.button.x,event.button.y);
+                        dstrectTab[0].x = event.button.x;
+                        dstrectTab[0].y = event.button.y;
+                    }
+
+                }
+
             } // end switch
         } // end of message processing
 
-        for(i=0;i<nbRect;i++)
+
+
+
+       /* for(i=0;i<nbRect;i++)
         {
             if((dstrectTab[i].x <= 0) || (dstrectTab[i].x >= sWidth - bmp->w))
             {
@@ -250,9 +269,9 @@ int main ( int argc, char** argv )
                 tabDir[i][1] *= (-1);
             }
 
-            dstrectTab[i].x += tabDir[i][0]*50;
-            dstrectTab[i].y += tabDir[i][1]*50;
-        }
+            dstrectTab[i].x += tabDir[i][0]*10;
+            dstrectTab[i].y += tabDir[i][1]*10;
+        }*/
 
 
 
@@ -270,7 +289,7 @@ int main ( int argc, char** argv )
 
         // finally, update the screen :)
         SDL_Flip(screen);
-        SDL_Delay(30);
+        SDL_Delay(16);
     } // end main loop
 
     // free loaded bitmap
