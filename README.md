@@ -45,3 +45,52 @@ Ou : http://openclassrooms.com/courses/gerez-vos-codes-source-avec-git (voir dan
 
 Pour ceux qui ont une ancienne version de Git Bash : git config --global push.default simple
 
+
+
+// STATIC LIB //
+
+SOUS LINUX :
+
+gcc -c main.c
+gcc -c libXXX.c
+ar -q libXXX.a libXXX.o
+gcc -o main main.c libXXX.a
+./main
+
+
+SOUS WINDOWS :
+
+gcc -c main.c
+gcc -c libXXX.c
+ar -q libXXX.lib libXXX.o
+gcc -o main main.c libXXX.lib
+main
+
+
+
+
+// DYNAMIc LIB //
+
+SOUS LINUX :
+
+gcc -c main.c
+gcc -c libXXX.c
+gcc -o libXXX.so -shared libXXX.o
+gcc -o main main.o libXXX.so
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH // on rajoute une variable d'environnement , ici le dossier courant
+./main
+
+
+SOUS WINDOWS :
+
+gcc -c main.c
+gcc -c libXXX.c
+gccgcc -o  -o libXXX.dll -shared libXXX.o
+gcc -o main main.o libXXX.dll
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH // on rajoute une variable d'environnement , ici le dossier courant
+main
+
+
+
+http://www.trustonme.net/didactels/154.html
+
