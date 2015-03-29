@@ -16,10 +16,7 @@
 
 // Include Windows //
 
-typedef struct {
-    unsigned int coulor; // 0 blanche 1 noire
-    SDL_Rect *rectDame; // position de l'image
-} Dame;
+
 
 void drawMultipleRect(SDL_Surface* bmp,SDL_Surface* screen,SDL_Rect *dstrectTab, int nbRect)
 {
@@ -52,6 +49,42 @@ void rectDirAlloc(SDL_Rect *dstrectTab, int **tabDir, int nbRect)
 
     }
 
+}
+
+void drawDames(Dame *damesTab, SDL_Surface* screen, int nbDames)
+{
+    int i;
+    //SDL_Rect dstrect;
+    for(i = 0; i < nbDames ; i++)
+    {
+        //dstrect =  damesTab[i].rectDame;
+        SDL_BlitSurface(damesTab[i].dameSurf,0,screen, damesTab[i].rectDame);
+    }
+}
+
+void initDamesTab(Dame *damesTab, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf, int nbDames)
+{
+    int i;
+    for(i = 0; i < nbDames; i++)
+    {
+        if(i<12)
+        {
+            damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect));
+            damesTab[i].coulor=0;
+            damesTab[i].dameSurf = dameWsurf;
+            damesTab[i].rectDame->x = rand()%500;
+            damesTab[i].rectDame->y = rand()%350;
+        }
+        else
+        {
+            damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect));
+            damesTab[i].coulor=1;
+            damesTab[i].dameSurf = dameBsurf;
+            damesTab[i].rectDame->x = rand()%500;
+            damesTab[i].rectDame->y = rand()%350;
+        }
+
+    }
 }
 
 int main ( int argc, char** argv )
@@ -200,20 +233,26 @@ int main ( int argc, char** argv )
     }
 
     // load an image
-    SDL_Surface* bmp = SDL_LoadBMP("cb.bmp");
-    if (!bmp)
+    SDL_Surface* dameWsurf = SDL_LoadBMP("white_dame.bmp");
+    if (!dameWsurf)
     {
-        printf("Unable to load bitmap: %s\n", SDL_GetError());
+        printf("Unable to load bitmap white_dame.bmp: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Surface* dameBsurf = SDL_LoadBMP("black_dame.bmp");
+    if (!dameWsurf)
+    {
+        printf("Unable to load bitmap black_dame.bmp: %s\n", SDL_GetError());
         return 1;
     }
 
     // centre the bitmap on screen
 
     srand(time(NULL));
-    int nbRect = 5,i;
-    SDL_Rect *dstrectTab = (SDL_Rect*) calloc (nbRect,sizeof(SDL_Rect));;
-    int **tabDir = (int**) calloc (nbRect,sizeof(int*));
-    rectDirAlloc(dstrectTab,tabDir,nbRect);
+    int i,j=0;
+    Dame *damesTab = (Dame*) malloc (24*sizeof(Dame));
+    initDamesTab(damesTab,dameWsurf,dameBsurf,24);
 
 
 
@@ -238,16 +277,27 @@ int main ( int argc, char** argv )
                 {
                     // exit if ESCAPE is pressed
                     if (event.key.keysym.sym == SDLK_ESCAPE)
+                    {
                         done = true;
-                    break;
+                        break;
+                    }
+                    if (event.key.keysym.sym == SDLK_END)
+                    {
+                        j++;
+                        if(j>23)
+                        {
+                            j=0;
+                        }
+                    }
+
                 }
             case SDL_MOUSEMOTION:
                 {
                     if(event.button.button == SDL_BUTTON_LEFT)
                     {
                         printf("mouse position : %d %d\n",event.button.x,event.button.y);
-                        dstrectTab[0].x = event.button.x;
-                        dstrectTab[0].y = event.button.y;
+                        damesTab[j].rectDame->x = event.button.x;
+                        damesTab[j].rectDame->y = event.button.y;
                     }
 
                 }
@@ -283,7 +333,7 @@ int main ( int argc, char** argv )
 
         // draw bitmap
         //SDL_BlitSurface(bmp, 0, screen, &dstrect);
-        drawMultipleRect(bmp,screen,dstrectTab,nbRect);
+        drawDames(damesTab,screen,24);
 
         // DRAWING ENDS HERE
 
@@ -293,11 +343,11 @@ int main ( int argc, char** argv )
     } // end main loop
 
     // free loaded bitmap
-    SDL_FreeSurface(bmp);
+    SDL_FreeSurface(dameBsurf);
+    SDL_FreeSurface(dameWsurf);
 
     // all is well ;)
-    free(dstrectTab);
-    free(tabDir);
+    free(damesTab);
     printf("Exited cleanly\n");
     return 0;
 }
