@@ -19,6 +19,7 @@ typedef struct {	// Structure d'une IA, regroupant les infos dont on a besoin po
 	unsigned int resultatMatch;		// 1 si cette IA a gagnée, 0 sinon
 } IA;
 
+// Sinon on peut aussi regrouper cette structure avec IA
 typedef struct {	// Structure décrivant les mouvements possibles à partir d'une case de départ (3 moves max)
 	int caseDepart;					// Numéro de la case de départ
 	int petitMove;					// Numéro de la case la plus proche où l'on pourrait aller avec un dé
