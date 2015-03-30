@@ -1,0 +1,13 @@
+#!/bin/bash
+gcc -c main.c
+echo "##### main compiled..."
+gcc -c backgammon.c
+gcc -o backgammonAPI.so -shared backgammon.o
+echo "##### backgammon.c compiled..."
+gcc -o main main.o backgammonAPI.so ###
+echo "##### librairie explicite..."
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+./main
+
+echo "### Library has been compiled successfully ###"
+
