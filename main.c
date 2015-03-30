@@ -67,9 +67,9 @@ void initDamesTab(Dame *damesTab, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf
     int i;
     for(i = 0; i < nbDames; i++)
     {
-        if(i<12)
+        if(i<15)
         {
-            damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect));
+            damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
             damesTab[i].coulor=0;
             damesTab[i].dameSurf = dameWsurf;
             damesTab[i].rectDame->x = rand()%500;
@@ -77,7 +77,7 @@ void initDamesTab(Dame *damesTab, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf
         }
         else
         {
-            damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect));
+            damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
             damesTab[i].coulor=1;
             damesTab[i].dameSurf = dameBsurf;
             damesTab[i].rectDame->x = rand()%500;
@@ -87,10 +87,22 @@ void initDamesTab(Dame *damesTab, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf
     }
 }
 
+void rollDices(unsigned char* dices)
+{
+
+    dices[0] =  rand()%6;
+    dices[1] =  rand()%6;
+
+}
+
 int main ( int argc, char** argv )
 {
 
+
     //************** CHARGEMENT DE L'API ***************//
+
+    //char nomLib[50];
+    //nomLib = "backgammonAPI.dll";
 
     #if OS == 0
 
@@ -210,7 +222,6 @@ int main ( int argc, char** argv )
 
     #endif // if
 
-    EndGame();
 
     // initialize SDL video
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -222,15 +233,25 @@ int main ( int argc, char** argv )
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-    int sWidth=640, sHeigth=640;
+    int sWidth=1310, sHeigth=900;
     // create a new window
     SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 16,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
     if ( !screen )
     {
-        printf("Unable to set 640x480 video: %s\n", SDL_GetError());
+        printf("Unable to set 1310x900 video: %s\n", SDL_GetError());
         return 1;
     }
+
+    SDL_Surface* backgroundBoard = SDL_LoadBMP("boardPolygammon.bmp");
+    if (!backgroundBoard)
+    {
+        printf("Unable to load bitmap boardPolygammon.bmp: %s\n", SDL_GetError());
+        return 1;
+    }
+    SDL_Rect rectBoard;
+    rectBoard.x = 0;
+    rectBoard.y = 0;
 
     // load an image
     SDL_Surface* dameWsurf = SDL_LoadBMP("white_dame.bmp");
@@ -240,6 +261,8 @@ int main ( int argc, char** argv )
         return 1;
     }
 
+    SDL_SetColorKey(dameWsurf, SDL_SRCCOLORKEY, SDL_MapRGB(dameWsurf->format, 255, 255, 255)); // on rend transparent le blanc de l'image
+
     SDL_Surface* dameBsurf = SDL_LoadBMP("black_dame.bmp");
     if (!dameWsurf)
     {
@@ -247,13 +270,24 @@ int main ( int argc, char** argv )
         return 1;
     }
 
+    SDL_SetColorKey(dameBsurf, SDL_SRCCOLORKEY, SDL_MapRGB(dameBsurf->format, 255, 255, 255)); // on rend transparent le blanc de l'image
+
     // centre the bitmap on screen
 
     srand(time(NULL));
     int i,j=0;
-    Dame *damesTab = (Dame*) malloc (24*sizeof(Dame));
-    initDamesTab(damesTab,dameWsurf,dameBsurf,24);
+    Dame *damesTab = (Dame*) malloc (30*sizeof(Dame));
+    initDamesTab(damesTab,dameWsurf,dameBsurf,30);
 
+    // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
+
+    States curState; // état courant du jeu
+    GameMode gameMode; // mode de jeu
+    curState = SINITLIBS;
+    Player curPlayer; // joueur courant
+
+    unsigned char j1Dices[2]; // dernier lancé de dés du j1
+    unsigned char j2Dices[2]; // dernier lancé de dés du j2
 
 
     // program main loop
@@ -262,10 +296,256 @@ int main ( int argc, char** argv )
     {
         // message processing loop
         SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
+
+            switch(curState)
+            {
+
+            case SINITLIBS:
+
+                // appelle de initLib
+                //InitLibrary(nomLib); // pour test
+
+                if(argc ==2) // jeu IA vs Humain
+                {
+                    gameMode = MHvsAI;
+                    // appelle de j1InitLibrary(...);
+                }
+                else if(argc == 3) // jeu IA vs IA
+                {
+                    // appelle de j1InitLibrary(...);
+                    // appelle de j2InitLibrary(...);
+
+                    gameMode = MAIvsAI;
+                }
+                else // humain vs humain
+                {
+
+                    gameMode = MHvsH;
+                }
+
+                curState = SSTARTMATCH;
+                break;
+
+            case SSTARTMATCH:
+                if(gameMode == MHvsAI)
+                {
+                    // appelle de j1startMatch();
+                }
+                else if(gameMode == MAIvsAI)
+                {
+                    // appelle de j1startMatch();
+                    // appelle de j2startMatch();
+                }
+                curState = SSTARTGAME;
+                break;
+
+            case SSTARTGAME:
+                curPlayer = NOBODY;
+                if(gameMode == MHvsAI)
+                {
+                    // appelle de j1startGame(BLACK);
+                }
+                else if(gameMode == MAIvsAI)
+                {
+                    // appelle de j1startGame(BLACK);
+                    // appelle de j2startGame(WHITE);
+                }
+
+                curState = SROLLDICES;
+                break;
+
+            case SROLLDICES:
+                if(curPlayer == NOBODY) // aucun joueur n'a été choisi pour commencé la partie
+                {
+                    int j1Sum = 0, j2Sum = 0;
+                    rollDices(j1Dices);
+                    rollDices(j2Dices);
+
+                    j1Sum = (int) j1Dices[0]  + (int) j1Dices[1] ; // somme des dés de j1
+                    j2Sum = (int) j2Dices[0]  + (int) j2Dices[1] ; // somme des dés de j2
+
+                    if(j1Sum > j2Sum)
+                    {
+                        printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
+                        printf("Player BLACK begins\n");
+                        curPlayer = BLACK;
+                        curState = SPLAY;
+                    }
+                    else
+                    {
+                        printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
+                        printf("Player WHITE begins\n");
+                        curPlayer = WHITE;
+                        curState = SPLAY;
+                    }
+                }
+
+
+                break;
+
+            case SPLAY:
+                if(curPlayer == BLACK)
+                {
+                    int playing = 1;
+                    while (SDL_PollEvent(&event) && playing)
+                    {
+
+                        switch (event.type)
+                        {
+                            // exit if the window is closed
+                        case SDL_QUIT:
+                            done = true;
+                            break;
+
+                            // check for keypresses
+                        case SDL_KEYDOWN:
+                            {
+                                // exit if ESCAPE is pressed
+                                if (event.key.keysym.sym == SDLK_ESCAPE)
+                                {
+                                    done = true;
+                                }
+                                if (event.key.keysym.sym == SDLK_END)
+                                {
+                                    j++;
+                                    if(j>15)
+                                    {
+                                        j=0;
+                                    }
+
+                                }
+                                if(event.key.keysym.sym == SDLK_n)
+                                {
+                                    playing = 0;
+                                    curPlayer = WHITE;
+                                    printf("BLACK is playing\n");
+                                }
+
+                                break;
+                            }
+                        case SDL_MOUSEMOTION:
+                            {
+                                if(event.button.button == SDL_BUTTON_LEFT)
+                                {
+                                    //printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
+                                    damesTab[j].rectDame->x = event.button.x;
+                                    damesTab[j].rectDame->y = event.button.y;
+                                }
+
+                                break;
+                            }
+
+                        } // end switch
+
+                        // DRAWING STARTS HERE
+
+                        // clear screen
+                        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+
+                        // DESSINER L'ECRAN
+
+                        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+                        drawDames(damesTab,screen,30);
+
+                        // DRAWING ENDS HERE
+
+                        // finally, update the screen :)
+                        SDL_Flip(screen);
+                        SDL_Delay(16);
+                    }
+                } // end if
+
+
+                if(curPlayer == WHITE)
+                {
+                    int playing = 1;
+                    while (SDL_PollEvent(&event) && playing)
+                    {
+
+                        switch (event.type)
+                        {
+                            // exit if the window is closed
+                        case SDL_QUIT:
+                            done = true;
+                            break;
+
+                            // check for keypresses
+                        case SDL_KEYDOWN:
+                            {
+                                // exit if ESCAPE is pressed
+                                if (event.key.keysym.sym == SDLK_ESCAPE)
+                                {
+                                    done = true;
+                                }
+                                if (event.key.keysym.sym == SDLK_END)
+                                {
+                                    j++;
+                                    if(j>15)
+                                    {
+                                        j=0;
+                                    }
+
+                                }
+                                if(event.key.keysym.sym == SDLK_n)
+                                {
+                                    playing = 0;
+                                    curPlayer = BLACK;
+                                    printf("WHITE is playing\n");
+                                }
+
+                                break;
+                            }
+                        case SDL_MOUSEMOTION:
+                            {
+                                if(event.button.button == SDL_BUTTON_LEFT)
+                                {
+                                    //printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
+                                    damesTab[j].rectDame->x = event.button.x;
+                                    damesTab[j].rectDame->y = event.button.y;
+                                }
+
+                                break;
+                            }
+
+                        } // end switch
+
+                        // DRAWING STARTS HERE
+
+                        // clear screen
+                        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+
+                        // DESSINER L'ECRAN
+
+                        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+                        drawDames(damesTab,screen,30);
+
+                        // DRAWING ENDS HERE
+
+                        // finally, update the screen :)
+                        SDL_Flip(screen);
+                        SDL_Delay(16);
+                    }
+                } // end if
+
+
+                    break;
+
+            case SDOUBLETAKEN:
+
+                break;
+
+            case SENDGAME:
+
+                break;
+
+            case SENDMATCH:
+
+                break;
+
+            }
+
             // check for messages
-            switch (event.type)
+            /*switch (event.type)
             {
                 // exit if the window is closed
             case SDL_QUIT:
@@ -279,49 +559,33 @@ int main ( int argc, char** argv )
                     if (event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         done = true;
-                        break;
                     }
                     if (event.key.keysym.sym == SDLK_END)
                     {
                         j++;
-                        if(j>23)
+                        if(j>29)
                         {
                             j=0;
                         }
+                        printf("mouse position : %d %d\n",event.button.x,event.button.y);
                     }
 
+                    break;
                 }
             case SDL_MOUSEMOTION:
                 {
                     if(event.button.button == SDL_BUTTON_LEFT)
                     {
-                        printf("mouse position : %d %d\n",event.button.x,event.button.y);
+                        printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
                         damesTab[j].rectDame->x = event.button.x;
                         damesTab[j].rectDame->y = event.button.y;
                     }
 
+                    break;
                 }
 
-            } // end switch
-        } // end of message processing
+            } // end switch*/
 
-
-
-
-       /* for(i=0;i<nbRect;i++)
-        {
-            if((dstrectTab[i].x <= 0) || (dstrectTab[i].x >= sWidth - bmp->w))
-            {
-                tabDir[i][0] *= (-1);
-            }
-            if((dstrectTab[i].y <= 0) || (dstrectTab[i].y >= sHeigth - bmp->h))
-            {
-                tabDir[i][1] *= (-1);
-            }
-
-            dstrectTab[i].x += tabDir[i][0]*10;
-            dstrectTab[i].y += tabDir[i][1]*10;
-        }*/
 
 
 
@@ -331,9 +595,10 @@ int main ( int argc, char** argv )
         // clear screen
         SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
-        // draw bitmap
-        //SDL_BlitSurface(bmp, 0, screen, &dstrect);
-        drawDames(damesTab,screen,24);
+        // DESSINER L'ECRAN
+
+        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+        drawDames(damesTab,screen,30);
 
         // DRAWING ENDS HERE
 
@@ -342,7 +607,7 @@ int main ( int argc, char** argv )
         SDL_Delay(16);
     } // end main loop
 
-    // free loaded bitmap
+    // LIBERATION DE LA MEMOIRE
     SDL_FreeSurface(dameBsurf);
     SDL_FreeSurface(dameWsurf);
 
