@@ -11,7 +11,7 @@
 typedef struct {	// Structure d'une IA, regroupant les infos dont on a besoin pour les fonctions et la stratégie
 	char nom[50];					// Nom de l'IA
 	unsigned int couleur;			// Couleur des pions de l'IA
-	unsigned int scoreActuel;		// Nombre de manches gagnées
+	unsigned int scoreActuel[2];	// Nombre de manches gagnées
 	unsigned int scorePourGagner;	// Nombre de manches nécessaires pour gagner un match
 	unsigned int scoreManche;		// Score de la manche (selon l'emplacement des pions genre l'addition du nombre des cases)
 	unsigned int pions;				// Nombre de pions encore sur le plateau
@@ -21,11 +21,15 @@ typedef struct {	// Structure d'une IA, regroupant les infos dont on a besoin po
 
 // Sinon on peut aussi regrouper cette structure avec IA
 typedef struct {	// Structure décrivant les mouvements possibles à partir d'une case de départ (3 moves max)
-	int caseDepart;					// Numéro de la case de départ
-	int petitMove;					// Numéro de la case la plus proche où l'on pourrait aller avec un dé
-	int grandMove;					// Numéro de la case la plus éloignée où l'on pourrait aller avec un dé
-	int totalMove;					// Numéro de la case où l'on pourrait aller avec deux dés
+	int directMove[2];				// Numéros de cases accessibles en un mouvement
+	int longMove[3];				// Numéros de cases accessibles en plusieurs mouvements
 }Mouvements;
+
+typedef struct {
+	int indice;						// Numéro de la case
+	Square sq;						// Structure Square de la case
+	Mouvements moves;				// Structure Mouvements de la case
+}Carre;
 
 IA OliverJohn;
 
@@ -104,9 +108,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	/* Ces tableaux sont Static car on les remplit une fois et on veut pas qu'ils se vident
 à chaque appel de PlayTurn() */
 	// Ou alors on ajoute ces tableaux à notre structure IA...
-	static int casesAllies[];		// Tableau des pions qui nous appartiennent
-	static int casesEnnemies[];		// Tableau des pions ennemis
-	int mouvements[];				// /!\ A VOIR SI ON GARDE CA OU UNE STRUCTURE /!\
+	Carre casesAllies[15];		// Tableau des pions qui nous appartiennent
+	Carre casesEnnemies[15];		// Tableau des pions ennemis
 	int i;							// Indice de parcours de boucle
 	int j = 0, k = 0;				// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies
 
@@ -123,16 +126,14 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	{
 		if (gameState.board[i].owner == OliverJohn.couleur)	// Si le proprio de la case (enum Player) est égal à notre couleur
 		{
-			casesAllies[j] = i;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
-			j++;
-			casesAllies[j] = gameState.board[i];	// On garde une structure Square donnant le nombre de Dames présentes sur la case
+			casesAllies[j].indice = i;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
+			casesAllies[j].sq = gameState.board[i];	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
 			j++;	// On incrémente l'indice de remplissage des cases alliées dès qu'on a remplit la case d'avant
 		}
 		else
 		{
-			casesEnnemies[k] = i;
-			k++;
-			casesEnnemies[k] = gameState.board[i];
+			casesEnnemies[k].indice = i;
+			casesEnnemies[k].sq = gameState.board[i];
 			k++;	// On incrémente l'indice de remplissage des cases ennemies dès qu'on a remplit la case d'avant
 		}
 	}
@@ -147,7 +148,20 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 c'est à dire 3 mouvements max pour un pion, où créer une structure Mouvements, avec la case d'où on part et les cases possibles */
 	for (j = 0; j < len(casesAllies); j++)
 	{
-		casesAllies[j]
+		if(dices[0] == dices[1]) {
+			//On peut regarder directement si la case est occupé par au moins 2 ennemis
+			casesAllies[j]->moves->directMove[0] = j+dices[0];
+			casesAllies[j]->moves->directMove[1] = -1;
+			casesAllies[j]->moves->longMove[0] = j+2*dices[0];
+			casesAllies[j]->moves->longMove[1] = j+3*dices[0];
+			casesAllies[j]->moves->longMove[2] = j+4*dices[0];
+		} else {
+			casesAllies[j]->moves->directMove[0] = j+dices[0];
+			casesAllies[j]->moves->directMove[1] = j+dices[1];
+			casesAllies[j]->moves->longMove[0] = j+dices[0]+dices[1];
+			casesAllies[j]->moves->longMove[1] = -1;
+			casesAllies[j]->moves->longMove[2] = -1;
+		}
 	}
 
 	/*
