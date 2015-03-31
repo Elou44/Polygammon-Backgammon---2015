@@ -7,6 +7,26 @@ typedef struct {
     SDL_Surface *dameSurf;
 } Dame;
 
+// Les différents états de jeu
+typedef enum {
+    SINITLIBS, // initialisation des librairies
+    SSTARTMATCH, // démarrage du match
+    SSTARTGAME, // démarrage de la game
+    SROLLDICES, // lancé de dés
+    SPLAY, // mouvements de l'IA
+    SDOUBLETAKEN, // si le double est pris par le joueur
+    SENDGAME,
+    SENDMATCH
+
+} States;
+
+// les différents mode de jeu
+typedef enum {
+    MHvsH, // humain contre humain
+    MHvsAI, // humain contre IA
+    MAIvsAI // IA contre IA
+} GameMode;
+
 /**
  * @brief Définit quel joueur contrôle la case.
  *
