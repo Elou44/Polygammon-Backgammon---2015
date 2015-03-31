@@ -6,7 +6,7 @@
 #include <time.h>
 #include "functions.h"
 
-#define OS 0 // 0 = Windows | 1 = Linux
+#define OS 1 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -281,330 +281,216 @@ int main ( int argc, char** argv )
 
     // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
 
-    States curState; // état courant du jeu
+    States curState; // ï¿½tat courant du jeu
     GameMode gameMode; // mode de jeu
     curState = SINITLIBS;
     Player curPlayer; // joueur courant
 
-    unsigned char j1Dices[2]; // dernier lancé de dés du j1
-    unsigned char j2Dices[2]; // dernier lancé de dés du j2
+    unsigned char j1Dices[2]; // dernier lancï¿½ de dï¿½s du j1
+    unsigned char j2Dices[2]; // dernier lancï¿½ de dï¿½s du j2
 
 
     // program main loop
     bool done = false;
-    while (!done)
+    SDL_Event event;
+    while(!done)
     {
-        // message processing loop
-        SDL_Event event;
-
-            switch(curState)
-            {
-
-            case SINITLIBS:
-
-                // appelle de initLib
-                //InitLibrary(nomLib); // pour test
-
-                if(argc ==2) // jeu IA vs Humain
+        while (SDL_PollEvent(&event))
+        {
+            // message processing loop
+            
+    
+                switch(curState)
                 {
-                    gameMode = MHvsAI;
-                    // appelle de j1InitLibrary(...);
-                }
-                else if(argc == 3) // jeu IA vs IA
-                {
-                    // appelle de j1InitLibrary(...);
-                    // appelle de j2InitLibrary(...);
-
-                    gameMode = MAIvsAI;
-                }
-                else // humain vs humain
-                {
-
-                    gameMode = MHvsH;
-                }
-
-                curState = SSTARTMATCH;
-                break;
-
-            case SSTARTMATCH:
-                if(gameMode == MHvsAI)
-                {
-                    // appelle de j1startMatch();
-                }
-                else if(gameMode == MAIvsAI)
-                {
-                    // appelle de j1startMatch();
-                    // appelle de j2startMatch();
-                }
-                curState = SSTARTGAME;
-                break;
-
-            case SSTARTGAME:
-                curPlayer = NOBODY;
-                if(gameMode == MHvsAI)
-                {
-                    // appelle de j1startGame(BLACK);
-                }
-                else if(gameMode == MAIvsAI)
-                {
-                    // appelle de j1startGame(BLACK);
-                    // appelle de j2startGame(WHITE);
-                }
-
-                curState = SROLLDICES;
-                break;
-
-            case SROLLDICES:
-                if(curPlayer == NOBODY) // aucun joueur n'a été choisi pour commencé la partie
-                {
-                    int j1Sum = 0, j2Sum = 0;
-                    rollDices(j1Dices);
-                    rollDices(j2Dices);
-
-                    j1Sum = (int) j1Dices[0]  + (int) j1Dices[1] ; // somme des dés de j1
-                    j2Sum = (int) j2Dices[0]  + (int) j2Dices[1] ; // somme des dés de j2
-
-                    if(j1Sum > j2Sum)
+    
+                case SINITLIBS:
+    
+                    // appelle de initLib
+                    //InitLibrary(nomLib); // pour test
+    
+                    if(argc ==2) // jeu IA vs Humain
                     {
-                        printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
-                        printf("Player BLACK begins\n");
-                        curPlayer = BLACK;
-                        curState = SPLAY;
+                        gameMode = MHvsAI;
+                        // appelle de j1InitLibrary(...);
                     }
-                    else
+                    else if(argc == 3) // jeu IA vs IA
                     {
-                        printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
-                        printf("Player WHITE begins\n");
-                        curPlayer = WHITE;
-                        curState = SPLAY;
+                        // appelle de j1InitLibrary(...);
+                        // appelle de j2InitLibrary(...);
+    
+                        gameMode = MAIvsAI;
                     }
-                }
-
-
-                break;
-
-            case SPLAY:
-                if(curPlayer == BLACK)
-                {
-                    int playing = 1;
-                    while (SDL_PollEvent(&event) && playing)
+                    else // humain vs humain
                     {
-
-                        switch (event.type)
-                        {
-                            // exit if the window is closed
-                        case SDL_QUIT:
-                            done = true;
-                            break;
-
-                            // check for keypresses
-                        case SDL_KEYDOWN:
-                            {
-                                // exit if ESCAPE is pressed
-                                if (event.key.keysym.sym == SDLK_ESCAPE)
-                                {
-                                    done = true;
-                                }
-                                if (event.key.keysym.sym == SDLK_END)
-                                {
-                                    j++;
-                                    if(j>15)
-                                    {
-                                        j=0;
-                                    }
-
-                                }
-                                if(event.key.keysym.sym == SDLK_n)
-                                {
-                                    playing = 0;
-                                    curPlayer = WHITE;
-                                    printf("BLACK is playing\n");
-                                }
-
-                                break;
-                            }
-                        case SDL_MOUSEMOTION:
-                            {
-                                if(event.button.button == SDL_BUTTON_LEFT)
-                                {
-                                    //printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
-                                    damesTab[j].rectDame->x = event.button.x;
-                                    damesTab[j].rectDame->y = event.button.y;
-                                }
-
-                                break;
-                            }
-
-                        } // end switch
-
-                        // DRAWING STARTS HERE
-
-                        // clear screen
-                        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-                        // DESSINER L'ECRAN
-
-                        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
-                        drawDames(damesTab,screen,30);
-
-                        // DRAWING ENDS HERE
-
-                        // finally, update the screen :)
-                        SDL_Flip(screen);
-                        SDL_Delay(16);
+    
+                        gameMode = MHvsH;
                     }
-                } // end if
-
-
-                if(curPlayer == WHITE)
-                {
-                    int playing = 1;
-                    while (SDL_PollEvent(&event) && playing)
-                    {
-
-                        switch (event.type)
-                        {
-                            // exit if the window is closed
-                        case SDL_QUIT:
-                            done = true;
-                            break;
-
-                            // check for keypresses
-                        case SDL_KEYDOWN:
-                            {
-                                // exit if ESCAPE is pressed
-                                if (event.key.keysym.sym == SDLK_ESCAPE)
-                                {
-                                    done = true;
-                                }
-                                if (event.key.keysym.sym == SDLK_END)
-                                {
-                                    j++;
-                                    if(j>15)
-                                    {
-                                        j=0;
-                                    }
-
-                                }
-                                if(event.key.keysym.sym == SDLK_n)
-                                {
-                                    playing = 0;
-                                    curPlayer = BLACK;
-                                    printf("WHITE is playing\n");
-                                }
-
-                                break;
-                            }
-                        case SDL_MOUSEMOTION:
-                            {
-                                if(event.button.button == SDL_BUTTON_LEFT)
-                                {
-                                    //printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
-                                    damesTab[j].rectDame->x = event.button.x;
-                                    damesTab[j].rectDame->y = event.button.y;
-                                }
-
-                                break;
-                            }
-
-                        } // end switch
-
-                        // DRAWING STARTS HERE
-
-                        // clear screen
-                        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-                        // DESSINER L'ECRAN
-
-                        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
-                        drawDames(damesTab,screen,30);
-
-                        // DRAWING ENDS HERE
-
-                        // finally, update the screen :)
-                        SDL_Flip(screen);
-                        SDL_Delay(16);
-                    }
-                } // end if
-
-
+    
+                    curState = SSTARTMATCH;
                     break;
-
-            case SDOUBLETAKEN:
-
-                break;
-
-            case SENDGAME:
-
-                break;
-
-            case SENDMATCH:
-
-                break;
-
-            }
-
-            // check for messages
-            /*switch (event.type)
-            {
-                // exit if the window is closed
-            case SDL_QUIT:
-                done = true;
-                break;
-
-                // check for keypresses
-            case SDL_KEYDOWN:
-                {
-                    // exit if ESCAPE is pressed
-                    if (event.key.keysym.sym == SDLK_ESCAPE)
+    
+                case SSTARTMATCH:
+                    if(gameMode == MHvsAI)
                     {
-                        done = true;
+                        // appelle de j1startMatch();
                     }
-                    if (event.key.keysym.sym == SDLK_END)
+                    else if(gameMode == MAIvsAI)
                     {
-                        j++;
-                        if(j>29)
+                        // appelle de j1startMatch();
+                        // appelle de j2startMatch();
+                    }
+                    curState = SSTARTGAME;
+                    break;
+    
+                case SSTARTGAME:
+                    curPlayer = NOBODY;
+                    if(gameMode == MHvsAI)
+                    {
+                        // appelle de j1startGame(BLACK);
+                    }
+                    else if(gameMode == MAIvsAI)
+                    {
+                        // appelle de j1startGame(BLACK);
+                        // appelle de j2startGame(WHITE);
+                    }
+    
+                    curState = SROLLDICES;
+                    break;
+    
+                case SROLLDICES:
+                    if(curPlayer == NOBODY) // aucun joueur n'a ï¿½tï¿½ choisi pour commencï¿½ la partie
+                    {
+                        int j1Sum = 0, j2Sum = 0;
+                        rollDices(j1Dices);
+                        rollDices(j2Dices);
+    
+                        j1Sum = (int) j1Dices[0]  + (int) j1Dices[1] ; // somme des dï¿½s de j1
+                        j2Sum = (int) j2Dices[0]  + (int) j2Dices[1] ; // somme des dï¿½s de j2
+    
+                        if(j1Sum > j2Sum)
                         {
-                            j=0;
+                            printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
+                            printf("Player BLACK begins\n");
+                            curPlayer = BLACK;
+                            curState = SPLAY;
                         }
-                        printf("mouse position : %d %d\n",event.button.x,event.button.y);
+                        else
+                        {
+                            printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
+                            printf("Player WHITE begins\n");
+                            curPlayer = WHITE;
+                            curState = SPLAY;
+                        }
                     }
-
+    
+    
                     break;
-                }
-            case SDL_MOUSEMOTION:
-                {
-                    if(event.button.button == SDL_BUTTON_LEFT)
+    
+                case SPLAY:
+                    if(curPlayer == BLACK)
                     {
-                        printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
-                        damesTab[j].rectDame->x = event.button.x;
-                        damesTab[j].rectDame->y = event.button.y;
-                    }
-
+                        
+                    } // end if
+    
+    
+                    if(curPlayer == WHITE)
+                    {
+                        
+                    } // end if
+    
+    
+                        break;
+    
+                case SDOUBLETAKEN:
+    
                     break;
+    
+                case SENDGAME:
+    
+                    break;
+    
+                case SENDMATCH:
+    
+                    break;
+    
                 }
-
-            } // end switch*/
-
-
-
-
-
-        // DRAWING STARTS HERE
-
-        // clear screen
-        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-        // DESSINER L'ECRAN
-
-        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
-        drawDames(damesTab,screen,30);
-
-        // DRAWING ENDS HERE
-
-        // finally, update the screen :)
-        SDL_Flip(screen);
-        SDL_Delay(16);
+    
+                // check for messages
+                switch (event.type)
+                {
+                    // exit if the window is closed
+                case SDL_QUIT:
+                    done = true;
+                    break;
+    
+                    // check for keypresses
+                case SDL_KEYDOWN:
+                    {
+                        // exit if ESCAPE is pressed
+                        if (event.key.keysym.sym == SDLK_ESCAPE)
+                        {
+                            done = true;
+                        }
+                        if (event.key.keysym.sym == SDLK_END)
+                        {
+                            j++;
+                            if(j>29)
+                            {
+                                j=0;
+                            }
+                            printf("mouse position : %d %d\n",event.button.x,event.button.y);
+                        }
+                        if(event.key.keysym.sym == SDLK_n)
+                        {
+                            if(curPlayer == BLACK)
+                            {
+                                curPlayer = WHITE;
+                                printf("Player WHITE is playing\n");
+    
+                            }
+                            else
+                            {
+                                curPlayer = BLACK;
+                                printf("Player BLACK is playing\n");
+                            }
+                        }
+    
+                        break;
+                    }
+                case SDL_MOUSEMOTION:
+                    {
+                        if(event.button.button == SDL_BUTTON_LEFT)
+                        {
+                            printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
+                            damesTab[j].rectDame->x = event.button.x;
+                            damesTab[j].rectDame->y = event.button.y;
+                        }
+    
+                        break;
+                    }
+    
+                } // end switch
+    
+    
+    
+    
+    
+            // DRAWING STARTS HERE
+    
+            // clear screen
+            SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+    
+            // DESSINER L'ECRAN
+    
+            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+            drawDames(damesTab,screen,30);
+    
+            // DRAWING ENDS HERE
+    
+            // finally, update the screen :)
+            SDL_Flip(screen);
+            SDL_Delay(16);
+        }
     } // end main loop
 
     // LIBERATION DE LA MEMOIRE
