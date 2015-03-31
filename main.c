@@ -293,21 +293,21 @@ int main ( int argc, char** argv )
     // program main loop
     bool done = false;
     SDL_Event event;
+
+    int cpt=0;
     while(!done)
     {
-        while (SDL_PollEvent(&event))
-        {
-            // message processing loop
-            
-    
+
+
+
                 switch(curState)
                 {
-    
+
                 case SINITLIBS:
-    
+
                     // appelle de initLib
                     //InitLibrary(nomLib); // pour test
-    
+
                     if(argc ==2) // jeu IA vs Humain
                     {
                         gameMode = MHvsAI;
@@ -317,18 +317,18 @@ int main ( int argc, char** argv )
                     {
                         // appelle de j1InitLibrary(...);
                         // appelle de j2InitLibrary(...);
-    
+
                         gameMode = MAIvsAI;
                     }
                     else // humain vs humain
                     {
-    
+
                         gameMode = MHvsH;
                     }
-    
+
                     curState = SSTARTMATCH;
                     break;
-    
+
                 case SSTARTMATCH:
                     if(gameMode == MHvsAI)
                     {
@@ -341,7 +341,7 @@ int main ( int argc, char** argv )
                     }
                     curState = SSTARTGAME;
                     break;
-    
+
                 case SSTARTGAME:
                     curPlayer = NOBODY;
                     if(gameMode == MHvsAI)
@@ -353,20 +353,20 @@ int main ( int argc, char** argv )
                         // appelle de j1startGame(BLACK);
                         // appelle de j2startGame(WHITE);
                     }
-    
+
                     curState = SROLLDICES;
                     break;
-    
+
                 case SROLLDICES:
                     if(curPlayer == NOBODY) // aucun joueur n'a �t� choisi pour commenc� la partie
                     {
                         int j1Sum = 0, j2Sum = 0;
                         rollDices(j1Dices);
                         rollDices(j2Dices);
-    
+
                         j1Sum = (int) j1Dices[0]  + (int) j1Dices[1] ; // somme des d�s de j1
                         j2Sum = (int) j2Dices[0]  + (int) j2Dices[1] ; // somme des d�s de j2
-    
+
                         if(j1Sum > j2Sum)
                         {
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
@@ -382,39 +382,43 @@ int main ( int argc, char** argv )
                             curState = SPLAY;
                         }
                     }
-    
-    
+
+
                     break;
-    
+
                 case SPLAY:
                     if(curPlayer == BLACK)
                     {
-                        
+
                     } // end if
-    
-    
+
+
                     if(curPlayer == WHITE)
                     {
-                        
+
                     } // end if
-    
-    
+
+
                         break;
-    
+
                 case SDOUBLETAKEN:
-    
+
                     break;
-    
+
                 case SENDGAME:
-    
+
                     break;
-    
+
                 case SENDMATCH:
-    
+
                     break;
-    
+
                 }
-    
+        while (SDL_WaitEvent(&event) && !done)
+        {
+            // message processing loop
+
+
                 // check for messages
                 switch (event.type)
                 {
@@ -422,9 +426,9 @@ int main ( int argc, char** argv )
                 case SDL_QUIT:
                     done = true;
                     break;
-    
+
                     // check for keypresses
-                case SDL_KEYDOWN:
+                /*case SDL_KEYDOWN:
                     {
                         // exit if ESCAPE is pressed
                         if (event.key.keysym.sym == SDLK_ESCAPE)
@@ -438,7 +442,7 @@ int main ( int argc, char** argv )
                             {
                                 j=0;
                             }
-                            printf("mouse position : %d %d\n",event.button.x,event.button.y);
+                            //printf("mouse position : %d %d\n",event.button.x,event.button.y);
                         }
                         if(event.key.keysym.sym == SDLK_n)
                         {
@@ -446,7 +450,7 @@ int main ( int argc, char** argv )
                             {
                                 curPlayer = WHITE;
                                 printf("Player WHITE is playing\n");
-    
+
                             }
                             else
                             {
@@ -454,42 +458,45 @@ int main ( int argc, char** argv )
                                 printf("Player BLACK is playing\n");
                             }
                         }
-    
+
                         break;
-                    }
-                case SDL_MOUSEMOTION:
+                    }*/
+                case SDL_MOUSEBUTTONDOWN:
                     {
+			printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
                         if(event.button.button == SDL_BUTTON_LEFT)
                         {
-                            printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
+
                             damesTab[j].rectDame->x = event.button.x;
                             damesTab[j].rectDame->y = event.button.y;
                         }
-    
+
                         break;
                     }
-    
+
                 } // end switch
-    
-    
-    
-    
-    
+
+
+
+
+
             // DRAWING STARTS HERE
-    
+
             // clear screen
             SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-    
+
             // DESSINER L'ECRAN
-    
+
             SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
             drawDames(damesTab,screen,30);
-    
+
             // DRAWING ENDS HERE
-    
+
             // finally, update the screen :)
             SDL_Flip(screen);
-            SDL_Delay(16);
+	    cpt++;
+	    printf("frame%d\n",cpt%100);
+            //SDL_Delay(10);
         }
     } // end main loop
 
