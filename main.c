@@ -488,7 +488,7 @@ int main ( int argc, char** argv )
 
             // DESSINER L'ECRAN
 
-           // SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
             drawDames(damesTab,screen,30);
 
             // DRAWING ENDS HERE
