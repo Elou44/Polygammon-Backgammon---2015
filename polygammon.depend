@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1427554275 source:d:\elouarn\etudes\sem 6\backgammon\git_repo\polygammon-backgammon---2015\main.c
+1427929739 source:d:\elouarn\etudes\sem 6\backgammon\git_repo\polygammon-backgammon---2015\main.c
 	<stdlib.h>
 	<stdio.h>
 	<stdbool.h>
@@ -10,7 +10,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl.h
 	"SDL_main.h"
 	"SDL_stdinc.h"
 	"SDL_audio.h"
@@ -29,14 +29,14 @@
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_main.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_main.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_stdinc.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_stdinc.h
 	"SDL_config.h"
 	<sys/types.h>
 	<stdio.h>
@@ -62,7 +62,7 @@
 	<stdlib.h>
 	"close_code.h"
 
-1326110988 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_config.h
+1326114588 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_config.h
 	"SDL_platform.h"
 	"SDL_config_dreamcast.h"
 	"SDL_config_macos.h"
@@ -72,16 +72,16 @@
 	"SDL_config_os2.h"
 	"SDL_config_minimal.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_platform.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_platform.h
 
-1326110994 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_config_win32.h
+1326114594 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_config_win32.h
 	"SDL_platform.h"
 
-1326111000 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\begin_code.h
+1326114600 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\begin_code.h
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\close_code.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\close_code.h
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_audio.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_audio.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_endian.h"
@@ -91,24 +91,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_error.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_error.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_endian.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_endian.h
 	"SDL_stdinc.h"
 	<endian.h>
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_mutex.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_mutex.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_thread.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_thread.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_mutex.h"
@@ -116,24 +116,24 @@
 	<process.h>
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_rwops.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_rwops.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_cdrom.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_cdrom.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_events.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_events.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_active.h"
@@ -144,61 +144,61 @@
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_active.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_active.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_keyboard.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_keyboard.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_keysym.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_keysym.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_keysym.h
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_mouse.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_mouse.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_video.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_video.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_rwops.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_joystick.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_joystick.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_quit.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_quit.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_loadso.h
-	"SDL_stdinc.h"
-	"SDL_error.h"
-	"begin_code.h"
-	"close_code.h"
-
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_timer.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_loadso.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325738640 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_version.h
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1325742240 a:\logiciels\sdl\devlib\sdl-1.2.15\include\sdl\sdl_version.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1427301263 d:\elouarn\etudes\sem 6\backgammon\git_repo\polygammon-backgammon---2015\functions.h
+1427929739 d:\elouarn\etudes\sem 6\backgammon\git_repo\polygammon-backgammon---2015\functions.h
 

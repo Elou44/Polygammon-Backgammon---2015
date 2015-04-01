@@ -25,7 +25,7 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate){
     int i,j,x=0,y=0,z=615;
     printf("putaiiiiiiin");
     for (i=0;i<24;i++){
-	
+
 	printf("here1");
 	//blanc
 	 if (i==0){
@@ -55,9 +55,9 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate){
 	   for (j=11;j<15;j++){
 	   damesTab[j].rectDame->x = 538;
            damesTab[j].rectDame->y = z;
-	   z -= 20; 
+	   z -= 20;
 	   }
-	 } 
+	 }
 	 //noir
 	 else if (i==4){
 	   for (j=16;j<18;j++){
@@ -87,8 +87,8 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate){
 	   z -= 20;
 	   }
 	 }
-	
-      }	
+
+      }
 }
 
 void initGameState(SGameState* gamestate){
@@ -148,7 +148,7 @@ void initDamesTab(Dame *damesTab, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf
             damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
             damesTab[i].coulor=1;
             damesTab[i].dameSurf = dameBsurf;
-                       
+
         }
 
     }
@@ -164,8 +164,7 @@ void rollDices(unsigned char* dices)
 
 int main ( int argc, char** argv )
 {
-  
-  printf("xD !!!!!!!!");
+
 
 
     //************** CHARGEMENT DE L'API ***************//
@@ -307,7 +306,7 @@ int main ( int argc, char** argv )
     // create a new window
     SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 32,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
-    
+
     SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
     if ( !screen )
     {
@@ -367,7 +366,6 @@ int main ( int argc, char** argv )
     SDL_Event event;
 
     int cpt=0;
-    printf("avcésar");
     while(!done)
     {
 
@@ -380,7 +378,6 @@ int main ( int argc, char** argv )
 
                     // appelle de initLib
                     //InitLibrary(nomLib); // pour test
-		    printf("looool");
                     if(argc ==2) // jeu IA vs Humain
                     {
                         gameMode = MHvsAI;
@@ -398,7 +395,6 @@ int main ( int argc, char** argv )
 
                         gameMode = MHvsH;
                     }
-		    printf("dfbufhdlhfuk");
                     curState = SSTARTMATCH;
                     break;
 
@@ -418,10 +414,10 @@ int main ( int argc, char** argv )
 
                 case SSTARTGAME:
                     curPlayer = NOBODY;
-		    printf("Je suis bon!2222");
-		    initGameState(&gamestate);
-		    printf("Je suis bon!");
-		    setDamesPos(damesTab,&gamestate);
+
+                    initGameState(&gamestate);
+
+                    setDamesPos(damesTab,&gamestate);
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startGame(BLACK);
@@ -565,17 +561,32 @@ int main ( int argc, char** argv )
 
             // DESSINER L'ECRAN
 
-            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+            /*SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
             drawDames(damesTab,screen,30);
 
             // DRAWING ENDS HERE
 
             // finally, update the screen :)
             SDL_Flip(screen);
-	    cpt++;
+            cpt++;
 	   // printf("frame%d\n",cpt%100);
-            //SDL_Delay(10);
+            SDL_Delay(10);*/
         }
+
+
+        SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+            drawDames(damesTab,screen,30);
+
+            // DRAWING ENDS HERE
+
+            // finally, update the screen :)
+            SDL_Flip(screen);
+            cpt++;
+	   // printf("frame%d\n",cpt%100);
+            SDL_Delay(10);
+
+
+
     } // end main loop
 
     // LIBERATION DE LA MEMOIRE
