@@ -48,10 +48,12 @@ void StartMatch(const unsigned int target_score)
 	Initialisation à 0 du nombre de manches actuelles gagnées
 	*/
 
-	OliverJohn->scoreActuel = 0;
-	OliverJohn->scorePourGagner = target_score;
-	OliverJohn->mancheActuelle = -1;
-	OliverJohn->resultatMatch = 0;
+	
+	OliverJohn.scoreActuel[0] = 0 ;
+	OliverJohn.scoreActuel[1] = 0 ;
+	OliverJohn.scorePourGagner = target_score;
+	OliverJohn.mancheActuelle = -1;
+	OliverJohn.resultatMatch = 0;
 }
 
 void StartGame(Player p)
@@ -62,8 +64,8 @@ void StartGame(Player p)
 	Initialisation du score de la manche à 0
 	*/
 
-	OliverJohn->scoreManche = 0;
-	OliverJohn->mancheActuelle++;
+	OliverJohn.scoreManche = 0;
+	OliverJohn.mancheActuelle++;
 }
 
 void EndGame()	// On indique juste que la manche est terminée, vu qu'on renvoie rien
@@ -72,7 +74,7 @@ void EndGame()	// On indique juste que la manche est terminée, vu qu'on renvoie
 {
 	printf("EndGame\n");
 	printf("Manche terminée\n");
-	printf("Score actuel : %s -> %d points\n", OliverJohn->nom, OliverJohn->scoreActuel);
+	printf("Score actuel : %s -> %du points\n", OliverJohn.nom, OliverJohn.scoreActuel[0]);
 }
 
 void EndMatch()	// On indique juste que le match est terminé
@@ -81,7 +83,7 @@ void EndMatch()	// On indique juste que le match est terminé
 {
 	printf("EndMatch\n");
 	printf("Partie terminée\n");
-	printf("IA %s avec un score de %d\n", OliverJohn->nom, OliverJohn->scoreActuel);
+	printf("IA %s avec un score de %du\n", OliverJohn.nom, OliverJohn.scoreActuel[0]);
 }
 
 int DoubleStack(const SGameState * const gameState)
@@ -114,7 +116,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 
 	printf("Début du tour\n");
 	
-	if(OliverJohn->couleur == 0) {
+	if(OliverJohn.couleur == 0) {
 		tirageDes[0] = -dices[0];
 		tirageDes[1] = -dices[1];
 	}
@@ -128,16 +130,16 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	// Parcours de chaque case du plateau pour repérer les cases à nous ou pas -> Remplissage des tableaux appartenance des cases
 	for (i = 0; i < len(gameState->board); i++)
 	{
-		if (gameState->board[i]->owner == OliverJohn->couleur)	// Si le proprio de la case (enum Player) est égal à notre couleur
+		if (gameState->board[i].owner == OliverJohn.couleur)	// Si le proprio de la case (enum Player) est égal à notre couleur
 		{
-			casesAllies[j]->indice = i;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
-			casesAllies[j]->sq = gameState->board[i];	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
+			casesAllies[j].indice = i;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
+			casesAllies[j].sq = gameState->board[i];	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
 			j++;	// On incrémente l'indice de remplissage des cases alliées dès qu'on a remplit la case d'avant
 		}
 		else
 		{
-			casesEnnemies[k]->indice = i;
-			casesEnnemies[k]->sq = gameState->board[i];
+			casesEnnemies[k].indice = i;
+			casesEnnemies[k].sq = gameState->board[i];
 			k++;	// On incrémente l'indice de remplissage des cases ennemies dès qu'on a remplit la case d'avant
 		}
 	}
@@ -156,69 +158,70 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			//On peut regarder directement si la case est occupé par au moins 2 ennemis
 			quatreMoves = 1;
 			
-			if(gameState->board[j+tirageDes[0]]->owner != OliverJohn->couleur && gameState->board[j+tirageDes[0]]->nbDames > 1) {
-				casesAllies[j]->moves->directMove[0] = -1;
+			if(gameState->board[j+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]].nbDames > 1) {
+				casesAllies[j].moves.directMove[0] = -1;
 			} else {
-				casesAllies[j]->moves->directMove[0] = j+tirageDes[0];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+tirageDes[0];
+				casesAllies[j].moves.directMove[0] = j+tirageDes[0];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+tirageDes[0];
 				k++;
 			}
 			
-			casesAllies[j]->moves->directMove[1] = -1;
+			casesAllies[j].moves.directMove[1] = -1;
 			
-			if(gameState->board[j+2*tirageDes[0]]->owner != OliverJohn->couleur && gameState->board[j+2*tirageDes[0]]->nbDames > 1) {
-				casesAllies[j]->moves->longMove[0] = -1;
+			if(gameState->board[j+2*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+2*tirageDes[0]].nbDames > 1) {
+				casesAllies[j].moves.longMove[0] = -1;
 			} else { 
-				casesAllies[j]->moves->longMove[0] = j+2*tirageDes[0];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+2*tirageDes[0];
+				casesAllies[j].moves.longMove[0] = j+2*tirageDes[0];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+2*tirageDes[0];
 				k++;
 			}
 			
-			if(gameState->board[j+3*tirageDes[0]]->owner != OliverJohn->couleur && gameState->board[j+3*tirageDes[0]]->nbDames > 1) {
-				casesAllies[j]->moves->longMove[1] = -1;
+			if(gameState->board[j+3*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+3*tirageDes[0]].nbDames > 1) {
+				casesAllies[j].moves.longMove[1] = -1;
 			} else { 
-				casesAllies[j]->moves->longMove[1] = j+3*tirageDes[0];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+3*tirageDes[0];
+				casesAllies[j].moves.longMove[1] = j+3*tirageDes[0];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+3*tirageDes[0];
 				k++;
 			}
 			
-			if(gameState->board[j+4*tirageDes[0]]->owner != OliverJohn->couleur && gameState->board[j+4*tirageDes[0]]->nbDames > 1) {
-				casesAllies[j]->moves->longMove[2] = -1;
+			
+			if(gameState->board[j+4*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+4*tirageDes[0]].nbDames > 1) {
+				casesAllies[j].moves.longMove[2] = -1;
 			} else { 
-				casesAllies[j]->moves->longMove[2] = j+4*tirageDes[0];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+4*tirageDes[0];
+				casesAllies[j].moves.longMove[2] = j+4*tirageDes[0];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+4*tirageDes[0];
 				k++;
 			}
 			
 			
 		} else {
 			
-			if(gameState->board[j+tirageDes[0]]->owner != OliverJohn->couleur && gameState->board[j+tirageDes[0]]->nbDames > 1) {
-				casesAllies[j]->moves->directMove[0] = -1;
+			if(gameState->board[j+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]].nbDames > 1) {
+				casesAllies[j].moves.directMove[0] = -1;
 			} else { 
-				casesAllies[j]->moves->directMove[0] = j+tirageDes[0];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+tirageDes[0];
+				casesAllies[j].moves.directMove[0] = j+tirageDes[0];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+tirageDes[0];
 				k++;
 			}
 			
-			if(gameState->board[j+tirageDes[1]]->owner != OliverJohn->couleur && gameState->board[j+tirageDes[1]]->nbDames > 1) {
-				casesAllies[j]->moves->directMove[1] = -1;
+			if(gameState->board[j+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[1]].nbDames > 1) {
+				casesAllies[j].moves.directMove[1] = -1;
 			} else { 
-				casesAllies[j]->moves->directMove[1] = j+tirageDes[1];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+tirageDes[1];
+				casesAllies[j].moves.directMove[1] = j+tirageDes[1];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+tirageDes[1];
 				k++;
 			}
 			
-			if(gameState->board[j+tirageDes[0]+tirageDes[1]]->owner != OliverJohn->couleur && gameState->board[j+tirageDes[0]+tirageDes[1]]->nbDames > 1) {
-				casesAllies[j]->moves->longMove[0] = -1;
+			if(gameState->board[j+tirageDes[0]+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]+tirageDes[1]].nbDames > 1) {
+				casesAllies[j].moves.longMove[0] = -1;
 			} else { 
-				casesAllies[j]->moves->longMove[0] = j+tirageDes[0]+tirageDes[1];
-				mouvts[k]->src_point = j; mouvts[k]->dest_point = j+tirageDes[0]+tirageDes[1];
+				casesAllies[j].moves.longMove[0] = j+tirageDes[0]+tirageDes[1];
+				mouvts[k].src_point = j; mouvts[k].dest_point = j+tirageDes[0]+tirageDes[1];
 				k++;
 			}
 			
-			casesAllies[j]->moves->longMove[1] = -1;
-			casesAllies[j]->moves->longMove[2] = -1;
+			casesAllies[j].moves.longMove[1] = -1;
+			casesAllies[j].moves.longMove[2] = -1;
 		}
 	}
 
@@ -237,8 +240,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 		nomove = 1;
 		for(i = 0; i < len(casesAllies); i++)
 		{
-			if(casesAllies[i]->move->directMove[0] != -1 || casesAllies[i]->move->directMove[1] != -1 || casesAllies[i]->move->longMove[0] != -1
-			|| casesAllies[i]->move->longMove[1] != -1 || casesAllies[i]->move->longMove[2] != -1) {
+			if(casesAllies[i].moves.directMove[0] != -1 || casesAllies[i].moves.directMove[1] != -1 || casesAllies[i].moves.longMove[0] != -1
+			|| casesAllies[i].moves.longMove[1] != -1 || casesAllies[i].moves.longMove[2] != -1) {
 				nomove = 0;
 			} 
 		}
