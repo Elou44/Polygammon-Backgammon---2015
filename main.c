@@ -17,39 +17,109 @@
 // Include Windows //
 
 
+//variable globale
 
-void drawMultipleRect(SDL_Surface* bmp,SDL_Surface* screen,SDL_Rect *dstrectTab, int nbRect)
-{
-    int i;
-    SDL_Rect dstrect;
-    for(i=0;i<nbRect;i++)
-    {
-        dstrect = (SDL_Rect) dstrectTab[i];
-        SDL_BlitSurface(bmp, 0, screen, &dstrect);
-    }
+SGameState gamestate;
 
+void setDamesPos(Dame *damesTab, SGameState* gamestate){
+    int i,j,x=0,y=0,z=615;
+    printf("putaiiiiiiin");
+    for (i=0;i<24;i++){
+	
+	printf("here1");
+	//blanc
+	 if (i==0){
+	   printf("here2");
+	   for (j=0;j<5;j++){
+	    damesTab[j].rectDame->x = 30;
+    	    damesTab[j].rectDame->y = y;
+	    y += 20;
+	   }
+	 }
+	else if (i==11){
+	  printf("here3");
+	   for (j=6;j<7;j++){
+	    damesTab[j].rectDame->x = 255;
+	    damesTab[j].rectDame->y = y;
+	    y += 20;
+	   }
+	 }
+	 else if (i==16){
+	   for (j=8;j<10;j++){
+	   damesTab[j].rectDame->x = 335;
+           damesTab[j].rectDame->y = z;
+	   y -= 20;
+	   }
+	 }
+	 else if (i==18){
+	   for (j=11;j<15;j++){
+	   damesTab[j].rectDame->x = 538;
+           damesTab[j].rectDame->y = z;
+	   z -= 20; 
+	   }
+	 } 
+	 //noir
+	 else if (i==4){
+	   for (j=16;j<18;j++){
+	   damesTab[j].rectDame->x = 335;
+           damesTab[j].rectDame->y = y;
+	   y += 20;
+	   }
+	 }
+	 else if (i==6){
+	   for (j=19;j<23;j++){
+	   damesTab[j].rectDame->x = 535;
+           damesTab[j].rectDame->y = y;
+	   y += 20;
+	   }
+	 }
+	 else if (i==13){
+	   for (j=24;j<28;j++){
+	   damesTab[j].rectDame->x = 30;
+           damesTab[j].rectDame->y = z;
+	   z -= 20;
+	   }
+	 }
+	 else if (i==23){
+	   for (j=29;j<30;j++){
+	   damesTab[j].rectDame->x = 255;
+           damesTab[j].rectDame->y = z;
+	   z -= 20;
+	   }
+	 }
+	
+      }	
 }
 
-void rectDirAlloc(SDL_Rect *dstrectTab, int **tabDir, int nbRect)
-{
-    int i,j;
-    for(i=0;i<nbRect;i++)
-    {
-        dstrectTab[i].x = rand()%500;
-        dstrectTab[i].y = rand()%350;
-        tabDir[i] = (int*) calloc (2,sizeof(int));
-    }
-
-    for(i=0;i<nbRect;i++)
-    {
-        for(j=0;j<2;j++)
-        {
-            tabDir[i][j] = 1;
-        }
-
-    }
-
+void initGameState(SGameState* gamestate){
+	Square temp;
+	temp.nbDames = 2;
+	temp.owner = WHITE;
+	gamestate->board[0] = temp;
+	temp.nbDames = 5;
+	temp.owner = BLACK;
+	gamestate->board[5] = temp;
+	temp.nbDames = 3;
+	temp.owner = BLACK;
+	gamestate->board[7] = temp;
+	temp.nbDames = 5;
+	temp.owner = WHITE;
+	gamestate->board[11] = temp;
+	temp.nbDames = 2;
+	temp.owner = BLACK;
+	gamestate->board[12] = temp;
+	temp.nbDames = 5;
+	temp.owner = WHITE;
+	gamestate->board[17] = temp;
+	temp.nbDames = 3;
+	temp.owner = WHITE;
+	gamestate->board[19] = temp;
+	temp.nbDames = 5;
+	temp.owner = BLACK;
+	gamestate->board[23] = temp;
 }
+
+
 
 void drawDames(Dame *damesTab, SDL_Surface* screen, int nbDames)
 {
@@ -72,16 +142,13 @@ void initDamesTab(Dame *damesTab, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf
             damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
             damesTab[i].coulor=0;
             damesTab[i].dameSurf = dameWsurf;
-            damesTab[i].rectDame->x = rand()%500;
-            damesTab[i].rectDame->y = rand()%350;
         }
         else
         {
             damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
             damesTab[i].coulor=1;
             damesTab[i].dameSurf = dameBsurf;
-            damesTab[i].rectDame->x = rand()%500;
-            damesTab[i].rectDame->y = rand()%350;
+                       
         }
 
     }
@@ -97,6 +164,8 @@ void rollDices(unsigned char* dices)
 
 int main ( int argc, char** argv )
 {
+  
+  printf("xD !!!!!!!!");
 
 
     //************** CHARGEMENT DE L'API ***************//
@@ -238,6 +307,8 @@ int main ( int argc, char** argv )
     // create a new window
     SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 32,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
+    
+    SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
     if ( !screen )
     {
         printf("Unable to set 1310x900 video: %s\n", SDL_GetError());
@@ -296,6 +367,7 @@ int main ( int argc, char** argv )
     SDL_Event event;
 
     int cpt=0;
+    printf("avcésar");
     while(!done)
     {
 
@@ -308,7 +380,7 @@ int main ( int argc, char** argv )
 
                     // appelle de initLib
                     //InitLibrary(nomLib); // pour test
-
+		    printf("looool");
                     if(argc ==2) // jeu IA vs Humain
                     {
                         gameMode = MHvsAI;
@@ -326,7 +398,7 @@ int main ( int argc, char** argv )
 
                         gameMode = MHvsH;
                     }
-
+		    printf("dfbufhdlhfuk");
                     curState = SSTARTMATCH;
                     break;
 
@@ -335,16 +407,21 @@ int main ( int argc, char** argv )
                     {
                         // appelle de j1startMatch();
                     }
-                    else if(gameMode == MAIvsAI)
+                    if(gameMode == MAIvsAI)
                     {
                         // appelle de j1startMatch();
                         // appelle de j2startMatch();
                     }
+                    printf("varou");
                     curState = SSTARTGAME;
                     break;
 
                 case SSTARTGAME:
                     curPlayer = NOBODY;
+		    printf("Je suis bon!2222");
+		    initGameState(&gamestate);
+		    printf("Je suis bon!");
+		    setDamesPos(damesTab,&gamestate);
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startGame(BLACK);
@@ -415,7 +492,7 @@ int main ( int argc, char** argv )
                     break;
 
                 }
-        while (SDL_WaitEvent(&event) && !done)
+        while (SDL_PollEvent(&event))
         {
             // message processing loop
 
@@ -464,7 +541,7 @@ int main ( int argc, char** argv )
                     }
                 case SDL_MOUSEMOTION:
                     {
-			//printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
+			printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
                         if(event.button.button == SDL_BUTTON_LEFT)
                         {
 
