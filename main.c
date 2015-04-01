@@ -233,9 +233,10 @@ int main ( int argc, char** argv )
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-    int sWidth=1310, sHeigth=900;
+
+    int sWidth=1024, sHeigth=703;
     // create a new window
-    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 16,
+    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 32,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
     if ( !screen )
     {
@@ -428,7 +429,7 @@ int main ( int argc, char** argv )
                     break;
 
                     // check for keypresses
-                /*case SDL_KEYDOWN:
+                case SDL_KEYDOWN:
                     {
                         // exit if ESCAPE is pressed
                         if (event.key.keysym.sym == SDLK_ESCAPE)
@@ -460,10 +461,10 @@ int main ( int argc, char** argv )
                         }
 
                         break;
-                    }*/
-                case SDL_MOUSEBUTTONDOWN:
+                    }
+                case SDL_MOUSEMOTION:
                     {
-			printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
+			//printf("mouse position2 : %d %d\n",event.button.x,event.button.y);
                         if(event.button.button == SDL_BUTTON_LEFT)
                         {
 
@@ -483,11 +484,11 @@ int main ( int argc, char** argv )
             // DRAWING STARTS HERE
 
             // clear screen
-            SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+           // SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
             // DESSINER L'ECRAN
 
-            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+           // SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
             drawDames(damesTab,screen,30);
 
             // DRAWING ENDS HERE
@@ -495,7 +496,7 @@ int main ( int argc, char** argv )
             // finally, update the screen :)
             SDL_Flip(screen);
 	    cpt++;
-	    printf("frame%d\n",cpt%100);
+	   // printf("frame%d\n",cpt%100);
             //SDL_Delay(10);
         }
     } // end main loop
