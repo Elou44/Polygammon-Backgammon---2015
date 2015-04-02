@@ -11,6 +11,7 @@
 typedef struct {	// Structure d'une IA, regroupant les infos dont on a besoin pour les fonctions et la stratégie
 	char nom[50];					// Nom de l'IA
 	unsigned int couleur;			// Couleur des pions de l'IA
+	unsigned int opponent;			// Couleur des pions adverses
 	unsigned int scoreActuel[2];	// Nombre de manches gagnées, et celle de l'adversaire
 	unsigned int scorePourGagner;	// Nombre de manches nécessaires pour gagner un match
 	unsigned int scoreManche;		// Score de la manche (selon l'emplacement des pions genre l'addition du nombre des cases)
@@ -19,19 +20,44 @@ typedef struct {	// Structure d'une IA, regroupant les infos dont on a besoin po
 	unsigned int resultatMatch;		// 1 si cette IA a gagnée, 0 sinon
 }IA;
 
+
 // Sinon on peut aussi regrouper cette structure avec IA
 typedef struct {	// Structure décrivant les mouvements possibles à partir d'une case de départ (3 moves max)
-	int directMove[2];				// Numéros de cases accessibles en un mouvement
-	int longMove[3];				// Numéros de cases accessibles en plusieurs mouvements
+	SMove mouvement;				// Numéros de cases accessibles en un mouvement
+	int priorite;				// Numéros de cases accessibles en plusieurs mouvements
 }Mouvements;
 
+/*
 typedef struct {
 	int indice;						// Numéro de la case
 	Square sq;						// Structure Square de la case
 	Mouvements moves;				// Structure Mouvements de la case
 }Carre;
+*/
 
 IA OliverJohn;
+
+int verifPresence(int *tableau, int element, int taille)
+{
+	int i;
+	
+	for (i = 0; i < taille;i++)
+	{
+		if(tableau[i] == element)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+int definePriority(int **AlliedSquares, int **EnnemySquares, SMove mov) {
+	int i;
+	if(mov.src_point == 0) { return 1; }
+	//else if() {
+	
+}
+
 
 void InitLibrary(char name[50])
 {
@@ -63,7 +89,9 @@ void StartGame(Player p)
 	Initialiser l'IA pour une manche
 	Initialisation du score de la manche à 0
 	*/
-
+	OliverJohn.couleur = p;
+	if(OliverJohn.couleur == 0) OliverJohn.opponent = 1;
+	else OliverJohn.opponent = 0;
 	OliverJohn.scoreManche = 0;
 	OliverJohn.mancheActuelle++;
 }
@@ -107,9 +135,9 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	#############################################
 	*/
 
-	Carre casesAllies[15];			// Tableau des cases qui nous appartiennent
-	Carre casesEnnemies[15];		// Tableau des cases ennemis
-	SMove mouvts[60];
+	int casesAllies[2][15];			// Tableau des cases qui nous appartiennent
+	int casesEnnemies[2][15];		// Tableau des cases ennemis
+	Mouvements mouvts[60];
 	int i, quatreMoves = 0;			// Indice de parcours de boucle, booléen indiquant si tirage de dés est un double
 	int tirageDes[2];				// Copie du tirage de dés
 	int j = 0, k = 0;				// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies
@@ -128,18 +156,29 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	*/
 
 	// Parcours de chaque case du plateau pour repérer les cases à nous ou pas -> Remplissage des tableaux appartenance des cases
+	if(gameState->bar[OliverJohn.couleur] > 0) {
+		casesAllies[0][j] = 0;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
+		casesAllies[1][j] = gameState->bar[OliverJohn.couleur];	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
+		j++;
+	}
+	if(gameState->bar[OliverJohn.opponent] > 0) {
+		casesEnnemies[0][k] = 0;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
+		casesEnnemies[1][k] = gameState->bar[OliverJohn.opponent];	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
+		k++;
+	}
+	
 	for (i = 0; i < len(gameState->board); i++)
 	{
 		if (gameState->board[i].owner == OliverJohn.couleur)	// Si le proprio de la case (enum Player) est égal à notre couleur
 		{
-			casesAllies[j].indice = i;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
-			casesAllies[j].sq = gameState->board[i];	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
+			casesAllies[0][j] = i+1;	// Juste avant de garder la structure Square, on garde le numéro de la case (pour les mouvements)
+			casesAllies[1][j] = gameState->board[i].nbDames;	// On garde une structure Square donnant le nombre de Dames présentes sur la case 
 			j++;	// On incrémente l'indice de remplissage des cases alliées dès qu'on a remplit la case d'avant
 		}
-		else
+		else if(gameState->board[i].owner != -1)
 		{
-			casesEnnemies[k].indice = i;
-			casesEnnemies[k].sq = gameState->board[i];
+			casesEnnemies[0][k] = i+1;
+			casesEnnemies[1][k] = gameState->board[i].nbDames;
 			k++;	// On incrémente l'indice de remplissage des cases ennemies dès qu'on a remplit la case d'avant
 		}
 	}
@@ -158,84 +197,64 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			//On peut regarder directement si la case est occupé par au moins 2 ennemis
 			quatreMoves = 1;	// Booléen à vrai
 			
-			if(gameState->board[j+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]].nbDames > 1) {	/* Si la case d'arrivée en utilisant
+			if(!(gameState->board[j+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]].nbDames > 1)) {	/* Si la case d'arrivée en utilisant
 le premier dé n'est pas à nous ET qu'il y a plus qu'un pions dessus */
 
-				casesAllies[j].moves.directMove[0] = -1;	// Le mouvement n'est pas possible (valeur -1)
-			} else {
-				casesAllies[j].moves.directMove[0] = j+tirageDes[0];	// On remplit le tableau des cases accessibles en un mouvement avec n° de la case d'arrivée
 				// On remplit l'objet SMove de la case
-				mouvts[k].src_point = j;
-				mouvts[k].dest_point = j+tirageDes[0];
+				mouvts[k].mouvement.src_point = j+1;
+				mouvts[k].mouvement.dest_point = j+tirageDes[0]+1;
 				k++;
 			}
-			
-			casesAllies[j].moves.directMove[1] = -1;	/* Si le premier directMove n'était pas possible, vu qu'on est dans le cas d'un tirage de double,
+			/* Si le premier directMove n'était pas possible, vu qu'on est dans le cas d'un tirage de double,
 le deuxième mouvement est aussi impossible */
 			
-			if(gameState->board[j+2*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+2*tirageDes[0]].nbDames > 1) {	/* Si la case d'arrivée en utilisant
+			if(!(gameState->board[j+2*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+2*tirageDes[0]].nbDames > 1)) {	/* Si la case d'arrivée en utilisant
 deux dés n'est pas à nous ET qu'il y a plus qu'un pions dessus */
-				casesAllies[j].moves.longMove[0] = -1;
-			} else { 
-				casesAllies[j].moves.longMove[0] = j+2*tirageDes[0];
-				mouvts[k].src_point = j; mouvts[k].dest_point = j+2*tirageDes[0];
+
+				mouvts[k].mouvement.src_point = j+1; mouvts[k].mouvement.dest_point = j+2*tirageDes[0]+1;
 				k++;
 			}
 			
-			if(gameState->board[j+3*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+3*tirageDes[0]].nbDames > 1) {	/* Si la case d'arrivée en utilisant
+			if(!(gameState->board[j+3*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+3*tirageDes[0]].nbDames > 1)) {	/* Si la case d'arrivée en utilisant
 trois dés n'est pas à nous ET qu'il y a plus qu'un pions dessus */
-				casesAllies[j].moves.longMove[1] = -1;
-			} else { 
-				casesAllies[j].moves.longMove[1] = j+3*tirageDes[0];
-				mouvts[k].src_point = j; mouvts[k].dest_point = j+3*tirageDes[0];
+
+				mouvts[k].mouvement.src_point = j+1; mouvts[k].mouvement.dest_point = j+3*tirageDes[0]+1;
 				k++;
 			}
 			
 			
-			if(gameState->board[j+4*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+4*tirageDes[0]].nbDames > 1) {	/* Si la case d'arrivée en utilisant
+			if(!(gameState->board[j+4*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+4*tirageDes[0]].nbDames > 1)) {	/* Si la case d'arrivée en utilisant
 quatre dés n'est pas à nous ET qu'il y a plus qu'un pions dessus */
-				casesAllies[j].moves.longMove[2] = -1;
-			} else { 
-				casesAllies[j].moves.longMove[2] = j+4*tirageDes[0];
-				mouvts[k].src_point = j; mouvts[k].dest_point = j+4*tirageDes[0];
+
+				mouvts[k].mouvement.src_point = j+1; mouvts[k].mouvement.dest_point = j+4*tirageDes[0]+1;
 				k++;
 			}
 			
 			
 		} else {
 			
-			if(gameState->board[j+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]].nbDames > 1) {	/* Si la case d'arrivée en utilisant
+			if(!(gameState->board[j+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]].nbDames > 1)) {	/* Si la case d'arrivée en utilisant
 un dé n'est pas à nous ET qu'il y a plus qu'un pions dessus */
-				casesAllies[j].moves.directMove[0] = -1;
-			} else { 
-				casesAllies[j].moves.directMove[0] = j+tirageDes[0];
-				mouvts[k].src_point = j;
-				mouvts[k].dest_point = j+tirageDes[0];
+
+				mouvts[k].mouvement.src_point = j+1;
+				mouvts[k].mouvement.dest_point = j+tirageDes[0]+1;
 				k++;
 			}
 			
-			if(gameState->board[j+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[1]].nbDames > 1) {	/* Si la case d'arrivée en utilisant
+			if(!(gameState->board[j+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[1]].nbDames > 1)) {	/* Si la case d'arrivée en utilisant
 deux dés n'est pas à nous ET qu'il y a plus qu'un pions dessus */
-				casesAllies[j].moves.directMove[1] = -1;
-			} else { 
-				casesAllies[j].moves.directMove[1] = j+tirageDes[1];
-				mouvts[k].src_point = j;
-				mouvts[k].dest_point = j+tirageDes[1];
+				mouvts[k].mouvement.src_point = j+1;
+				mouvts[k].mouvement.dest_point = j+tirageDes[1]+1;
 				k++;
 			}
 			
-			if(gameState->board[j+tirageDes[0]+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]+tirageDes[1]].nbDames > 1) {	/* Si la case
+			if(!(gameState->board[j+tirageDes[0]+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[j+tirageDes[0]+tirageDes[1]].nbDames > 1)) {	/* Si la case
 d'arrivée en utilisant deux dés n'est pas à nous ET qu'il y a plus qu'un pions dessus */
-				casesAllies[j].moves.longMove[0] = -1;
-			} else { 
-				casesAllies[j].moves.longMove[0] = j+tirageDes[0]+tirageDes[1];
-				mouvts[k].src_point = j;
-				mouvts[k].dest_point = j+tirageDes[0]+tirageDes[1];
+
+				mouvts[k].mouvement.src_point = j+1;
+				mouvts[k].mouvement.dest_point = j+tirageDes[0]+tirageDes[1]+1;
 				k++;
 			}
-			
-			casesAllies[j].moves.longMove[1] = -1;
-			casesAllies[j].moves.longMove[2] = -1;
 		}
 	}
 
@@ -250,21 +269,25 @@ d'arrivée en utilisant deux dés n'est pas à nous ET qu'il y a plus qu'un pion
 		nbdices = 4;
 	} else nbdices = 2;
 	
-	while(nbdices || nomove) {	// Tant qu'il nous reste des dés pour bouger OU 
+	while(nbdices || nomove) {	// Tant qu'il nous reste des dés pour bouger OU qu'il n'y a plus e mouvements à faire
 		nomove = 1;
 		for(i = 0; i < len(casesAllies); i++)	// Parmis les cases conquises (i case de départ)
 		{
-			if(casesAllies[i].moves.directMove[0] != -1 || casesAllies[i].moves.directMove[1] != -1 || casesAllies[i].moves.longMove[0] != -1
-			|| casesAllies[i].moves.longMove[1] != -1 || casesAllies[i].moves.longMove[2] != -1) {	/* Si à partir de la case en étude je peux faire un directMove OU
-longMove */
-				nomove = 0;
-			}
+			
 		}
 	}
 
 }
 
 /*
+ - PRIORITE 1 : condition vérifier si on a des pions de sortis et qu'il faut sortir en priorité (TOP PRIORITE)
+ - PRIORITE 2 : mouvement de pions tout seul sur leur case et qu'on peut sécuriser sur une pile    |  Par quart : de l'ennemi vers nous
+ 	-> si tous les pions adverses sont derriere, toujours securisés
+ - PRIORITE 3 : mouvement de pions pouvant bouffer un adversaire (et pouvant être sécurisé après)  |  Resp. : de nous vers l'ennemi
+ - PRIORITE 4 : création de case sécurisée
+ - PRIORITE 5 : mouvement sécurisé
+ - PRIORITE 6 : oups, sucks
+ 	-> prioriser les mouvements des pions qui ne sont pas dans le dernier quart
  - on trouve les pions -> parcours des cases
  	-> pions de chaques joueurs (case, nb)
  - on liste tous nos mouvements
