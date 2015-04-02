@@ -6,6 +6,9 @@
 // Dans la librairie
 //
 
+
+/* PETIT COMMENTAIRE VOIR SI CA MARCHE LE PULL */
+
 // Apparemment il faut faire une structure globale pour stocker toutes les infos dont on a besoin pour implémenter nos fonctions
 
 typedef struct {	// Structure d'une IA, regroupant les infos dont on a besoin pour les fonctions et la stratégie
