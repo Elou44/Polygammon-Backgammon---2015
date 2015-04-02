@@ -22,73 +22,292 @@
 SGameState gamestate;
 
 void setDamesPos(Dame *damesTab, SGameState* gamestate){
-    int i,j,x=0,y=0,z=615;
-    printf("putaiiiiiiin");
+    int i,j,x=0,y=615, z=0, esp=40;
+
+
     for (i=0;i<24;i++){
+    y = 615;
+        if(i >=0 && i <= 11){
 
-	printf("here1");
-	//blanc
-	 if (i==0){
-	   printf("here2");
-	   for (j=0;j<5;j++){
-	    damesTab[j].rectDame->x = 30;
-    	    damesTab[j].rectDame->y = y;
-	    y += 20;
-	   }
-	 }
-	else if (i==11){
-	  printf("here3");
-	   for (j=6;j<7;j++){
-	    damesTab[j].rectDame->x = 255;
-	    damesTab[j].rectDame->y = y;
-	    y += 20;
-	   }
-	 }
-	 else if (i==16){
-	   for (j=8;j<10;j++){
-	   damesTab[j].rectDame->x = 335;
-           damesTab[j].rectDame->y = z;
-	   y -= 20;
-	   }
-	 }
-	 else if (i==18){
-	   for (j=11;j<15;j++){
-	   damesTab[j].rectDame->x = 538;
-           damesTab[j].rectDame->y = z;
-	   z -= 20;
-	   }
-	 }
-	 //noir
-	 else if (i==4){
-	   for (j=16;j<18;j++){
-	   damesTab[j].rectDame->x = 335;
-           damesTab[j].rectDame->y = y;
-	   y += 20;
-	   }
-	 }
-	 else if (i==6){
-	   for (j=19;j<23;j++){
-	   damesTab[j].rectDame->x = 535;
-           damesTab[j].rectDame->y = y;
-	   y += 20;
-	   }
-	 }
-	 else if (i==13){
-	   for (j=24;j<28;j++){
-	   damesTab[j].rectDame->x = 30;
-           damesTab[j].rectDame->y = z;
-	   z -= 20;
-	   }
-	 }
-	 else if (i==23){
-	   for (j=29;j<30;j++){
-	   damesTab[j].rectDame->x = 255;
-           damesTab[j].rectDame->y = z;
-	   z -= 20;
-	   }
-	 }
+            y = 615;
 
-      }
+        }
+        else {
+
+            y = 20;
+
+        }
+
+
+        if (i==0){
+
+            printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 925;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+        }
+
+        else if(i==1){
+
+            printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 849;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==2){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 773;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==3){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 696;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==4){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 621;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==5){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 543;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==6){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 416;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==7){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 340;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+
+        else if(i==8){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 264;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==9){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 187;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==10){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 112;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==11){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 35;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y -= esp;
+            }
+
+        }
+
+        else if(i==12){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 35;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==13){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 112;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==14){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 187;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==15){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 264;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==16){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 340;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==17){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 416;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==18){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 543;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==19){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 621;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==20){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 696;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==21){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 773;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==22){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 849;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+        else if(i==23){
+
+            for (j=0; j < gamestate->board[i].nbDames ; j++){
+                damesTab[z].rectDame->x = 925;
+                damesTab[z].rectDame->y = y;
+                z++;
+                y += esp;
+            }
+
+        }
+
+    }
 }
 
 void initGameState(SGameState* gamestate){
@@ -105,16 +324,16 @@ void initGameState(SGameState* gamestate){
 	temp.nbDames = 5;
 	temp.owner = WHITE;
 	gamestate->board[11] = temp;
-	temp.nbDames = 2;
+	temp.nbDames = 5;
 	temp.owner = BLACK;
 	gamestate->board[12] = temp;
-	temp.nbDames = 5;
-	temp.owner = WHITE;
-	gamestate->board[17] = temp;
 	temp.nbDames = 3;
 	temp.owner = WHITE;
-	gamestate->board[19] = temp;
+	gamestate->board[16] = temp;
 	temp.nbDames = 5;
+	temp.owner = WHITE;
+	gamestate->board[18] = temp;
+	temp.nbDames = 2;
 	temp.owner = BLACK;
 	gamestate->board[23] = temp;
 }
@@ -304,7 +523,7 @@ int main ( int argc, char** argv )
 
     int sWidth=1024, sHeigth=703;
     // create a new window
-    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 32,
+    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 16,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
 
     SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
