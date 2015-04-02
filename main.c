@@ -421,34 +421,90 @@ void initDamesTab(Dame *damesTab, int nbDames)
 void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB)
 {
 
+    int i,x1=840,y1=-667,x2=422,y2=-667,x3=27,y3=17,x4=541,y4=17,width=68,height1=-291,height2=291;
+    int x5=844,y5=660,x6=325,y6=660,x7=99,y7=17,x8=607,y8=17;
+
+    for(i = 0; i < nbHB; i++){
+
+	    hitboxesTab[i].rectHB = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectHB
+
+	    if(i >= 0 && i <= 23) // on initialise les hitboxes des 24 squares.
+	        {
+	            hitboxesTab[i].rectHB->w = width;
+	            if (i>=0 && i<=11){
+	    	        hitboxesTab[i].rectHB->h = height1;
+	            }
+	            else if (i>=12 && i<=23){
+	    	        hitboxesTab[i].rectHB->h = height2;
+	            }
+	            if(i%2 == 0) // correspond aux squares blanc.
+	                {
+		                if (i>=0 && i<=5){
+		                    hitboxesTab[i].rectHB->x = x1;
+		                    hitboxesTab[i].rectHB->y = y1;
+		                    x1 -= 107;
+		                }
+		                else if (i>=6 && i<=11){
+		                hitboxesTab[i].rectHB->x = x2;
+		                hitboxesTab[i].rectHB->y = y2;
+		                x2 -= 107;
+		                }
+	                	else if (i>=12 && i<=17){
+		                    hitboxesTab[i].rectHB->x = x3;
+		                    hitboxesTab[i].rectHB->y = y3;
+		                    x3 += 107;
+		               }
+		               else if (i>=18 && i<=23){
+		                    hitboxesTab[i].rectHB->x = x4;
+		                    hitboxesTab[i].rectHB->y = y4;
+		                    x4 += 107;
+		               }
+	               }
+	        }
+	    else // correspond aux squares rouge.
+	    {
+		    if (i>=0 && i<=5){
+		        hitboxesTab[i].rectHB->x = x5;
+		        hitboxesTab[i].rectHB->y = y5;
+		        x5 += 107;
+		    }
+		    else if (i>=6 && i<=11){
+		        hitboxesTab[i].rectHB->x = x6;
+		        hitboxesTab[i].rectHB->y = y6;
+		        x6 += 107;
+		    }
+		    else if (i>=12 && i<=17){
+		        hitboxesTab[i].rectHB->x = x7;
+		        hitboxesTab[i].rectHB->y = y7;
+		        x7 -= 107;
+		    }
+		    else if (i>=18 && i<=23){
+		        hitboxesTab[i].rectHB->x = x8;
+		        hitboxesTab[i].rectHB->y = y8;
+	            x8 -=107;
+		    }
+	   }
+    }
+}
+
+int detectClickIntoHitbox(Hitbox *hitboxesTab, int nbHB, int x, int y)
+{
     int i;
 
     for(i = 0; i < nbHB; i++)
     {
-
-	hitboxesTab[i].rectHB = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectHB
-
-	if(i >= 0 && i <= 23) // on initialise les hitboxes des 24 squares.
-	{
-	    if(i%2 == 0) // correspond aux squares blanc.
-	    {
-		hitboxesTab[i].rectHB->x =0;
-		hitboxesTab[i].rectHB->y =0;
-		hitboxesTab[i].rectHB->w =0;
-		hitboxesTab[i].rectHB->h =0;
-	    }
-	    else // correspond aux squares rouge.
-	    {
-
-		hitboxesTab[i].rectHB->x =0;
-		hitboxesTab[i].rectHB->y =0;
-		hitboxesTab[i].rectHB->w =0;
-		hitboxesTab[i].rectHB->h =0;
-
-	    }
-	}
-
+        if((x >= hitboxesTab[i].rectHB->x) && (x <= hitboxesTab[i].rectHB->x + hitboxesTab[i].rectHB->w))
+        {
+            if((y >= hitboxesTab[i].rectHB->y) && (y <= hitboxesTab[i].rectHB->y + hitboxesTab[i].rectHB->h))
+            {
+                printf("click detected on hitbox %d\n", i);
+                return i;
+            }
+        }
     }
+    printf("no hitbox detected\n");
+    return -1;
+
 }
 
 void rollDices(unsigned char* dices)
@@ -651,6 +707,7 @@ int main ( int argc, char** argv )
     // Initialisation des Hitboxes
 
     Hitbox *hitboxesTab = (Hitbox*) malloc (28*sizeof(Hitbox));
+    initHitBoxesTab(hitboxesTab,28);
 
 
     // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
@@ -848,6 +905,7 @@ int main ( int argc, char** argv )
                         printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
                         lastX =  event.button.x;
                         lastY =  event.button.y;
+                        detectClickIntoHitbox(hitboxesTab,28,event.button.y,event.button.y);
                         if(event.button.button == SDL_BUTTON_LEFT)
                         {
 
