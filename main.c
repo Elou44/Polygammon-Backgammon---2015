@@ -6,7 +6,7 @@
 #include <time.h>
 #include "functions.h"
 
-#define OS 1 // 0 = Windows | 1 = Linux
+#define OS 0 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -52,7 +52,7 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
             y = 20;
 
         }
-        
+
 
 
 
@@ -67,8 +67,8 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
 		setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
-		
-		
+
+
             }
         }
 
@@ -82,7 +82,7 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
 		setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
-		
+
             }
 
         }
@@ -95,9 +95,9 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
 		setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
-		
+
             }
-            
+
         }
 
         else if(i==3){
@@ -108,7 +108,7 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
 		setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
-		
+
             }
 
         }
@@ -121,7 +121,7 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
 		setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
-		
+
             }
 
         }
@@ -134,7 +134,7 @@ void setDamesPos(Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, 
 		setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
-		
+
             }
 
         }
@@ -364,31 +364,31 @@ void initGameState(SGameState* gamestate){
 	temp.nbDames = 2;
 	temp.owner = WHITE;
 	gamestate->board[0] = temp;
-	
+
 	temp.nbDames = 5;
 	temp.owner = BLACK;
 	gamestate->board[5] = temp;
-	
+
 	temp.nbDames = 3;
 	temp.owner = BLACK;
 	gamestate->board[7] = temp;
-	
+
 	temp.nbDames = 5;
 	temp.owner = WHITE;
 	gamestate->board[11] = temp;
-	
+
 	temp.nbDames = 5;
 	temp.owner = BLACK;
 	gamestate->board[12] = temp;
-	
+
 	temp.nbDames = 3;
 	temp.owner = WHITE;
 	gamestate->board[16] = temp;
-	
+
 	temp.nbDames = 5;
 	temp.owner = WHITE;
 	gamestate->board[18] = temp;
-	
+
 	temp.nbDames = 2;
 	temp.owner = BLACK;
 	gamestate->board[23] = temp;
@@ -414,20 +414,20 @@ void initDamesTab(Dame *damesTab, int nbDames)
     {
       damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
       damesTab[i].dameSurf = (SDL_Surface*) malloc (1*sizeof(SDL_Surface)); // PENSER A LIBERER LA SURFACE
-      
+
     }
 }
 
 void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB)
 {
-  
+
     int i;
-    
+
     for(i = 0; i < nbHB; i++)
     {
-     
+
 	hitboxesTab[i].rectHB = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectHB
-	
+
 	if(i >= 0 && i <= 23) // on initialise les hitboxes des 24 squares.
 	{
 	    if(i%2 == 0) // correspond aux squares blanc.
@@ -439,15 +439,15 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB)
 	    }
 	    else // correspond aux squares rouge.
 	    {
-		
+
 		hitboxesTab[i].rectHB->x =0;
 		hitboxesTab[i].rectHB->y =0;
 		hitboxesTab[i].rectHB->w =0;
 		hitboxesTab[i].rectHB->h =0;
-		
+
 	    }
 	}
-      
+
     }
 }
 
@@ -641,17 +641,17 @@ int main ( int argc, char** argv )
     SDL_SetColorKey(dameBsurf, SDL_SRCCOLORKEY, SDL_MapRGB(dameBsurf->format, 255, 255, 255)); // on rend transparent le blanc de l'image
 
     // centre the bitmap on screen
-    
-    
+
+
     srand(time(NULL));
     int i,j=0;
     Dame *damesTab = (Dame*) malloc (30*sizeof(Dame));
     initDamesTab(damesTab,30);
-    
+
     // Initialisation des Hitboxes
-    
+
     Hitbox *hitboxesTab = (Hitbox*) malloc (28*sizeof(Hitbox));
-    
+
 
     // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
 
@@ -836,23 +836,22 @@ int main ( int argc, char** argv )
                                 printf("Player BLACK is playing\n");
                             }
                         }
-                        
-		      if(event.key.keysym.sym == SDLK_p)
-		      {
-			    printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
-			    lastX = event.button.x;
-			    lastY = event.button.y;
-		      }
+
+
+
+
 
                         break;
                     }
-                case SDL_MOUSEMOTION:
+                case SDL_MOUSEBUTTONDOWN:
                     {
-			
+                        printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
+                        lastX =  event.button.x;
+                        lastY =  event.button.y;
                         if(event.button.button == SDL_BUTTON_LEFT)
                         {
-			  
-			    
+
+
                             damesTab[j].rectDame->x = event.button.x;
                             damesTab[j].rectDame->y = event.button.y;
                         }
