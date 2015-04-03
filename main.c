@@ -22,6 +22,172 @@
 
 SGameState gamestate;
 
+void setScore(SGameState *gamestate){
+    int i,j1,j2,w=0,b=0;
+//on va utiliser whiteScore et blackScore DU CACA
+	gamestate->whiteScore = w;
+	gamestate->blackScore = b;
+	for (i=0;i<24;i++){
+	   if (gamestate->board[i].owner == WHITE){
+		   j1 = gamestate->board[i].nbDames;
+		   if (i == 0){
+			w+=24;
+		   }
+		   else if (i == 1){
+			w+=(23*j1);
+		   }
+		   else if (i == 2){
+			w+=(22*j1);
+		   }
+		   else if (i == 3){
+			w+=(21*j1);
+		   }
+		   else if (i == 4){
+			w+=(20*j1);
+		   }
+		   else if (i == 5){
+			w+=(19*j1);
+		   }
+		   else if (i == 6){
+			w+=(18*j1);
+		   }
+		   else if (i == 7){
+			w+=(17*j1);
+		   }
+		   else if (i == 8){
+			w+=(16*j1);
+		   }
+		   else if (i == 9){
+			w+=(15*j1);
+		   }
+		   else if (i == 10){
+			w+=(14*j1);
+		   }
+		   else if (i == 11){
+			w+=(13*j1);
+		   }
+		   else if (i == 12){
+			w+=(12*j1);
+		   }
+		   else if (i == 13){
+			w+=(11*j1);
+		   }
+		   else if (i == 14){
+			w+=(10*j1);
+		   }
+		   else if (i == 15){
+			w+=(9*j1);
+		   }
+		   else if (i == 16){
+			w+=(8*j1);
+		   }
+		   else if (i == 17){
+			w+=(7*j1);
+		   }
+		   else if (i == 18){
+			w+=(6*j1);
+		   }
+		   else if (i == 19){
+			w+=(5*j1);
+		   }
+		   else if (i == 20){
+			w+=(4*j1);
+		   }
+		   else if (i == 21){
+			w+=(3*j1);
+		   }
+		   else if (i == 22){
+			w+=(2*j1);
+		   }
+		   else if (i == 23){
+			w+=(1*j1);
+		   }
+		   //pour le out
+		   else if (i == 24){
+			w+=(25*gamestate->out[0]);
+		   }
+	   }
+	   else if (gamestate->board[i].owner == BLACK){
+		   j2 = gamestate->board[i].nbDames;
+		   if (i == 23){
+			w+=24;
+		   }
+		   else if (i == 22){
+			b+=(23*j2);
+		   }
+		   else if (i == 21){
+			b+=(22*j2);
+		   }
+		   else if (i == 20){
+			b+=(21*j2);
+		   }
+		   else if (i == 19){
+			b+=(20*j2);
+		   }
+		   else if (i == 18){
+			b+=(19*j2);
+		   }
+		   else if (i == 17){
+			b+=(18*j2);
+		   }
+		   else if (i == 16){
+			b+=(17*j2);
+		   }
+		   else if (i == 15){
+			b+=(16*j2);
+		   }
+		   else if (i == 14){
+			b+=(15*j2);
+		   }
+		   else if (i == 13){
+			b+=(14*j2);
+		   }
+		   else if (i == 12){
+			b+=(13*j2);
+		   }
+		   else if (i == 11){
+			b+=(12*j2);
+		   }
+		   else if (i == 10){
+			b+=(11*j2);
+		   }
+		   else if (i == 9){
+			b+=(10*j2);
+		   }
+		   else if (i == 8){
+			b+=(9*j2);
+		   }
+		   else if (i == 7){
+			b+=(8*j2);
+		   }
+		   else if (i == 6){
+			b+=(7*j2);
+		   }
+		   else if (i == 5){
+			b+=(6*j2);
+		   }
+		   else if (i == 4){
+			b+=(5*j2);
+		   }
+		   else if (i == 3){
+			b+=(4*j2);
+		   }
+		   else if (i == 2){
+			b+=(3*j2);
+		   }
+		   else if (i == 1){
+			b+=(2*j2);
+		   }
+		   else if (i == 0){
+			b+=(1*j2);
+		   }
+		   //pour le out
+		   else if (i == 25){
+			b+=(25*gamestate->out[1]);
+		   }
+	   }
+	}	
+}
 
 void setSurf(int i, int z, Dame *damesTab, SGameState* gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf)
 {
