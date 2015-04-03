@@ -1,4 +1,4 @@
-
+#include <SDL/SDL.h>
 // DECLARATION DES POINTEURS DE FONCTIONS DE L'API //
 
 typedef struct {
@@ -135,7 +135,7 @@ typedef int (*pfDoubleStack)(const SGameState * const);
 typedef int (*pfTakeDouble)(const SGameState * const);
 
 /**
- * Prise de décision de la part de l'IA
+ * Prise de décision de la part de l'IA.
  * @param const SGameState * const gameState
  *	l'état du jeu courant
  * @param SMove moves[4]
@@ -145,4 +145,107 @@ typedef int (*pfTakeDouble)(const SGameState * const);
  */
 //void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries);
 typedef void (*pfPlayTurn)(const SGameState * const,  const unsigned char[2], SMove[4], unsigned int*, unsigned int);
+
+
+/**
+ * Calcule le score de chaque joueur.
+ * @param const SGameState * const gameState
+ *	l'état du jeu courant
+ */
+void setScore(SGameState* gamestate);
+
+void setScore2(SGameState* gamestate);
+
+/**
+ * Fonction utilisée dans setDamesPos. Met la bonne SDL_surface à chaque Dame (pion).
+ * @param int i
+ *	indice du board
+ * @param int z
+ *	indice de la Dame dans le tableau damesTab
+ * @param Dame *damesTab
+ *	tableau de Dames (pions)
+ * @param const SGameState * const gameState
+ *	l'état du jeu courant
+ * @param SDL_Surface dameWsurf
+ *	surface des pions blanc
+ * @param SDL_Surface dameBsurf
+ *	surface des pions noir
+ */
+void setSurf(int i, int z, Dame *damesTab, const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf);
+
+
+/**
+ * Place les pions sur le plateau de jeu en fonction d'un SGameState donné.
+ * @param Dame *damesTab
+ *	tableau de Dames (pions)
+ * @param const SGameState * const gameState
+ *	l'état du jeu courant
+ * @param SDL_Surface dameWsurf
+ *	surface des pions blanc
+ * @param SDL_Surface dameBsurf
+ *	surface des pions noir
+ */
+void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf);
+
+
+/**
+ * Initialisation de l'état de jeu (configuration début de partie).
+ * @param const SGameState * const gameState
+ *	l'état du jeu courant
+ */
+void initGameState(SGameState* gamestate);
+
+
+/**
+ * Dessine les Dames (pions) sur l'écran
+ * @param Dame *damesTab
+ *	tableau de Dames (pions)
+ * @param SDL_Surface* screen
+ *	surface de l'écran
+ * @param int nbDames
+ *	nombre de Dames
+ */
+void drawDames(Dame *damesTab, SDL_Surface* screen, int nbDames);
+
+/**
+ * Initialisation du tableau des Dames (Allocations dynamiques de mémoires)
+ * @param Dame *damesTab
+ *	tableau de Dames (pions)
+ * @param int nbDames
+ *	nombre de Dames
+ */
+void initDamesTab(Dame *damesTab, int nbDames);
+
+/**
+ * Initialisation du tableau des hitboxes (Allocations dynamiques de mémoires)
+ * @param Hitbox *hitboxesTab
+ *	tableau de Hitbox
+ * @param int nbHB
+ *	nombre de Hitbox
+ * @param SDL_Surface* screen (DEBUG purpose)
+ *	surface de l'écran (pour dessiner les hitboxes à l'écran)
+ */
+void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen);
+
+/**
+ * Renvoie l'indice de la hitbox cliquée (ou -1 si aucune hitbox n'est cliquée)
+ * @param Hitbox *hitboxesTab
+ *	tableau de Hitbox
+ * @param int nbHB
+ *	nombre de Hitbox
+ * @param int x
+ *	abscisse du pointeur de la souris
+ * @param int y
+ *	ordonnée du pointeur de la souris
+ */
+int detectClickIntoHitbox(Hitbox *hitboxesTab, int nbHB, int x, int y);
+
+/**
+ * Tire deux dés aléatoirement
+ * @param unsigned char* dices
+ *	tableau de caractères (représentant les dés tirés)
+ */
+void rollDices(unsigned char* dices);
+
+
 
