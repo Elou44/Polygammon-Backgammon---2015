@@ -3,10 +3,11 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include <time.h>
 #include "functions.h"
 
-#define OS 0 // 0 = Windows | 1 = Linux
+#define OS 1 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -424,7 +425,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
     int i,y1 = 380, y2= 23, width1 = 68, height = 300;
 
 
-    for(i = 0; i < 24; i++){
+    for(i = 0; i < 28; i++){
 
         hitboxesTab[i].rectHB = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectHB
 
@@ -619,8 +620,40 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
         }
+	//out blanc
+	else if (i == 24)
+	{
+	    hitboxesTab[i].rectHB->x = 490;
+            hitboxesTab[i].rectHB->y = y2;
+            hitboxesTab[i].rectHB->w = 44;
+            hitboxesTab[i].rectHB->h = height;	    
+	}
+	//out noir
+	else if (i == 25)
+	{
+            hitboxesTab[i].rectHB->x = 490;
+            hitboxesTab[i].rectHB->y = y1;
+            hitboxesTab[i].rectHB->w = 44;
+            hitboxesTab[i].rectHB->h = height;	    
+	}
+	//win blanc
+	else if (i == 26)
+	{
+            hitboxesTab[i].rectHB->x = 1015;
+            hitboxesTab[i].rectHB->y = y2;
+            hitboxesTab[i].rectHB->w = width1;
+            hitboxesTab[i].rectHB->h = height;
+	}
+	//win noir
+	else if (i == 27)
+	{
+            hitboxesTab[i].rectHB->x = 1015;
+            hitboxesTab[i].rectHB->y = y1;
+            hitboxesTab[i].rectHB->w = width1;
+            hitboxesTab[i].rectHB->h = height;
+	}
 
-        //SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
+        SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
 
     }
 
@@ -635,7 +668,7 @@ int detectClickIntoHitbox(Hitbox *hitboxesTab, int nbHB, int x, int y)
 {
     int i;
 
-    for(i = 0; i < 24; i++)
+    for(i = 0; i < 28; i++)
     {
         if((x >= hitboxesTab[i].rectHB->x) && (x <= hitboxesTab[i].rectHB->x + hitboxesTab[i].rectHB->w))
         {
@@ -799,15 +832,15 @@ int main ( int argc, char** argv )
     atexit(SDL_Quit);
 
 
-    int sWidth=1024, sHeigth=703;
+    int sWidth=1241, sHeigth=811;
     // create a new window
-    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 16,
+    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 32,
                                            SDL_HWSURFACE|SDL_DOUBLEBUF);
 
     SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
     if ( !screen )
     {
-        printf("Unable to set 1310x900 video: %s\n", SDL_GetError());
+        printf("Unable to set 1241*811 video: %s\n", SDL_GetError());
         return 1;
     }
 
@@ -839,7 +872,22 @@ int main ( int argc, char** argv )
     }
 
     SDL_SetColorKey(dameBsurf, SDL_SRCCOLORKEY, SDL_MapRGB(dameBsurf->format, 255, 255, 255)); // on rend transparent le blanc de l'image
+    //init SDL TTF
+    /*TTF_Init();
+    //Si erreur
+    if(TTF_Init() == -1)
 
+    {
+
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+
+    exit(EXIT_FAILURE);
+
+    }
+    //Chargement de la police
+    TTF_Font *police = NULL;
+    police = TTF_OpenFont("./police/Modern Serif Italic.ttf",20);
+	*/
     // centre the bitmap on screen
 
 
@@ -1088,7 +1136,7 @@ int main ( int argc, char** argv )
         }
 
 
-            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+            //SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
             drawDames(damesTab,screen,30);
 
             // DRAWING ENDS HERE
