@@ -827,7 +827,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
             hitboxesTab[i].rectHB->h = height;
 	}
 
-        SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
+        //SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
 
     }
 

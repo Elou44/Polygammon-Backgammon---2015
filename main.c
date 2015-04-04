@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <SDL/SDL.h>
-//#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 #include <time.h>
 #include "functions.h"
 
@@ -159,6 +159,35 @@ int main ( int argc, char** argv )
         return 1;
     }
 
+    if(TTF_Init() == -1)
+    {
+        printf("Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+    SDL_Surface *text1;
+    //text1->w = 500;
+    //text1->h = 30;
+    TTF_Font *fontHacked = NULL;
+    SDL_Rect fontPos;
+    fontPos.x = 100;
+    fontPos.y = 100;
+    SDL_Color colorBlack = {255, 255, 255};
+
+
+        /* Chargement de la police */
+    fontHacked = TTF_OpenFont("hacked.ttf", 65);
+    if(fontHacked == NULL)
+    {
+        printf("Erreur d'initialisation de Openfont : %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+    /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
+    text1 = TTF_RenderText_Blended(fontHacked, "Backgammon NA Edition", colorBlack);
+    if(text1 == NULL)
+    {
+        printf("Erreur d'initialisation de RenderText : %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
@@ -230,7 +259,7 @@ int main ( int argc, char** argv )
     // Initialisation des Hitboxes
 
     Hitbox *hitboxesTab = (Hitbox*) malloc (28*sizeof(Hitbox));
-    SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+    //SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
     initHitBoxesTab(hitboxesTab,28,screen);
 
 
@@ -470,7 +499,7 @@ int main ( int argc, char** argv )
 
             //SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
             drawDames(damesTab,screen,30);
-
+            SDL_BlitSurface(text1, NULL, screen, &fontPos); /* Blit du texte */
             // DRAWING ENDS HERE
 
             // finally, update the screen :)
@@ -486,6 +515,12 @@ int main ( int argc, char** argv )
     // LIBERATION DE LA MEMOIRE
     SDL_FreeSurface(dameBsurf);
     SDL_FreeSurface(dameWsurf);
+
+    TTF_CloseFont(fontHacked);
+    TTF_Quit();
+
+    SDL_FreeSurface(text1);
+    SDL_Quit();
 
     // all is well ;)
     free(damesTab);
