@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include <time.h>
 #include "functions.h"
 
@@ -212,7 +213,7 @@ int main ( int argc, char** argv )
         return 1;
     }
 
-    SDL_Surface* backgroundBoard = SDL_LoadBMP("boardPolygammon.bmp");
+    SDL_Surface* backgroundBoard = IMG_Load("boardPolygammon.bmp");
     if (!backgroundBoard)
     {
         printf("Unable to load bitmap boardPolygammon.bmp: %s\n", SDL_GetError());
@@ -223,7 +224,7 @@ int main ( int argc, char** argv )
     rectBoard.y = 0;
 
     // load an image
-    SDL_Surface* dameWsurf = SDL_LoadBMP("white_dame.bmp");
+    SDL_Surface* dameWsurf = IMG_Load("white_dame.bmp");
     if (!dameWsurf)
     {
         printf("Unable to load bitmap white_dame.bmp: %s\n", SDL_GetError());
@@ -232,7 +233,7 @@ int main ( int argc, char** argv )
 
 
 
-    SDL_Surface* dameBsurf = SDL_LoadBMP("black_dame.bmp");
+    SDL_Surface* dameBsurf = IMG_Load("black_dame.bmp");
     if (!dameWsurf)
     {
         printf("Unable to load bitmap black_dame.bmp: %s\n", SDL_GetError());
