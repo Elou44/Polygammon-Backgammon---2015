@@ -96,6 +96,9 @@ http://www.trustonme.net/didactels/154.html
 
 ### Installation de SDL2 sur CodeBlocks :
 - téléchargez SDL2-devel-2.0.3-mingw.tar.gz (MinGW 32/64-bit) sur https://www.libsdl.org/download-2.0.php
-- décompressez l'archive. le dossier que vous aller utilisez est : #### i686-w64-mingw32 #####
+- décompressez l'archive. le dossier que vous allez utiliser est : i686-w64-mingw32 (IMPORTANT)
+- collez SDL2.dll situé dans bin dans le bin de CodeBlocks (C:/ProgamFiles/CodeBlocks/MinGW/bin)
+- collez le DOSSIER SDL2 (situé dans include) dans le dossier include de CodeBlocks
+- collez les fichiers situé dans lib dans le dossier lib de CodeBlocks
 
-
+Normalement ça devrait etre bon ! 
