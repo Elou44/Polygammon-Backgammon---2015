@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <time.h>
 #include "functions.h"
@@ -194,8 +194,16 @@ int main ( int argc, char** argv )
 
     int sWidth=1241, sHeigth=811;
     // create a new window
-    SDL_Surface* screen = SDL_SetVideoMode(sWidth, sHeigth, 32,
-                                           SDL_HWSURFACE|SDL_DOUBLEBUF);
+    SDL_Window * window = SDL_CreateWindow(
+        "Polygammon™",                  // window title
+        SDL_WINDOWPOS_UNDEFINED,           // initial x position
+        SDL_WINDOWPOS_UNDEFINED,           // initial y position
+        sWidth,                               // width, in pixels
+        sHeigth,                               // height, in pixels
+        SDL_WINDOW_OPENGL                  // flags - see below
+    );
+
+    SDL_Surface *screen = SDL_GetWindowSurface(window);
 
     SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
     if ( !screen )
@@ -222,7 +230,7 @@ int main ( int argc, char** argv )
         return 1;
     }
 
-    SDL_SetColorKey(dameWsurf, SDL_SRCCOLORKEY, SDL_MapRGB(dameWsurf->format, 255, 255, 255)); // on rend transparent le blanc de l'image
+
 
     SDL_Surface* dameBsurf = SDL_LoadBMP("black_dame.bmp");
     if (!dameWsurf)
@@ -231,23 +239,7 @@ int main ( int argc, char** argv )
         return 1;
     }
 
-    SDL_SetColorKey(dameBsurf, SDL_SRCCOLORKEY, SDL_MapRGB(dameBsurf->format, 255, 255, 255)); // on rend transparent le blanc de l'image
-    //init SDL TTF
-    /*TTF_Init();
-    //Si erreur
-    if(TTF_Init() == -1)
 
-    {
-
-    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
-
-    exit(EXIT_FAILURE);
-
-    }
-    //Chargement de la police
-    TTF_Font *police = NULL;
-    police = TTF_OpenFont("./police/Modern Serif Italic.ttf",20);
-	*/
     // centre the bitmap on screen
 
 
@@ -366,6 +358,7 @@ int main ( int argc, char** argv )
                         {
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
                             printf("Player WHITE begins\n");
+                            printf("jusque ici 1");
                             curPlayer = WHITE;
                             curState = SPLAY;
                         }
@@ -440,6 +433,7 @@ int main ( int argc, char** argv )
                                 curPlayer = WHITE;
                                 printf("Player WHITE is playing (Score: %d)\n", gamestate.whiteScore);
 
+
                             }
                             else
                             {
@@ -474,36 +468,19 @@ int main ( int argc, char** argv )
                 } // end switch
 
 
-
-
-
-            // DRAWING STARTS HERE
-
-            // clear screen
-           // SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-            // DESSINER L'ECRAN
-
-            /*SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
-            drawDames(damesTab,screen,30);
-
-            // DRAWING ENDS HERE
-
-            // finally, update the screen :)
-            SDL_Flip(screen);
-            cpt++;
-	   // printf("frame%d\n",cpt%100);
-            SDL_Delay(10);*/
         }
 
 
-            //SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
-            drawDames(damesTab,screen,30);
-            SDL_BlitSurface(text1, NULL, screen, &fontPos); /* Blit du texte */
-            // DRAWING ENDS HERE
+            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
-            // finally, update the screen :)
-            SDL_Flip(screen);
+            SDL_BlitSurface(text1,0,screen, &fontPos);
+
+            drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
+
+
+            SDL_UpdateWindowSurface(window);
+
             cpt++;
 	   // printf("frame%d\n",cpt%100);
             SDL_Delay(15);
@@ -520,6 +497,8 @@ int main ( int argc, char** argv )
     TTF_Quit();
 
     SDL_FreeSurface(text1);
+    SDL_FreeSurface(screen);
+    SDL_DestroyWindow(window);
     SDL_Quit();
 
     // all is well ;)
@@ -527,3 +506,6 @@ int main ( int argc, char** argv )
     printf("Exited cleanly\n");
     return 0;
 }
+
+
+

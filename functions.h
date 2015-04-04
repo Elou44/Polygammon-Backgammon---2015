@@ -7,9 +7,8 @@ typedef struct {
 
 
 typedef struct {
-    unsigned int coulor; // 0 blanche 1 noire
+    unsigned int color; // 0 blanche 1 noire
     SDL_Rect *rectDame; // position de l'image
-    SDL_Surface *dameSurf;
 } Dame;
 
 // Les différents états de jeu
@@ -205,7 +204,7 @@ void initGameState(SGameState* gamestate);
  * @param int nbDames
  *	nombre de Dames
  */
-void drawDames(Dame *damesTab, SDL_Surface* screen, int nbDames);
+void drawDames(Dame *damesTab,SDL_Surface* dameWsurf, SDL_Surface* dameBsurf, SDL_Surface* screen, int nbDames);
 
 /**
  * Initialisation du tableau des Dames (Allocations dynamiques de mémoires)

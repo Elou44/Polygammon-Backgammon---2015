@@ -12,8 +12,13 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add option="-std=c99" />
 				</Compiler>
+				<Linker>
+					<Add library="C:\Program Files (x86)\CodeBlocks\MinGW\lib\SDL2_ttf.lib" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/polygammon" prefix_auto="1" extension_auto="1" />
@@ -30,18 +35,21 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="A:/Logiciels/SDL/DevLib/SDL-1.2.15/include" />
+			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
-			<Add library="SDLmain" />
-			<Add library="SDL.dll" />
+			<Add library="SDL2main" />
+			<Add library="SDL2.dll" />
 			<Add library="user32" />
 			<Add library="gdi32" />
 			<Add library="winmm" />
 			<Add library="dxguid" />
-			<Add directory="A:/Logiciels/SDL/DevLib/SDL-1.2.15/lib" />
+			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/lib" />
 		</Linker>
+		<Unit filename="functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="functions.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />

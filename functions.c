@@ -199,27 +199,27 @@ void setScore2(SGameState* gamestate){
 	gamestate->blackScore = b;
 }
 
-void setSurf(int i, int z, Dame *damesTab,const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf)
+void setColor(int i, int z, Dame *damesTab,const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf)
 {
     if(gamestate->board[i].owner == WHITE)
     {
-	damesTab[z].coulor=0;
-	damesTab[z].dameSurf = dameWsurf;
+	damesTab[z].color=0;
     }
     else
     {
-	damesTab[z].coulor=1;
-	damesTab[z].dameSurf = dameBsurf;
+	damesTab[z].color=1;
     }
 }
 
 void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf){
+    //SDL_UnlockSurface(dameWsurf);
+    //SDL_UnlockSurface(dameBsurf);
     int i,j,x=0,y=615, z=0, esp=40;
 
 
     for (i=0;i<24;i++){
 
-    y = 615;
+        y = 615;
         if(i >=0 && i <= 11){
 
             y = 615;
@@ -238,7 +238,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 925;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
 
@@ -253,7 +253,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 849;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
 
@@ -266,7 +266,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 773;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
 
@@ -279,7 +279,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 696;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
 
@@ -292,7 +292,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 621;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
 
@@ -305,7 +305,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 543;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
 
@@ -318,7 +318,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 416;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
             }
@@ -330,7 +330,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 340;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
             }
@@ -343,7 +343,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 264;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
             }
@@ -355,7 +355,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 187;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
             }
@@ -367,7 +367,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 112;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
             }
@@ -379,7 +379,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 35;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
             }
@@ -391,7 +391,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 35;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -403,7 +403,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 112;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -415,7 +415,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 187;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -427,7 +427,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 264;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -439,7 +439,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 340;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -451,7 +451,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 416;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -463,7 +463,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 543;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -475,7 +475,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 621;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -487,7 +487,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 696;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -499,7 +499,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 773;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -511,7 +511,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 849;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -523,7 +523,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 925;
                 damesTab[z].rectDame->y = y;
-                setSurf(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
+                setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y += esp;
             }
@@ -571,14 +571,23 @@ void initGameState(SGameState* gamestate){
 
 
 
-void drawDames(Dame *damesTab, SDL_Surface* screen, int nbDames)
+void drawDames(Dame *damesTab,SDL_Surface* dameWsurf, SDL_Surface* dameBsurf, SDL_Surface* screen, int nbDames)
 {
     int i;
+
     //SDL_Rect dstrect;
     for(i = 0; i < nbDames ; i++)
     {
-        //dstrect =  damesTab[i].rectDame;
-        SDL_BlitSurface(damesTab[i].dameSurf,0,screen, damesTab[i].rectDame);
+
+        if(damesTab[i].color == 0)
+        {
+            SDL_BlitSurface(dameWsurf,0,screen, damesTab[i].rectDame);
+        }
+        else
+        {
+            SDL_BlitSurface(dameBsurf,0,screen, damesTab[i].rectDame);
+        }
+
     }
 }
 
@@ -588,8 +597,6 @@ void initDamesTab(Dame *damesTab, int nbDames)
     for(i = 0; i < nbDames; i++)
     {
       damesTab[i].rectDame = (SDL_Rect*) malloc (1*sizeof(SDL_Rect)); // PENSER A LIBERER LE rectDame
-      damesTab[i].dameSurf = (SDL_Surface*) malloc (1*sizeof(SDL_Surface)); // PENSER A LIBERER LA SURFACE
-
     }
 }
 
