@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <SDL2/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #include <time.h>
 #include "functions.h"
 
@@ -170,7 +170,7 @@ int main ( int argc, char** argv )
     TTF_Font *fontHacked = NULL;
     SDL_Rect fontPos;
     fontPos.x = 100;
-    fontPos.y = 100;
+    fontPos.y = 750;
     SDL_Color colorBlack = {255, 255, 255};
 
 
@@ -182,7 +182,7 @@ int main ( int argc, char** argv )
         exit(EXIT_FAILURE);
     }
     /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
-    text1 = TTF_RenderText_Blended(fontHacked, "Backgammon NA Edition", colorBlack);
+    text1 = TTF_RenderText_Blended(fontHacked, "Backgammon Nantarena Edition", colorBlack);
     if(text1 == NULL)
     {
         printf("Erreur d'initialisation de RenderText : %s\n", TTF_GetError());
