@@ -110,3 +110,11 @@ Normalement ça devrait etre bon !
 - collez les lib (dossier lib/x86) dans le dossier lib de CodeBlocks
 
 Normalement ça devrait etre bon ! 
+
+### Installation de SDL_Imamge sur CodeBlocks :
+- téléchargez   SDL2_image-devel-2.0.0-VC.zip sur http://www.libsdl.org/projects/SDL_image/
+- décompressez l'archive. 
+- collez SDL_image.h situé dans include dans le include/SDL2 de CodeBlocks (C:/ProgamFiles/CodeBlocks/MinGW/include/SDL2)
+- collez les lib (dossier lib/x86) dans le dossier lib de CodeBlocks
+
+Normalement ça devrait etre bon ! 
