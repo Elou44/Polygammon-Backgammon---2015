@@ -457,7 +457,7 @@ int main ( int argc, char** argv )
                             {
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                 setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                //drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
 
                                 nbMoves = 0;
                                 printf("Player WHITE is playing (Score: %d)\n", gamestate.whiteScore);
@@ -469,7 +469,7 @@ int main ( int argc, char** argv )
                             {
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                 setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                //drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
 
                                 nbMoves = 0;
                                 printf("Player BLACK is playing (Score: %d)\n", gamestate.blackScore);
@@ -517,22 +517,26 @@ int main ( int argc, char** argv )
                 } // end switch
 
 
+
+                SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+
+                SDL_BlitSurface(text1,0,screen, &fontPos);
+                //printf("dessin\n");
+                //printf("%d\n", gamestate.board[23].nbDames);
+                drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
+
+
+                SDL_UpdateWindowSurface(window);
+
+
+                SDL_Delay(15);
+
+
         }
 
 
-            SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
-            SDL_BlitSurface(text1,0,screen, &fontPos);
-            //printf("dessin\n");
-            drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
-
-
-
-            SDL_UpdateWindowSurface(window);
-
-            cpt++;
-	   // printf("frame%d\n",cpt%100);
-            SDL_Delay(15);
 
 
 

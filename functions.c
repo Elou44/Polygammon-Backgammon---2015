@@ -30,191 +30,26 @@ void setScore(SGameState* gamestate){
 
 }
 
-void setScore2(SGameState* gamestate){
-    int i,j1,j2,w=0,b=0;
-
-	for (i=0;i<24;i++){
-	   if (gamestate->board[i].owner == WHITE){
-		   j1 = gamestate->board[i].nbDames;
-		   if (i == 0){
-			w+=24;
-		   }
-		   else if (i == 1){
-			w+=(23*j1);
-		   }
-		   else if (i == 2){
-			w+=(22*j1);
-		   }
-		   else if (i == 3){
-			w+=(21*j1);
-		   }
-		   else if (i == 4){
-			w+=(20*j1);
-		   }
-		   else if (i == 5){
-			w+=(19*j1);
-		   }
-		   else if (i == 6){
-			w+=(18*j1);
-		   }
-		   else if (i == 7){
-			w+=(17*j1);
-		   }
-		   else if (i == 8){
-			w+=(16*j1);
-		   }
-		   else if (i == 9){
-			w+=(15*j1);
-		   }
-		   else if (i == 10){
-			w+=(14*j1);
-		   }
-		   else if (i == 11){
-			w+=(13*j1);
-		   }
-		   else if (i == 12){
-			w+=(12*j1);
-		   }
-		   else if (i == 13){
-			w+=(11*j1);
-		   }
-		   else if (i == 14){
-			w+=(10*j1);
-		   }
-		   else if (i == 15){
-			w+=(9*j1);
-		   }
-		   else if (i == 16){
-			w+=(8*j1);
-		   }
-		   else if (i == 17){
-			w+=(7*j1);
-		   }
-		   else if (i == 18){
-			w+=(6*j1);
-		   }
-		   else if (i == 19){
-			w+=(5*j1);
-		   }
-		   else if (i == 20){
-			w+=(4*j1);
-		   }
-		   else if (i == 21){
-			w+=(3*j1);
-		   }
-		   else if (i == 22){
-			w+=(2*j1);
-		   }
-		   else if (i == 23){
-			w+=(1*j1);
-		   }
-		   //pour le out
-		   else if (i == 24){
-			w+=(25*gamestate->out[0]); // White correspont à l'indice 1 | il fallait prendre en compte la bar pas le out
-		   }
-	   }
-	   else if (gamestate->board[i].owner == BLACK){
-		   j2 = gamestate->board[i].nbDames;
-		   if (i == 23){
-			w+=24;
-		   }
-		   else if (i == 22){
-			b+=(23*j2);
-		   }
-		   else if (i == 21){
-			b+=(22*j2);
-		   }
-		   else if (i == 20){
-			b+=(21*j2);
-		   }
-		   else if (i == 19){
-			b+=(20*j2);
-		   }
-		   else if (i == 18){
-			b+=(19*j2);
-		   }
-		   else if (i == 17){
-			b+=(18*j2);
-		   }
-		   else if (i == 16){
-			b+=(17*j2);
-		   }
-		   else if (i == 15){
-			b+=(16*j2);
-		   }
-		   else if (i == 14){
-			b+=(15*j2);
-		   }
-		   else if (i == 13){
-			b+=(14*j2);
-		   }
-		   else if (i == 12){
-			b+=(13*j2);
-		   }
-		   else if (i == 11){
-			b+=(12*j2);
-		   }
-		   else if (i == 10){
-			b+=(11*j2);
-		   }
-		   else if (i == 9){
-			b+=(10*j2);
-		   }
-		   else if (i == 8){
-			b+=(9*j2);
-		   }
-		   else if (i == 7){
-			b+=(8*j2);
-		   }
-		   else if (i == 6){
-			b+=(7*j2);
-		   }
-		   else if (i == 5){
-			b+=(6*j2);
-		   }
-		   else if (i == 4){
-			b+=(5*j2);
-		   }
-		   else if (i == 3){
-			b+=(4*j2);
-		   }
-		   else if (i == 2){
-			b+=(3*j2);
-		   }
-		   else if (i == 1){
-			b+=(2*j2);
-		   }
-		   else if (i == 0){
-			b+=(1*j2);
-		   }
-		   //pour le out
-		   else if (i == 25){
-			b+=(25*gamestate->out[1]);
-		   }
-	   }
-	}
-
-	//on va utiliser whiteScore et blackScore
-	gamestate->whiteScore = w;
-	gamestate->blackScore = b;
-}
 
 void setColor(int i, int z, Dame *damesTab,const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf)
 {
     if(gamestate->board[i].owner == WHITE)
     {
-	damesTab[z].color=1;
+        damesTab[z].color=1;
+        printf("setColor color=1 z: %d  \n",z);
     }
     else
     {
-	damesTab[z].color=0;
+        damesTab[z].color=0;
+        printf("setColor color=0 z: %d  \n",z);
+
     }
 }
 
 void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf){
     //SDL_UnlockSurface(dameWsurf);
     //SDL_UnlockSurface(dameBsurf);
-    int i,j,x=0,y=615, z=0, esp=40;
+    int i,j,x=0,y=615, z = 0, esp=40;
 
 
     for (i=0;i<24;i++){
@@ -238,6 +73,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 925;
                 damesTab[z].rectDame->y = y;
+
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
@@ -253,6 +89,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 849;
                 damesTab[z].rectDame->y = y;
+
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
@@ -266,6 +103,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 773;
                 damesTab[z].rectDame->y = y;
+
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
                 y -= esp;
@@ -578,7 +416,6 @@ void initGameState(SGameState* gamestate){
 	temp.owner = BLACK;
 	gamestate->board[23] = temp;
 
-
 }
 
 
@@ -594,10 +431,12 @@ void drawDames(Dame *damesTab,SDL_Surface* dameWsurf, SDL_Surface* dameBsurf, SD
         if(damesTab[i].color == 1) // WHITE
         {
             SDL_BlitSurface(dameWsurf,0,screen, damesTab[i].rectDame);
+            //printf("color = 1, damesTab[%d].rectDame %d %d\n",i,damesTab[i].rectDame->x,damesTab[i].rectDame->y);
         }
         else // BLACK
         {
             SDL_BlitSurface(dameBsurf,0,screen, damesTab[i].rectDame);
+            //printf("color = 0, damesTab[%d].rectDame %d %d\n",i,damesTab[i].rectDame->x,damesTab[i].rectDame->y);
         }
 
     }
@@ -891,35 +730,37 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
   //cas depuis un square vers un autre
   if ((moves[i].dest_point != 0 || moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
 
-    if (curPlayer == WHITE){
+    if (curPlayer == BLACK){
+
+        if(gamestate->board[24-moves[i].dest_point].owner == BLACK || gamestate->board[24-moves[i].dest_point].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+        {
+            gamestate->board[24-moves[i].dest_point].nbDames += 1;
+            gamestate->bar[1] += 1; // on rajoute un pion dans la bar du blanc
+        }
+
+        gamestate->board[24-moves[i].src_point].nbDames -= 1;
+
+        gamestate->board[24-moves[i].dest_point].owner = BLACK;
+
+    }
+    else if (curPlayer == WHITE){
 
         if(gamestate->board[moves[i].dest_point-1].owner == WHITE || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
         {
 
             gamestate->board[moves[i].dest_point-1].nbDames += 1;
+            gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
         }
 
         gamestate->board[moves[i].src_point-1].nbDames -= 1;
         gamestate->board[moves[i].dest_point-1].owner = WHITE;
 
-    }
-    else if (curPlayer == BLACK){
 
-        if(gamestate->board[24-moves[i].dest_point].owner == BLACK || gamestate->board[24-moves[i].dest_point].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
-        {
-            gamestate->board[24-moves[i].dest_point].nbDames += 1;
-        }
-        printf("-= 1 BLACK %d\n ", 24-moves[i].src_point);
-
-        gamestate->board[24-moves[i].src_point].nbDames -= 1;
-
-        printf("%d\n", gamestate->board[24-moves[i].src_point].nbDames);
-        gamestate->board[24-moves[i].dest_point].owner = BLACK;
     }
   }
 
   //cas depuis un square vers bar
-
+/*
   else if (moves[i].dest_point == 0 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
    if (curPlayer == WHITE){
     gamestate->bar[1] += 1;
@@ -929,7 +770,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
     gamestate->bar[0] += 1;
     gamestate->board[24-moves[i].src_point].nbDames -= 1;
    }
-  }
+  }*/
   //cas depuis bar vers square
   else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
    if (curPlayer == WHITE){
@@ -937,6 +778,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
         if(gamestate->board[moves[i].dest_point-1].owner == WHITE || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
         {
             gamestate->board[moves[i].dest_point-1].nbDames += 1;
+            gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
         }
         gamestate->bar[1] -= 1;
         gamestate->board[moves[i].dest_point-1].owner = WHITE;
@@ -947,6 +789,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
         if(gamestate->board[24-moves[i].dest_point].owner == BLACK || gamestate->board[24-moves[i].dest_point].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
         {
             gamestate->board[24-moves[i].dest_point].nbDames += 1;
+            gamestate->bar[1] += 1; // on rajoute un pion dans la bar du blanc
         }
 
         gamestate->bar[0] -= 1;
@@ -969,6 +812,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
     for (i=0;i < 24;i++) // remettre à NOBODY les squares vides
     {
         if(gamestate->board[i].nbDames == 0) gamestate->board[i].owner = NOBODY;
+        printf("proprio magueule : i:%d %d\n", i,gamestate->board[i].owner);
     }
 
 }
