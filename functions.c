@@ -203,11 +203,11 @@ void setColor(int i, int z, Dame *damesTab,const SGameState* const gamestate, SD
 {
     if(gamestate->board[i].owner == WHITE)
     {
-	damesTab[z].color=0;
+	damesTab[z].color=1;
     }
     else
     {
-	damesTab[z].color=1;
+	damesTab[z].color=0;
     }
 }
 
@@ -534,7 +534,18 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 }
 
 void initGameState(SGameState* gamestate){
-	Square temp;
+
+
+	int i;
+    Square temp;
+
+    for( i = 0; i < 24; i++) // Initialisation de tous les squares à NOBODY et 0 dame
+    {
+        temp.nbDames = 0;
+        temp.owner = NOBODY;
+        gamestate->board[i] = temp;
+    }
+
 	temp.nbDames = 2;
 	temp.owner = WHITE;
 	gamestate->board[0] = temp;
@@ -567,6 +578,7 @@ void initGameState(SGameState* gamestate){
 	temp.owner = BLACK;
 	gamestate->board[23] = temp;
 
+
 }
 
 
@@ -579,11 +591,11 @@ void drawDames(Dame *damesTab,SDL_Surface* dameWsurf, SDL_Surface* dameBsurf, SD
     for(i = 0; i < nbDames ; i++)
     {
 
-        if(damesTab[i].color == 0)
+        if(damesTab[i].color == 1) // WHITE
         {
             SDL_BlitSurface(dameWsurf,0,screen, damesTab[i].rectDame);
         }
-        else
+        else // BLACK
         {
             SDL_BlitSurface(dameBsurf,0,screen, damesTab[i].rectDame);
         }
@@ -870,17 +882,6 @@ void rollDices(unsigned char* dices)
 }
 
 
-/*void updateSGameState(SGameState gamestate, SMoves[4],int nbMoves, Player curPlayer)
-{
-    int i;
-
-    for (i=0;i < nbMoves;i++){
-
-        gamestate.board[moves[i].src_point].nbDames -= 1;
-        gamestate.board[SMoves[i].dest_point].nbDames += 1;
-
-    }
-}*/
 
 
 void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves, Player curPlayer){
@@ -889,10 +890,34 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
  for (i=0;i < *nbMoves;i++){
   //cas depuis un square vers un autre
   if ((moves[i].dest_point != 0 || moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
-   gamestate->board[moves[i].src_point-1].nbDames -= 1;
-   gamestate->board[moves[i].dest_point-1].nbDames += 1;
+
+    if (curPlayer == WHITE){
+
+        if(gamestate->board[moves[i].dest_point-1].owner == WHITE || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+        {
+
+            gamestate->board[moves[i].dest_point-1].nbDames += 1;
+        }
+
+        gamestate->board[moves[i].src_point-1].nbDames -= 1;
+        gamestate->board[moves[i].dest_point-1].owner = WHITE;
+
+    }
+    else if (curPlayer == BLACK){
+
+        if(gamestate->board[24-moves[i].dest_point].owner == BLACK || gamestate->board[24-moves[i].dest_point].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+        {
+            gamestate->board[24-moves[i].dest_point].nbDames += 1;
+        }
+        printf("-= 1 BLACK %d\n ", 24-moves[i].src_point);
+
+        gamestate->board[24-moves[i].src_point].nbDames -= 1;
+
+        printf("%d\n", gamestate->board[24-moves[i].src_point].nbDames);
+        gamestate->board[24-moves[i].dest_point].owner = BLACK;
+    }
   }
-  //0 black 1 white
+
   //cas depuis un square vers bar
 
   else if (moves[i].dest_point == 0 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
@@ -902,18 +927,30 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
    }
    else if (curPlayer == BLACK){
     gamestate->bar[0] += 1;
-    gamestate->board[moves[i].src_point-1].nbDames -= 1;
+    gamestate->board[24-moves[i].src_point].nbDames -= 1;
    }
   }
   //cas depuis bar vers square
   else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
    if (curPlayer == WHITE){
-    gamestate->bar[1] -= 1;
-    gamestate->board[moves[i].dest_point-1].nbDames += 1;
+
+        if(gamestate->board[moves[i].dest_point-1].owner == WHITE || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+        {
+            gamestate->board[moves[i].dest_point-1].nbDames += 1;
+        }
+        gamestate->bar[1] -= 1;
+        gamestate->board[moves[i].dest_point-1].owner = WHITE;
+
    }
    else if (curPlayer == BLACK){
-    gamestate->bar[0] -= 1;
-    gamestate->board[moves[i].dest_point-1].nbDames += 1;
+
+        if(gamestate->board[24-moves[i].dest_point].owner == BLACK || gamestate->board[24-moves[i].dest_point].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+        {
+            gamestate->board[24-moves[i].dest_point].nbDames += 1;
+        }
+
+        gamestate->bar[0] -= 1;
+        gamestate->board[24-moves[i].dest_point].owner = BLACK;
    }
   }
   //cas depuis square vers out
@@ -924,15 +961,21 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
    }
    else if (curPlayer == BLACK){
     gamestate->out[0] += 1;
-    gamestate->board[moves[i].src_point-1].nbDames -= 1;
+    gamestate->board[24-moves[i].src_point].nbDames -= 1;
    }
   }
  }
 
+    for (i=0;i < 24;i++) // remettre à NOBODY les squares vides
+    {
+        if(gamestate->board[i].nbDames == 0) gamestate->board[i].owner = NOBODY;
+    }
+
 }
 
 
-void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves)
+
+void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player curPlayer)
 {
     if(*nbMoves < 4)
     {
@@ -946,8 +989,19 @@ void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves)
         }
 
         printf("indiceHBTab[0] %d | indiceHBTab[1] %d | nbMoves %d\n",indiceHBTab[0],indiceHBTab[1], *nbMoves);
-        moves[*nbMoves].src_point = indiceHBTab[0];
-        moves[*nbMoves].dest_point = indiceHBTab[1];
+
+        if(curPlayer == WHITE)
+        {
+            moves[*nbMoves].src_point = indiceHBTab[0];
+            moves[*nbMoves].dest_point = indiceHBTab[1];
+        }
+
+        else if(curPlayer == BLACK)
+        {
+            moves[*nbMoves].src_point = 24-indiceHBTab[0]+1;
+            moves[*nbMoves].dest_point = 24-indiceHBTab[1]+1;
+        }
+
         printf("moves added between %d and %d\n",moves[*nbMoves].src_point,moves[*nbMoves].dest_point);
         *nbMoves += 1; // on incrémente le compteur de moves
         indiceHBTab[0] = -1;

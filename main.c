@@ -457,7 +457,7 @@ int main ( int argc, char** argv )
                             {
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                 setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+                                //drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 
                                 nbMoves = 0;
                                 printf("Player WHITE is playing (Score: %d)\n", gamestate.whiteScore);
@@ -469,7 +469,7 @@ int main ( int argc, char** argv )
                             {
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                 setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+                                //drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 
                                 nbMoves = 0;
                                 printf("Player BLACK is playing (Score: %d)\n", gamestate.blackScore);
@@ -504,7 +504,7 @@ int main ( int argc, char** argv )
                                 else if(indiceHBTab[1] == -1)
                                 {
                                     indiceHBTab[1] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
-                                    clickToSMoves(indiceHBTab,moves,&nbMoves);
+                                    clickToSMoves(indiceHBTab,moves,&nbMoves,curPlayer);
                                 }
                             }
 
@@ -523,7 +523,7 @@ int main ( int argc, char** argv )
             SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
             SDL_BlitSurface(text1,0,screen, &fontPos);
-
+            //printf("dessin\n");
             drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 
 
