@@ -246,5 +246,11 @@ int detectClickIntoHitbox(Hitbox *hitboxesTab, int nbHB, int x, int y);
  */
 void rollDices(unsigned char* dices);
 
+void updateSGameState(SGameState* gamestate, SMove* moves, unsigned int *nbMoves, Player curPlayer);
+
+void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves);
+
+
+
 
 

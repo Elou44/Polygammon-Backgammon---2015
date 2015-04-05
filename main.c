@@ -8,7 +8,7 @@
 #include <time.h>
 #include "functions.h"
 
-#define OS 1 // 0 = Windows | 1 = Linux
+#define OS 0 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -263,14 +263,23 @@ int main ( int argc, char** argv )
     curState = SINITLIBS;
     Player curPlayer; // joueur courant
 
-    unsigned char j1Dices[2]; // dernier lanc� de d�s du j1
-    unsigned char j2Dices[2]; // dernier lanc� de d�s du j2
+    unsigned char dices[2]; // dernier lanc� de d�s du j1
+
+
+    SMove moves[4];
+    int indiceHBTab[2]; // indice des hitboxes cliquées pour 1 move
+
+
+    unsigned int nbMoves = 0;
 
 
     // program main loop
     bool done = false;
     SDL_Event event;
     int lastX=0,lastY=0;
+
+    int scoreToReach = 1;
+
 
     int cpt=0;
     while(!done)
@@ -315,16 +324,20 @@ int main ( int argc, char** argv )
                         // appelle de j1startMatch();
                         // appelle de j2startMatch();
                     }
-                    printf("varou");
+
                     curState = SSTARTGAME;
                     break;
 
                 case SSTARTGAME:
                     curPlayer = NOBODY;
 
+                    indiceHBTab[0] = -1; // initialisation du tableau d'indice des hitboxes cliquées
+                    indiceHBTab[1] = -1;
+
                     initGameState(&gamestate);
 
                     setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startGame(BLACK);
@@ -342,11 +355,12 @@ int main ( int argc, char** argv )
                     if(curPlayer == NOBODY) // aucun joueur n'a �t� choisi pour commenc� la partie
                     {
                         int j1Sum = 0, j2Sum = 0;
-                        rollDices(j1Dices);
-                        rollDices(j2Dices);
 
-                        j1Sum = (int) j1Dices[0]  + (int) j1Dices[1] ; // somme des d�s de j1
-                        j2Sum = (int) j2Dices[0]  + (int) j2Dices[1] ; // somme des d�s de j2
+                        rollDices(dices);
+                        j1Sum = (int) dices[0]  + (int) dices[1] ; // somme des d�s de j1
+
+                        rollDices(dices);
+                        j2Sum = (int) dices[0]  + (int) dices[1] ; // somme des d�s de j2
 
                         if(j1Sum > j2Sum)
                         {
@@ -363,6 +377,16 @@ int main ( int argc, char** argv )
                             curPlayer = WHITE;
                             curState = SPLAY;
                         }
+                    }
+
+                    else if(curPlayer == BLACK)
+                    {
+                        rollDices(dices);
+                    }
+
+                    else if(curPlayer == WHITE)
+                    {
+                        rollDices(dices);
                     }
 
 
@@ -431,15 +455,25 @@ int main ( int argc, char** argv )
                             setScore(&gamestate); // on met à jour le score
                             if(curPlayer == BLACK)
                             {
-                                curPlayer = WHITE;
+                                updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
+                                setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+                                drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
+                                nbMoves = 0;
                                 printf("Player WHITE is playing (Score: %d)\n", gamestate.whiteScore);
+                                curPlayer = WHITE;
 
 
                             }
                             else
                             {
-                                curPlayer = BLACK;
+                                updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
+                                setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+                                drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
+                                nbMoves = 0;
                                 printf("Player BLACK is playing (Score: %d)\n", gamestate.blackScore);
+                                curPlayer = BLACK;
                             }
                         }
 
@@ -454,14 +488,28 @@ int main ( int argc, char** argv )
                         printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
                         lastX =  event.button.x;
                         lastY =  event.button.y;
-                        detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
-                        if(event.button.button == SDL_BUTTON_LEFT)
+                        //detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
+                        /*if(event.button.button == SDL_BUTTON_LEFT)
                         {
 
 
                             damesTab[j].rectDame->x = event.button.x;
                             damesTab[j].rectDame->y = event.button.y;
+                        }*/
+                        if(gameMode == MHvsH)
+                        {
+                            if(detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y) != -1) // on vérifie qu'on clique bien sur une hitbox
+                            {
+                                if(indiceHBTab[0] == -1) indiceHBTab[0] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y); // mouvement non terminé
+                                else if(indiceHBTab[1] == -1)
+                                {
+                                    indiceHBTab[1] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
+                                    clickToSMoves(indiceHBTab,moves,&nbMoves);
+                                }
+                            }
+
                         }
+
 
                         break;
                     }

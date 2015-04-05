@@ -868,3 +868,95 @@ void rollDices(unsigned char* dices)
     dices[1] =  rand()%6;
 
 }
+
+
+/*void updateSGameState(SGameState gamestate, SMoves[4],int nbMoves, Player curPlayer)
+{
+    int i;
+
+    for (i=0;i < nbMoves;i++){
+
+        gamestate.board[moves[i].src_point].nbDames -= 1;
+        gamestate.board[SMoves[i].dest_point].nbDames += 1;
+
+    }
+}*/
+
+
+void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves, Player curPlayer){
+ int i;
+
+ for (i=0;i < *nbMoves;i++){
+  //cas depuis un square vers un autre
+  if ((moves[i].dest_point != 0 || moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
+   gamestate->board[moves[i].src_point-1].nbDames -= 1;
+   gamestate->board[moves[i].dest_point-1].nbDames += 1;
+  }
+  //0 black 1 white
+  //cas depuis un square vers bar
+
+  else if (moves[i].dest_point == 0 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
+   if (curPlayer == WHITE){
+    gamestate->bar[1] += 1;
+    gamestate->board[moves[i].src_point-1].nbDames -= 1;
+   }
+   else if (curPlayer == BLACK){
+    gamestate->bar[0] += 1;
+    gamestate->board[moves[i].src_point-1].nbDames -= 1;
+   }
+  }
+  //cas depuis bar vers square
+  else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
+   if (curPlayer == WHITE){
+    gamestate->bar[1] -= 1;
+    gamestate->board[moves[i].dest_point-1].nbDames += 1;
+   }
+   else if (curPlayer == BLACK){
+    gamestate->bar[0] -= 1;
+    gamestate->board[moves[i].dest_point-1].nbDames += 1;
+   }
+  }
+  //cas depuis square vers out
+  else if (moves[i].dest_point == 25 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
+   if (curPlayer == WHITE){
+    gamestate->out[1] += 1;
+    gamestate->board[moves[i].src_point-1].nbDames -= 1;
+   }
+   else if (curPlayer == BLACK){
+    gamestate->out[0] += 1;
+    gamestate->board[moves[i].src_point-1].nbDames -= 1;
+   }
+  }
+ }
+
+}
+
+
+void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves)
+{
+    if(*nbMoves < 4)
+    {
+        int i; // normalisation des indices
+        for (i = 0; i < 2; i++)
+        {
+            if(indiceHBTab[i]>=0 && indiceHBTab[i] <= 23) indiceHBTab[i] += 1;
+            else if(indiceHBTab[i] == 24 || indiceHBTab[i] == 25) indiceHBTab[i] = 0;
+            else if(indiceHBTab[i] == 26 || indiceHBTab[i] == 27) indiceHBTab[i] = 25;
+
+        }
+
+        printf("indiceHBTab[0] %d | indiceHBTab[1] %d | nbMoves %d\n",indiceHBTab[0],indiceHBTab[1], *nbMoves);
+        moves[*nbMoves].src_point = indiceHBTab[0];
+        moves[*nbMoves].dest_point = indiceHBTab[1];
+        printf("moves added between %d and %d\n",moves[*nbMoves].src_point,moves[*nbMoves].dest_point);
+        *nbMoves += 1; // on incrémente le compteur de moves
+        indiceHBTab[0] = -1;
+        indiceHBTab[1] = -1;
+    }
+    else
+    {
+        printf("erreur segmentation fault out of SMoves[4]");
+    }
+
+
+}
