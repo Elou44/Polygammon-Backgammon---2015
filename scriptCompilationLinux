@@ -1,4 +1,4 @@
 #!/bin/bash
-gcc -Wall -o PolygammonLinux main.c `sdl-config --cflags --libs` -ldl
-
+gcc -Wall -o PolygammonLinux main.c functions.c `sdl2-config --cflags --libs` -ldl -lSDL2main -lSDL2_image -lSDL2_ttf
+export LD_LIBRARY_PATH=.
 echo "PolygammonLinux has been compiled successfully"
