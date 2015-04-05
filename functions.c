@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 void setScore(SGameState* gamestate){
 

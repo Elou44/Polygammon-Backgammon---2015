@@ -1,4 +1,4 @@
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 // DECLARATION DES POINTEURS DE FONCTIONS DE L'API //
 
 typedef struct {

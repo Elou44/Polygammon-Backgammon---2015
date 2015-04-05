@@ -8,7 +8,7 @@
 #include <time.h>
 #include "functions.h"
 
-#define OS 0 // 0 = Windows | 1 = Linux
+#define OS 1 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
