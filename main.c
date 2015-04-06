@@ -267,7 +267,7 @@ int main ( int argc, char** argv )
     rectBoard.y = 0;
 
     // load an image
-    SDL_Surface* dameWsurf = IMG_Load("white_dame.bmp");
+    SDL_Surface* dameWsurf = IMG_Load("white_dame.png");
     if (!dameWsurf)
     {
         printf("Unable to load bitmap white_dame.bmp: %s\n", SDL_GetError());
@@ -276,7 +276,7 @@ int main ( int argc, char** argv )
 
 
 
-    SDL_Surface* dameBsurf = IMG_Load("black_dame.bmp");
+    SDL_Surface* dameBsurf = IMG_Load("black_dame.png");
     if (!dameWsurf)
     {
         printf("Unable to load bitmap black_dame.bmp: %s\n", SDL_GetError());
