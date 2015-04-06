@@ -483,7 +483,7 @@ int main ( int argc, char** argv )
                         if(curPlayer == BLACK)
                         {
                             // appelle de playturn
-                            PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+
                         } // end if
 
 
@@ -586,6 +586,12 @@ int main ( int argc, char** argv )
 
                                 if(curPlayer == BLACK)
                                 {
+
+                                    if(gameMode == MHvsAI)
+                                    {
+                                        PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+                                    }
+
 
                                     printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
 
