@@ -9,7 +9,7 @@
 #include <string.h>
 #include "functions.h"
 
-#define OS 0 // 0 = Windows | 1 = Linux
+#define OS 1 // 0 = Windows | 1 = Linux
 
 #if OS == 0
    #include <windows.h>
@@ -145,7 +145,7 @@ int main ( int argc, char** argv )
             printf("could not locate the function TakeDouble");
             return EXIT_FAILURE;
         }
-        if((PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTurn"))==NULL)
+        if((PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTest"))==NULL)
         {
             printf("could not locate the function PlayTurn");
             return EXIT_FAILURE;
@@ -334,6 +334,10 @@ int main ( int argc, char** argv )
 
     SDL_Event event;
 
+    int j1Tries = 0;
+
+    int j2Tries = 0;
+
     int cpt=0;
 
     while(!done)
@@ -364,7 +368,9 @@ int main ( int argc, char** argv )
                     else // humain vs humain
                     {
 
-                        gameMode = MHvsH;
+                        gameMode = MHvsAI;
+                        char name[50] = "FreddyTGros";
+                        InitLibrary(name);
                     }
 
                     curState = SSTARTMATCH;
@@ -374,6 +380,8 @@ int main ( int argc, char** argv )
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startMatch();
+                        StartMatch(1);
+
                     }
                     if(gameMode == MAIvsAI)
                     {
@@ -392,6 +400,9 @@ int main ( int argc, char** argv )
                     indiceHBTab[0] = -1; // initialisation du tableau d'indice des hitboxes cliquées
                     indiceHBTab[1] = -1;
 
+                    j1Tries = 0;
+                    j2Tries = 0;
+
                     //char *myStr = "hello%d", 1000;
 
                     initGameState(&gamestate);
@@ -403,6 +414,7 @@ int main ( int argc, char** argv )
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startGame(BLACK);
+                        StartGame(BLACK);
                     }
                     else if(gameMode == MAIvsAI)
                     {
@@ -466,19 +478,23 @@ int main ( int argc, char** argv )
                     break;
 
                 case SPLAY:
-                    if(curPlayer == BLACK)
+                    if(gameMode == MHvsAI)
                     {
-
-                    } // end if
-
-
-                    if(curPlayer == WHITE)
-                    {
-
-                    } // end if
+                        if(curPlayer == BLACK)
+                        {
+                            // appelle de playturn
+                            PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+                        } // end if
 
 
-                        break;
+                        if(curPlayer == WHITE)
+                        {
+
+                        } // end if
+
+                    }
+
+                    break;
 
                 case SDOUBLETAKEN:
 
@@ -640,7 +656,7 @@ int main ( int argc, char** argv )
                             lastY =  event.button.y;
                             //detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
 
-                            if(gameMode == MHvsH)
+                            if(gameMode == MHvsH || (gameMode == MHvsAI && curPlayer == WHITE))
                             {
                                 if(detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y) != -1) // on vérifie qu'on clique bien sur une hitbox
                                 {
