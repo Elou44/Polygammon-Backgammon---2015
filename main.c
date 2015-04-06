@@ -592,7 +592,7 @@ int main ( int argc, char** argv )
 
                                         for(i = 0; i < nbMoves ; i++)
                                         {
-                                            printf("moves (%d) IA added between %d and %d\n",nbMoves,moves[nbMoves].src_point,moves[nbMoves].dest_point);
+                                            printf("moves (%d) IA added between %d and %d\n",nbMoves,moves[i].src_point,moves[i].dest_point);
 
                                         }
 
