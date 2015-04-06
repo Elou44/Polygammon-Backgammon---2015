@@ -147,7 +147,7 @@ int definePriority(int AlliedSquares[2][15], int EnnemySquares[2][15], SMove mov
 void InitLibrary(char name[50])
 {
 	printf("Initiating library...\n");
-	strcopy();
+	strcpy();
 }
 
 void StartMatch(const unsigned int target_score)
@@ -207,6 +207,7 @@ int DoubleStack(const SGameState * const gameState)
 
 int TakeDouble(const SGameState * const gameState)
 {
+	// Retourne 1 si on prend, retourne 0 sinon
 	printf("TakeDouble\n");
 	
 	return(0);
@@ -220,7 +221,7 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 	Mouvements mouvts[60];			// Liste des mouvements possibles
 	int i, quatreMoves = 0;			// Indice de parcours de boucle, booléen indiquant si le tirage de dés est un double
 	int tirageDes[2];				// Copie du tirage de dés
-	int j = 0, k = 0, l = 0;				// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies, indice remplissage tableau moves
+	int j = 0, k = 0, l = 0;		// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies, indice remplissage tableau moves
 
 	printf("Début du tour IA de test\n");
 	
@@ -266,12 +267,14 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 		{
 			moves[j].src_point = mouvts[i].mouvement.src_point;
 			moves[j].dest_point = mouvts[i].mouvement.dest_point;
+			*nbMove += 1;
 			j++;
 		}
-		else if (j <= 2)	// Si le tirage est simple ET qu je n'ai pas encore indiqué 2 mouvements
+		else if (j <= 2)	// Si le tirage est simple ET que je n'ai pas encore indiqué 2 mouvements
 		{
 			moves[j].src_point = mouvts[i].mouvement.src_point;
 			moves[j].dest_point = mouvts[i].mouvement.dest_point;
+			*nbMove += 1;
 			j++;
 		}
 	}
@@ -499,7 +502,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	// /!\ on ne peut pas faire de mouvements tant que des pions sont dans la bar
 	
 	int nomove = 0, tempind = 0, indtri;	// nb dés encore à utiliser ; bouléen pas de mouvement restants ; indice temporaire de remplissage de tempmoves
-	int prioritymin = 1, requireddices, actualdicenb;		// priorité minimum à regarder ; lancés de dé requis pour le mouvement
+	int prioritymin = 1, requireddices;		// priorité minimum à regarder ; lancés de dé requis pour le mouvement
 	int movesdone = 0;		// nb de move déjà entrés dans le SMove moves
 	Mouvements tempmoves[60];	// mouvements à faire, varie au fur et à mesure du parcours des moves
 	
@@ -757,24 +760,24 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					requireddices = tempmoves[i].mouvement.dest_point-tempmoves[i].mouvement.src_point; //Nombre de lancer de dés requis égal à à la case d'arrivée moins numéro case de départ (pas nécéssairement positif)
 					if(quatreMoves) {	// Cas d'un tirage double
 					
-						requireddices = requireddices/tirageDes[0]; 		//positif : nb dés utilisé <= Mais ça peut ne pas tomber juste ? <- non
-						if(requireddices <= nbdices) {						// Si on utilise un nombre de dés raisonnable
-							if(indtri == 0) {								// Si l'indice du tableau tempmoves est nul pas de mouvement triés encore
+						requireddices = requireddices/tirageDes[0]; //positif : nb dés utilisé <= Mais ça peut ne pas tomber juste ? <- non
+						if(requireddices <= nbdices) {	// Si on utilise un nombre de dés raisonnable
+							if(indtri == 0) { // Si l'indice du tableau tempmoves est nul pas de mouvement triés encore
 								tempmoves[0] = tempmoves[i];
 								indtri = 1;
 								
 							} else {
-								for(j = indtri-1; j >= 0; j--) {	//on parcours les mouvements triés en commençant par la fin (indtri est le nombre de mouvement trié)
+								for(j = indtri-1; j >= 0; j--) { //on parcours les mouvements triés en commençant par la fin (indtri est le nombre de mouvement trié)
 									
-									actualdicenb = (tempmoves[j].mouvement.dest_point-tempmoves[j].mouvement.src_point)/tirageDes[0];
-									if(requireddices > (actualdicenb)) {
-										tempmoves[j+1] = tempmoves[j];			//on décale le mouvement
-										if(j == 0) {							//cas où le mouvement utilise plus de dés que tous ceux déjà triés
+									actualdicenb = tempmoves[j].mouvement.dest_point-tempmoves[j].mouvement.src_point)/tirageDes[0];
+									if(requireddices > (actualdicenb) {
+										tempmoves[j+1] = tempmoves[j]; //on décale le mouvement
+										if(j == 0) { //cas où le mouvement utilise plus de dés que tous ceux déjà triés
 											tempmoves[j] = tempmoves[i];
 											indtri++;
 										}
 										
-									} else if(requireddices <= (actualdicenb)) {
+									} else if(requireddices <= (actualdicenb) {
 										tempmoves[j+1] = tempmoves[i]; //on l'enregistre à la suite
 										indtri++;
 										break;
@@ -782,32 +785,32 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 								}
 							}
 						}
-					
+					}
 					
 					
 					//remplissage du tableau des moves à faire, en remontant les moves qui utilisent le plus de dés : cas dés non doubles
 					
-					} else {											//les dés ne sont pas un double
+					else { //les dés ne sont pas un double
 						if(requireddices == tirageDes[0] || requireddices == tirageDes[1] || requireddices == tirageDes[0]+tirageDes[1]) {
-							if(indtri == 0) {						//pas de mouvement triés encore
+							if(indtri == 0) { //pas de mouvement triés encore
 								tempmoves[0] = tempmoves[i];
 								indtri = 1;
 								
-							} else {								// /!\ les requireddices peuvent être négatifs, regarder la couleur
-								for(j = indtri-1; j >= 0; j--) {	//on parcours les mouvements triés en commençant par la fin (indtri est le nombre de mouvement trié)
+							} else {				// /!\ les requireddices peuvent être négatifs, regarder la couleur
+								for(j = indtri-1; j >= 0; j--) { //on parcours les mouvements triés en commençant par la fin (indtri est le nombre de mouvement trié)
 									actualdicenb = tempmoves[j].mouvement.dest_point-tempmoves[j].mouvement.src_point;
 									
 									
-									if(OliverJohn.couleur == 1) {			//cas où les dés sont positifs
+									if(OliverJohn.couleur == 1) { //cas où les dés sont positifs
 										if(requireddices > actualdicenb) {
-											tempmoves[j+1] = tempmoves[j];	//on décale le mouvement
-											if(j == 0) {					//cas où le mouvement utilise plus de dés que tous ceux déjà triés
+											tempmoves[j+1] = tempmoves[j]; //on décale le mouvement
+											if(j == 0) { //cas où le mouvement utilise plus de dés que tous ceux déjà triés
 												tempmoves[j] = tempmoves[i];
 												indtri++;
 											}
 											
 										} else if(requireddices <= actualdicenb) {
-											tempmoves[j+1] = tempmoves[i];	//on l'enregistre à la suite
+											tempmoves[j+1] = tempmoves[i]; //on l'enregistre à la suite
 											indtri++;
 											break;
 										}
@@ -822,8 +825,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 												indtri++;
 											}
 											
-										} else if(requireddices >= (actualdicenb)) {
-											tempmoves[j+1] = tempmoves[i];			//on l'enregistre à la suite
+										} else if(requireddices >= (actualdicenb) {
+											tempmoves[j+1] = tempmoves[i]; //on l'enregistre à la suite
 											indtri++;
 											break;
 										}
