@@ -592,7 +592,8 @@ int main ( int argc, char** argv )
 
                                         for(i = 0; i < nbMoves ; i++)
                                         {
-                                            printf("moves IA added between %d and %d\n",moves[nbMoves].src_point,moves[nbMoves].dest_point);
+                                            printf("moves (%d) IA added between %d and %d\n",nbMoves,moves[nbMoves].src_point,moves[nbMoves].dest_point);
+
                                         }
 
                                     }
@@ -625,7 +626,7 @@ int main ( int argc, char** argv )
 
                                 else
                                 {
-
+                                    printf("nbMoves WHITE : %d\n",nbMoves);
                                     updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                     setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
                                     setScore(&gamestate); // on met à jour le score
