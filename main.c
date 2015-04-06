@@ -575,9 +575,7 @@ int main ( int argc, char** argv )
                                 //printf("indiceHBTab[1] = %d",indiceHBTab[1]);
 
 
-                                updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
-                                setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                setScore(&gamestate); // on met à jour le score
+
 
                                 indiceHBTab[0] = -1; // réinitialisation des Hitboxes cliquées
                                 indiceHBTab[1] = -1;
@@ -590,8 +588,18 @@ int main ( int argc, char** argv )
                                     if(gameMode == MHvsAI)
                                     {
                                         PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+                                        //clickToSMoves(indiceHBTab,moves,&nbMoves,curPlayer);
+
+                                        for(i = 0; i < nbMoves ; i++)
+                                        {
+                                            printf("moves IA added between %d and %d\n",moves[nbMoves].src_point,moves[nbMoves].dest_point);
+                                        }
+
                                     }
 
+                                    updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
+                                    setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+                                    setScore(&gamestate); // on met à jour le score
 
                                     printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
 
@@ -617,6 +625,10 @@ int main ( int argc, char** argv )
 
                                 else
                                 {
+
+                                    updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
+                                    setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+                                    setScore(&gamestate); // on met à jour le score
 
 
                                     printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
