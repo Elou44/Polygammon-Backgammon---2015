@@ -580,7 +580,7 @@ int main ( int argc, char** argv )
                                 indiceHBTab[0] = -1; // réinitialisation des Hitboxes cliquées
                                 indiceHBTab[1] = -1;
 
-                                nbMoves = 0;
+
 
                                 if(curPlayer == BLACK)
                                 {
@@ -601,6 +601,8 @@ int main ( int argc, char** argv )
                                     updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                     setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
                                     setScore(&gamestate); // on met à jour le score
+
+                                    nbMoves = 0;
 
                                     printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
 
@@ -631,6 +633,7 @@ int main ( int argc, char** argv )
                                     setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
                                     setScore(&gamestate); // on met à jour le score
 
+                                    nbMoves = 0;
 
                                     printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
 
