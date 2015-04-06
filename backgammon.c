@@ -147,7 +147,7 @@ int definePriority(int AlliedSquares[2][15], int EnnemySquares[2][15], SMove mov
 void InitLibrary(char name[50])
 {
 	printf("Initiating library...\n");
-	strcpy();
+	//strcpy();
 }
 
 void StartMatch(const unsigned int target_score)
@@ -301,6 +301,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	int j = 0, k = 0;				// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies
 	int playTurn = 1;				// Booléen indiquant si je peux jouer mon tour ou non, selon si je peux sortir mes pions présents dans le bar ou non
 	int nbBar, nbBarSortie, nbDesDispo;
+	int actualdicenb;
 
 	printf("Début du tour\n");
 	
@@ -769,15 +770,15 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 							} else {
 								for(j = indtri-1; j >= 0; j--) { //on parcours les mouvements triés en commençant par la fin (indtri est le nombre de mouvement trié)
 									
-									actualdicenb = tempmoves[j].mouvement.dest_point-tempmoves[j].mouvement.src_point)/tirageDes[0];
-									if(requireddices > (actualdicenb) {
+									actualdicenb = (tempmoves[j].mouvement.dest_point-tempmoves[j].mouvement.src_point)/tirageDes[0];
+									if(requireddices > (actualdicenb)) {
 										tempmoves[j+1] = tempmoves[j]; //on décale le mouvement
 										if(j == 0) { //cas où le mouvement utilise plus de dés que tous ceux déjà triés
 											tempmoves[j] = tempmoves[i];
 											indtri++;
 										}
 										
-									} else if(requireddices <= (actualdicenb) {
+									} else if(requireddices <= (actualdicenb)) {
 										tempmoves[j+1] = tempmoves[i]; //on l'enregistre à la suite
 										indtri++;
 										break;
@@ -825,7 +826,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 												indtri++;
 											}
 											
-										} else if(requireddices >= (actualdicenb) {
+										} else if(requireddices >= (actualdicenb)) {
 											tempmoves[j+1] = tempmoves[i]; //on l'enregistre à la suite
 											indtri++;
 											break;
