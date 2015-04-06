@@ -223,12 +223,14 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 	int tirageDes[2];				// Copie du tirage de dés
 	int j = 0, k = 0, l = 0;		// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies, indice remplissage tableau moves
 
-	printf("Début du tour IA de test\n");
+	printf("Début du tour IA de test. Vas y ça va pas marcher\n");
 	
+	/*
 	if(OliverJohn.couleur == 0) {	// Si nous sommes les pions noirs alors on inverse les résultats des dés pour partir vers notre but sans changer tous les calculs
 		tirageDes[0] = -dices[0];
 		tirageDes[1] = -dices[1];
 	}
+	*/
 	
 	
 	
@@ -259,6 +261,7 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 			mouvts[k].mouvement.dest_point = i+tirageDes[1];
 			k++;
 		}
+		printf("Mouvement possibles de %d vers %d\n", mouvts[k-1].mouvement.src_point, mouvts[k-1].mouvement.dest_point);
 	}
 	
 	for(i = 0; i < k; i++)	// Parmis les mouvements de mouvts (indice k non remis à zéro donc on a la taille réel des infos de mouvts)
@@ -267,19 +270,25 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 		{
 			moves[j].src_point = mouvts[i].mouvement.src_point;
 			moves[j].dest_point = mouvts[i].mouvement.dest_point;
+			printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point, mouvts[i].mouvement.dest_point);
+			printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
 			*nbMove += 1;
+			printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
 			j++;
 		}
 		else if (j <= 2)	// Si le tirage est simple ET que je n'ai pas encore indiqué 2 mouvements
 		{
 			moves[j].src_point = mouvts[i].mouvement.src_point;
 			moves[j].dest_point = mouvts[i].mouvement.dest_point;
+			printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point, mouvts[i].mouvement.dest_point);
+			printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
 			*nbMove += 1;
+			printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
 			j++;
 		}
 	}
 	
-	printf("Tour IA de test terminé\n");
+	printf("Tour IA de test terminé Bouyah ! A toi de jouer.\n");
 	
 }
 
