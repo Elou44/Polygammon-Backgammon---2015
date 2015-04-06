@@ -36,19 +36,18 @@ void setColor(int i, int z, Dame *damesTab,const SGameState* const gamestate, SD
     if(gamestate->board[i].owner == WHITE)
     {
         damesTab[z].color=1;
-        printf("setColor color=1 z: %d  \n",z);
+        //printf("setColor color=1 z: %d  \n",z);
     }
     else
     {
         damesTab[z].color=0;
-        printf("setColor color=0 z: %d  \n",z);
+        //printf("setColor color=0 z: %d  \n",z);
 
     }
 }
 
 void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf){
-    //SDL_UnlockSurface(dameWsurf);
-    //SDL_UnlockSurface(dameBsurf);
+
     int i,j,x = 0, y = 615, y1 = 380, y2 = 23, z = 0, esp=40;
 
 
@@ -401,10 +400,10 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
     for (j=0; j < gamestate->out[0] ; j++){
         damesTab[z].rectDame->x = 1015;
-        damesTab[z].rectDame->y = y2;
-        damesTab[z].color=1;
+        damesTab[z].rectDame->y = y1;
+        damesTab[z].color=0;
         z++;
-        y2 += esp;
+        y1 += esp;
     }
 
 
@@ -412,10 +411,10 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
     for (j=0; j < gamestate->out[1] ; j++){
         damesTab[z].rectDame->x = 1015;
-        damesTab[z].rectDame->y = y1;
-        damesTab[z].color=0;
+        damesTab[z].rectDame->y = y2;
+        damesTab[z].color=1;
         z++;
-        y1 += esp;
+        y2 += esp;
     }
 
 }
@@ -486,12 +485,12 @@ void drawDames(Dame *damesTab,SDL_Surface* dameWsurf, SDL_Surface* dameBsurf, SD
         if(damesTab[i].color == 1) // WHITE
         {
             SDL_BlitSurface(dameWsurf,0,screen, damesTab[i].rectDame);
-            //printf("color = 1, damesTab[%d].rectDame %d %d\n",i,damesTab[i].rectDame->x,damesTab[i].rectDame->y);
+
         }
         else // BLACK
         {
             SDL_BlitSurface(dameBsurf,0,screen, damesTab[i].rectDame);
-            //printf("color = 0, damesTab[%d].rectDame %d %d\n",i,damesTab[i].rectDame->x,damesTab[i].rectDame->y);
+
         }
 
     }
@@ -770,8 +769,8 @@ int detectClickIntoHitbox(Hitbox *hitboxesTab, int nbHB, int x, int y)
 void rollDices(unsigned char* dices)
 {
 
-    dices[0] =  rand()%6;
-    dices[1] =  rand()%6;
+    dices[0] =  rand()%6+1;
+    dices[1] =  rand()%6+1;
 
 }
 
@@ -783,7 +782,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
 
  for (i=0;i < *nbMoves;i++){
   //cas depuis un square vers un autre
-  if ((moves[i].dest_point != 0 || moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
+  if ((moves[i].dest_point != 0 && moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
 
     if (curPlayer == BLACK){
 
@@ -938,5 +937,18 @@ void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player 
         printf("erreur segmentation fault out of SMoves[4]");
     }
 
+
+}
+
+
+void changeText(SDL_Surface* text,/* char* newText,*/ TTF_Font* font, SDL_Color colorFont)
+{
+
+    text = TTF_RenderText_Blended(font, "lol", colorFont);
+    if(text == NULL)
+    {
+        printf("Erreur d'initialisation de RenderText : %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
 
 }

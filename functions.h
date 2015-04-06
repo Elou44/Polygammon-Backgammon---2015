@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 // DECLARATION DES POINTEURS DE FONCTIONS DE L'API //
 
 typedef struct {
@@ -250,7 +251,7 @@ void updateSGameState(SGameState* gamestate, SMove* moves, unsigned int *nbMoves
 
 void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player curPlayer);
 
-
+void changeText(SDL_Surface* text,/* char* newText,*/ TTF_Font* font, SDL_Color colorFont);
 
 
 

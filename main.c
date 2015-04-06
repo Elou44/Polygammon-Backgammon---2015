@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include <time.h>
+#include <string.h>
 #include "functions.h"
 
 #define OS 0 // 0 = Windows | 1 = Linux
@@ -165,30 +166,72 @@ int main ( int argc, char** argv )
         printf("Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
-    SDL_Surface *text1;
-    //text1->w = 500;
-    //text1->h = 30;
+
+    SDL_Surface *title;
+    SDL_Rect fontPosTitle;
+    fontPosTitle.x = 200;
+    fontPosTitle.y = 780;
+
+    SDL_Surface *textDices;
+    SDL_Rect fontPosDices;
+    fontPosDices.x = 430;
+    fontPosDices.y = 720;
+
+    SDL_Surface *textCurPlayer;
+    SDL_Rect fontPosCurPlayer;
+    fontPosCurPlayer.x = 1050;
+    fontPosCurPlayer.y = 350;
+
+    SDL_Surface *textScoreWhite;
+    SDL_Rect fontPosScoreWhite;
+    fontPosScoreWhite.x = 1050;
+    fontPosScoreWhite.y = 50;
+
+
+    SDL_Surface *textScoreBlack;
+    SDL_Rect fontPosScoreBlack;
+    fontPosScoreBlack.x = 1050;
+    fontPosScoreBlack.y = 650;
+
     TTF_Font *fontHacked = NULL;
-    SDL_Rect fontPos;
-    fontPos.x = 100;
-    fontPos.y = 750;
-    SDL_Color colorBlack = {255, 255, 255};
+
+
+    SDL_Color colorFont = {255, 255, 255};
 
 
         /* Chargement de la police */
-    fontHacked = TTF_OpenFont("hacked.ttf", 65);
+    fontHacked = TTF_OpenFont("Digital-Desolation.ttf", 15);
     if(fontHacked == NULL)
     {
         printf("Erreur d'initialisation de Openfont : %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
     /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
-    text1 = TTF_RenderText_Blended(fontHacked, "Backgammon Nantarena Edition", colorBlack);
-    if(text1 == NULL)
+    title = TTF_RenderText_Blended(fontHacked, "Backgammon Nantarena Edition", colorFont);
+
+    if(title == NULL)
     {
         printf("Erreur d'initialisation de RenderText : %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
+    textDices = TTF_RenderText_Blended(fontHacked, "Dice1 | Dice2", colorFont);
+    char strDices[10];
+
+    textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
+    char strCurPlayer[15];
+
+    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE : 167", colorFont);
+    char strScoreWhite[15];
+
+    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK : 167", colorFont);
+    char strScoreBlack[15];
+
+    //char machaine[6] = "WHITE";
+    //textCurPlayer = TTF_RenderText_Blended(fontHacked, "lol", colorFont);
+    //changeText(textCurPlayer,fontHacked,colorFont);
+
+
+
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
@@ -281,6 +324,7 @@ int main ( int argc, char** argv )
     int scoreToReach = 1;
 
 
+
     int cpt=0;
     while(!done)
     {
@@ -311,6 +355,8 @@ int main ( int argc, char** argv )
 
                         gameMode = MHvsH;
                     }
+
+                    printf("Chavez2 le retour !!!!\n");
                     curState = SSTARTMATCH;
                     break;
 
@@ -324,6 +370,8 @@ int main ( int argc, char** argv )
                         // appelle de j1startMatch();
                         // appelle de j2startMatch();
                     }
+                    printf("Chavez !!!!\n");
+
 
                     curState = SSTARTGAME;
                     break;
@@ -333,6 +381,14 @@ int main ( int argc, char** argv )
 
                     indiceHBTab[0] = -1; // initialisation du tableau d'indice des hitboxes cliquées
                     indiceHBTab[1] = -1;
+
+                    //char *myStr = "hello%d", 1000;
+
+
+
+
+
+
 
                     initGameState(&gamestate);
 
@@ -364,6 +420,7 @@ int main ( int argc, char** argv )
 
                         if(j1Sum > j2Sum)
                         {
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK", colorFont);
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
                             printf("Player BLACK begins\n");
                             curPlayer = BLACK;
@@ -371,22 +428,33 @@ int main ( int argc, char** argv )
                         }
                         else
                         {
+
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
                             printf("Player WHITE begins\n");
                             printf("jusque ici 1");
                             curPlayer = WHITE;
                             curState = SPLAY;
                         }
+
                     }
 
                     else if(curPlayer == BLACK)
                     {
                         rollDices(dices);
+                        printf("cavallo\n");
+                        sprintf(strDices, "%d | %d", dices[0],dices[1]);
+                        textDices = TTF_RenderText_Blended(fontHacked,strDices, colorFont);
+                        curState = SPLAY;
+
                     }
 
                     else if(curPlayer == WHITE)
                     {
                         rollDices(dices);
+                        sprintf(strDices, "%d | %d", dices[0],dices[1]);
+                        textDices = TTF_RenderText_Blended(fontHacked,strDices, colorFont);
+                        curState = SPLAY;
                     }
 
 
@@ -452,15 +520,23 @@ int main ( int argc, char** argv )
                         }
                         if(event.key.keysym.sym == SDLK_n)
                         {
-                            setScore(&gamestate); // on met à jour le score
+
                             if(curPlayer == BLACK)
                             {
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                 setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-
+                                setScore(&gamestate); // on met à jour le score
 
                                 nbMoves = 0;
-                                printf("Player WHITE is playing (Score: %d)\n", gamestate.whiteScore);
+
+                                printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
+
+                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
+
+                                sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
+                                textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont);
+
+                                curState = SROLLDICES;
                                 curPlayer = WHITE;
 
 
@@ -469,10 +545,18 @@ int main ( int argc, char** argv )
                             {
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
                                 setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-
+                                setScore(&gamestate); // on met à jour le score
 
                                 nbMoves = 0;
-                                printf("Player BLACK is playing (Score: %d)\n", gamestate.blackScore);
+
+                                printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
+
+                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK", colorFont);
+
+                                sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
+                                textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
+
+                                curState = SROLLDICES;
                                 curPlayer = BLACK;
                             }
                         }
@@ -517,11 +601,16 @@ int main ( int argc, char** argv )
                 } // end switch
 
 
+                SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
                 SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
-                SDL_BlitSurface(text1,0,screen, &fontPos);
-                //printf("dessin\n");
+                SDL_BlitSurface(title,0,screen, &fontPosTitle);
+                SDL_BlitSurface(textDices,0,screen, &fontPosDices);
+                SDL_BlitSurface(textCurPlayer,0,screen, &fontPosCurPlayer);
+                SDL_BlitSurface(textScoreWhite,0,screen, &fontPosScoreWhite);
+                SDL_BlitSurface(textScoreBlack,0,screen, &fontPosScoreBlack);
+
                 //printf("%d\n", gamestate.board[23].nbDames);
                 drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 
@@ -549,7 +638,12 @@ int main ( int argc, char** argv )
     TTF_CloseFont(fontHacked);
     TTF_Quit();
 
-    SDL_FreeSurface(text1);
+    SDL_FreeSurface(title);
+    SDL_FreeSurface(textDices);
+    SDL_FreeSurface(textCurPlayer);
+    SDL_FreeSurface(textScoreWhite);
+    SDL_FreeSurface(textScoreBlack);
+
     SDL_FreeSurface(screen);
     SDL_DestroyWindow(window);
     SDL_Quit();
