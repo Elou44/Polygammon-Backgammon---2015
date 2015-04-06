@@ -67,7 +67,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
         if (i==0){
 
-            printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
+            //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 925;
@@ -83,7 +83,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
         else if(i==1){
 
-            printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
+            //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 849;
@@ -372,10 +372,10 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
     //24 bar noir milieu
 
-        printf("gamestate->bar[0]: %d\n",gamestate->bar[0]);
-        printf("gamestate->bar[1]: %d\n",gamestate->bar[1]);
-        printf("gamestate->out[0]: %d\n",gamestate->out[0]);
-        printf("gamestate->out[1]: %d\n",gamestate->out[1]);
+        //printf("gamestate->bar[0]: %d\n",gamestate->bar[0]);
+        //printf("gamestate->bar[1]: %d\n",gamestate->bar[1]);
+        //printf("gamestate->out[0]: %d\n",gamestate->out[0]);
+        //printf("gamestate->out[1]: %d\n",gamestate->out[1]);
     for (j=0; j < gamestate->bar[0] ; j++){
         damesTab[z].rectDame->x = 500;
         damesTab[z].rectDame->y = y2;
@@ -756,7 +756,7 @@ int detectClickIntoHitbox(Hitbox *hitboxesTab, int nbHB, int x, int y)
         {
             if((y >= hitboxesTab[i].rectHB->y) && (y <= hitboxesTab[i].rectHB->y + hitboxesTab[i].rectHB->h))
             {
-                printf("click detected on hitbox %d\n", i);
+                //printf("click detected on hitbox %d\n", i);
                 return i;
             }
         }
@@ -909,7 +909,7 @@ void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player 
 
             if(indiceHBTab[0]!=0 && indiceHBTab[0]!=25)
             {
-                moves[*nbMoves].src_point = 24-indiceHBTab[0]+1;printf("moncul\n");
+                moves[*nbMoves].src_point = 24-indiceHBTab[0]+1;
             }
             else
             {
@@ -937,18 +937,5 @@ void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player 
         printf("erreur segmentation fault out of SMoves[4]");
     }
 
-
-}
-
-
-void changeText(SDL_Surface* text,/* char* newText,*/ TTF_Font* font, SDL_Color colorFont)
-{
-
-    text = TTF_RenderText_Blended(font, "lol", colorFont);
-    if(text == NULL)
-    {
-        printf("Erreur d'initialisation de RenderText : %s\n", TTF_GetError());
-        exit(EXIT_FAILURE);
-    }
 
 }

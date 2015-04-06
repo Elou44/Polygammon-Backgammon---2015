@@ -301,13 +301,12 @@ int main ( int argc, char** argv )
 
     // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
 
-    States curState; // �tat courant du jeu
+
     GameMode gameMode; // mode de jeu
-    curState = SINITLIBS;
+
     Player curPlayer; // joueur courant
 
     unsigned char dices[2]; // dernier lanc� de d�s du j1
-
 
     SMove moves[4];
     int indiceHBTab[2]; // indice des hitboxes cliquées pour 1 move
@@ -317,15 +316,26 @@ int main ( int argc, char** argv )
 
 
     // program main loop
-    bool done = false;
-    SDL_Event event;
+
+
     int lastX=0,lastY=0;
 
-    int scoreToReach = 1;
+    int scoreToReach = 2; // score à atteindre pour gagner
+
+    int j1GlobalScore = 0;
+    int j2GlobalScore = 0;
 
 
+
+    bool done = false;
+
+    States curState; // �tat courant du jeu
+    curState = SINITLIBS;
+
+    SDL_Event event;
 
     int cpt=0;
+
     while(!done)
     {
 
@@ -335,6 +345,7 @@ int main ( int argc, char** argv )
                 {
 
                 case SINITLIBS:
+
 
                     // appelle de initLib
                     //InitLibrary(nomLib); // pour test
@@ -356,7 +367,6 @@ int main ( int argc, char** argv )
                         gameMode = MHvsH;
                     }
 
-                    printf("Chavez2 le retour !!!!\n");
                     curState = SSTARTMATCH;
                     break;
 
@@ -370,13 +380,13 @@ int main ( int argc, char** argv )
                         // appelle de j1startMatch();
                         // appelle de j2startMatch();
                     }
-                    printf("Chavez !!!!\n");
 
 
                     curState = SSTARTGAME;
                     break;
 
                 case SSTARTGAME:
+
                     curPlayer = NOBODY;
 
                     indiceHBTab[0] = -1; // initialisation du tableau d'indice des hitboxes cliquées
@@ -384,13 +394,9 @@ int main ( int argc, char** argv )
 
                     //char *myStr = "hello%d", 1000;
 
-
-
-
-
-
-
                     initGameState(&gamestate);
+
+                    setScore(&gamestate); // on met à jour le score
 
                     setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
 
@@ -432,17 +438,16 @@ int main ( int argc, char** argv )
                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
                             printf("Player WHITE begins\n");
-                            printf("jusque ici 1");
                             curPlayer = WHITE;
                             curState = SPLAY;
                         }
 
                     }
 
-                    else if(curPlayer == BLACK)
+
+                    if(curPlayer == BLACK)
                     {
                         rollDices(dices);
-                        printf("cavallo\n");
                         sprintf(strDices, "%d | %d", dices[0],dices[1]);
                         textDices = TTF_RenderText_Blended(fontHacked,strDices, colorFont);
                         curState = SPLAY;
@@ -480,147 +485,204 @@ int main ( int argc, char** argv )
                     break;
 
                 case SENDGAME:
+                    if(j1GlobalScore == scoreToReach || j2GlobalScore == scoreToReach)
+                    {
+                        curState = SENDMATCH;
+                        SDL_Delay(1000);
+                    }
+                    else
+                    {
+                        curState = SSTARTGAME;
+                        SDL_Delay(1000);
+                    }
+
 
                     break;
 
                 case SENDMATCH:
 
+                    done = true;
+
+
                     break;
 
                 }
-        while (SDL_PollEvent(&event))
+
+
+        /* ***************************
+         *                           *
+         *   GESTION DES EVENEMENTS  *
+         *                           *
+         * **************************/
+
+
+        if((curState == SPLAY) && (gameMode != MAIvsAI))
         {
-            // message processing loop
+
+            while (SDL_PollEvent(&event))
+            {
+                // message processing loop
 
 
-                // check for messages
-                switch (event.type)
-                {
-                    // exit if the window is closed
-                case SDL_QUIT:
-                    done = true;
-                    break;
-
-                    // check for keypresses
-                case SDL_KEYDOWN:
+                    // check for messages
+                    switch (event.type)
                     {
-                        // exit if ESCAPE is pressed
-                        if (event.key.keysym.sym == SDLK_ESCAPE)
-                        {
-                            done = true;
-                        }
-                        if (event.key.keysym.sym == SDLK_END)
-                        {
-                            j++;
-                            if(j>29)
-                            {
-                                j=0;
-                            }
-                            //printf("mouse position : %d %d\n",event.button.x,event.button.y);
-                        }
-                        if(event.key.keysym.sym == SDLK_n)
-                        {
-
-                            if(curPlayer == BLACK)
-                            {
-                                updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
-                                setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                setScore(&gamestate); // on met à jour le score
-
-                                nbMoves = 0;
-
-                                printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
-
-                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
-
-                                sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
-                                textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont);
-
-                                curState = SROLLDICES;
-                                curPlayer = WHITE;
-
-
-                            }
-                            else
-                            {
-                                updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
-                                setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                setScore(&gamestate); // on met à jour le score
-
-                                nbMoves = 0;
-
-                                printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
-
-                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK", colorFont);
-
-                                sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
-                                textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
-
-                                curState = SROLLDICES;
-                                curPlayer = BLACK;
-                            }
-                        }
-
-
-
-
-
+                        // exit if the window is closed
+                    case SDL_QUIT:
+                        done = true;
                         break;
-                    }
-                case SDL_MOUSEBUTTONDOWN:
-                    {
-                        printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
-                        lastX =  event.button.x;
-                        lastY =  event.button.y;
-                        //detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
-                        /*if(event.button.button == SDL_BUTTON_LEFT)
-                        {
 
-
-                            damesTab[j].rectDame->x = event.button.x;
-                            damesTab[j].rectDame->y = event.button.y;
-                        }*/
-                        if(gameMode == MHvsH)
+                        // check for keypresses
+                    case SDL_KEYDOWN:
                         {
-                            if(detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y) != -1) // on vérifie qu'on clique bien sur une hitbox
+                            // exit if ESCAPE is pressed
+                            if (event.key.keysym.sym == SDLK_ESCAPE)
                             {
-                                if(indiceHBTab[0] == -1) indiceHBTab[0] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y); // mouvement non terminé
-                                else if(indiceHBTab[1] == -1)
+                                done = true;
+                            }
+                            if (event.key.keysym.sym == SDLK_END)
+                            {
+                                j++;
+                                if(j>29)
                                 {
-                                    indiceHBTab[1] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
-                                    clickToSMoves(indiceHBTab,moves,&nbMoves,curPlayer);
+                                    j=0;
+                                }
+                                //printf("mouse position : %d %d\n",event.button.x,event.button.y);
+                            }
+                            if(event.key.keysym.sym == SDLK_n) // CHANGEMENT DE JOUEUR
+                            {
+
+
+
+
+                                //printf("indiceHBTab[0] = %d",indiceHBTab[0]);
+                                //printf("indiceHBTab[1] = %d",indiceHBTab[1]);
+
+
+                                updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
+                                setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+                                setScore(&gamestate); // on met à jour le score
+
+                                indiceHBTab[0] = -1; // réinitialisation des Hitboxes cliquées
+                                indiceHBTab[1] = -1;
+
+                                nbMoves = 0;
+
+                                if(curPlayer == BLACK)
+                                {
+
+                                    printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
+
+
+                                    textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
+
+                                    sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
+                                    textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
+
+                                    if(gamestate.blackScore == 0)
+                                    {
+                                        curState = SENDGAME;
+                                        j1GlobalScore++; // BLACK
+                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont);
+                                    }
+                                    else
+                                    {
+                                        curState = SROLLDICES;
+                                        curPlayer = WHITE;
+                                    }
+
+                                }
+
+                                else
+                                {
+
+
+                                    printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
+
+                                    textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK", colorFont);
+
+
+
+                                    sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
+                                    textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont);
+
+                                    if(gamestate.whiteScore == 0 )
+                                    {
+                                        curState = SENDGAME;
+                                        j2GlobalScore++; // WHITE
+                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont);
+                                    }
+                                    else
+                                    {
+                                        curState = SROLLDICES;
+                                        curPlayer = BLACK;
+                                    }
                                 }
                             }
 
+                            if(event.key.keysym.sym == SDLK_r) // Réinitialiser les mouvements
+                            {
+                                nbMoves = 0;
+                                indiceHBTab[0] = -1; // réinitialisation des Hitboxes cliquées
+                                indiceHBTab[1] = -1;
+                            }
+
+
+
+
+
+                            break;
+                        }
+                    case SDL_MOUSEBUTTONDOWN:
+                        {
+                            //printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
+                            lastX =  event.button.x;
+                            lastY =  event.button.y;
+                            //detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
+
+                            if(gameMode == MHvsH)
+                            {
+                                if(detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y) != -1) // on vérifie qu'on clique bien sur une hitbox
+                                {
+                                    if(indiceHBTab[0] == -1) indiceHBTab[0] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y); // mouvement non terminé
+                                    else if(indiceHBTab[1] == -1)
+                                    {
+                                        indiceHBTab[1] = detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y);
+                                        clickToSMoves(indiceHBTab,moves,&nbMoves,curPlayer);
+                                    }
+                                }
+
+                            }
+
+
+                            break;
                         }
 
-
-                        break;
-                    }
-
-                } // end switch
+                    } // end switch
 
 
-                SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+                    SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
-                SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+                    SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
-                SDL_BlitSurface(title,0,screen, &fontPosTitle);
-                SDL_BlitSurface(textDices,0,screen, &fontPosDices);
-                SDL_BlitSurface(textCurPlayer,0,screen, &fontPosCurPlayer);
-                SDL_BlitSurface(textScoreWhite,0,screen, &fontPosScoreWhite);
-                SDL_BlitSurface(textScoreBlack,0,screen, &fontPosScoreBlack);
+                    SDL_BlitSurface(title,0,screen, &fontPosTitle);
+                    SDL_BlitSurface(textDices,0,screen, &fontPosDices);
+                    SDL_BlitSurface(textCurPlayer,0,screen, &fontPosCurPlayer);
+                    SDL_BlitSurface(textScoreWhite,0,screen, &fontPosScoreWhite);
+                    SDL_BlitSurface(textScoreBlack,0,screen, &fontPosScoreBlack);
 
-                //printf("%d\n", gamestate.board[23].nbDames);
-                drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+                    //printf("%d\n", gamestate.board[23].nbDames);
+                    drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 
 
 
-                SDL_UpdateWindowSurface(window);
+                    SDL_UpdateWindowSurface(window);
 
 
-                SDL_Delay(15);
+                    SDL_Delay(15);
 
+
+            }
 
         }
 

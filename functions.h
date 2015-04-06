@@ -251,7 +251,7 @@ void updateSGameState(SGameState* gamestate, SMove* moves, unsigned int *nbMoves
 
 void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player curPlayer);
 
-void changeText(SDL_Surface* text,/* char* newText,*/ TTF_Font* font, SDL_Color colorFont);
+
 
 
 
