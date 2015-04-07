@@ -213,7 +213,100 @@ int TakeDouble(const SGameState * const gameState)
 	return(0);
 }
 
+
 // IA DE TEST
+/*
+int defPriorityTest(SMove mov, unsigned int couleur) {	// Définit le coefficient de priorité du mouvement décrit par le SMove donné en paramètre
+
+// /!\ Comment on fait pour les mouvements composés ?
+//Est-ce que le move en parametre est forcement valide ou est-ce que'on regarde s'il l'est ?
+
+	int i = 0;	// Indice de parcours de tableau
+	int IndiceCaseDepart;	// Numéro de la case de départ en étude
+	int IndiceCaseArrivee;	// Numéro de la case d'arrivée en étude
+	int bar, out;
+	if(couleur == 0) {
+		bar = 25; out = 0;
+	} else {
+		bar = 0; out = 25;
+	}
+	
+	// On cherche l'indice dans AlliedSquares de la case de départ
+	if((i = verifPresence(AlliedSquares[1], mov.src_point, 15)) != -1 )	// Si la case de départ est une case conquise, ce qui va forcément être le cas, juste pour avoir l'indice de la case dans AlliedSquares via verifPresence
+	{
+		IndiceCaseDepart = i;
+	}
+	
+	// PRIORITE 1 : mouvement d'un pion depuis notre bar
+	if(mov.src_point == 0) { return 1; }	// Si le point de départ du mouvement est dans le bar (il a été mangé) <- dans LE bar ?
+	
+	
+	
+	// On cherche l'indice de la case d'arrivée
+	if((i = verifPresence(AlliedSquares[1], mov.dest_point, 15)) != -1 )	// Si la case d'arrivée est une case conquise
+	{
+		
+		IndiceCaseArrivee = i;
+		// PRIORITE 2 : mouvement d'un pion isolé vers une case conquise
+		if((AlliedSquares[1][IndiceCaseDepart] == 1) || (AlliedSquares[1][IndiceCaseArrivee] == 1 && AlliedSquares[1][IndiceCaseDepart] > 2))	// Si on a un pion tout seul sur une case et que la case d'arrivée est à nous
+		//Comment on gère pour les quarts ? (1-6; 7-12; 13-18; 19-24 , mais le sens dépend de la couleur)
+		{
+			return 2;
+		}
+		
+			// PRIORITE 6 : mouvement d'un pion sécurisé vers une case sécurisée
+		if(AlliedSquares[1][IndiceCaseDepart] > 2 && AlliedSquares[1][IndiceCaseArrivee] > 2)
+		{
+			return 6;
+		}
+		
+	}
+	else if((i = verifPresence(EnnemySquares[1], mov.dest_point, 15)) != -1 )
+	{
+		IndiceCaseArrivee = i;
+		
+		
+		// PRIORITE 7 : mouvement d'un pion non sécurisé pour manger un pion adverse
+		if(AlliedSquares[1][IndiceCaseDepart] == 1 && EnnemySquares[1][IndiceCaseArrivee] == 1)	// Si on a un pion isolé et qu'il a la possibilité de manger un pion adverse
+		{
+			return 7;
+		}
+		
+		// PRIORITE 8 : mouvement d'un pion sécurisé pour manger un adversaire
+		if(AlliedSquares[1][IndiceCaseDepart] > 1 && EnnemySquares[1][IndiceCaseArrivee] == 1)
+		{
+			return 8;
+		}
+		
+	}
+	//la case n'appartient ni aux alliés, ni aux ennemis
+	
+	// Définition des priorités
+	
+	
+	// PRIORITE 3 : mouvement de deux pions sur différentes cases formant une case sécurisée, pas pris en compte dans cette fonction déterminé après dans PlayTurn()
+	
+	// PRIORITE 4 : mouvement d'un pion pouvant manger un pion adverse, à faire dehors
+	
+	// PRIORITE 5 : mouvement d'un pion sur une case où on a un pion isolé : obsolète
+	
+	// PRIORITE 9 : mouvement d'un pion vers le out
+	if(mov.dest_point >= out)
+	{
+		return 9;
+	}
+	
+	// PRIORITE 10 : mouvement par défaut
+	return 10;
+	
+	
+	//j'ai changé des trucs dans les priorités, faut qu'on en reparle
+	//on peut garder celle-là, qui est assez simple pour les tests, mais faut pas qu'on tarde trop si on veut faire ce qu'on a dit
+	
+}
+*/
+
+
 void PlayTest(const SGameState * const gameState, const unsigned char dices[2], SMove moves[4], unsigned int *nbMove, unsigned int tries)
 {
 	int casesAllies[2][15];			// Tableau des cases qui nous appartiennent, Numéro de la case et le nombre de Dames présentes
@@ -223,6 +316,7 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 	int tirageDes[2];				// Copie du tirage de dés
 	int j = 0, k = 0, l = 0;		// Indices pour remplir les tableaux des cases, respectivement Alliées / Ennemies, indice remplissage tableau moves
 	int noir = 0;					// Booléen indiquant si nous controlant les pions noirs
+	int fait = 0;
 
 	static int nbTour = 1;
 
@@ -238,95 +332,173 @@ void PlayTest(const SGameState * const gameState, const unsigned char dices[2], 
 
 	for(i = 0; i < 24; i++)
 	{
-		printf("Je travaille sur la cellule %d, appartenant à %d\n", i, gameState->board[i].owner);
-		if(gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+tirageDes[0]].owner == OliverJohn.couleur || gameState->board[i+tirageDes[0]].owner == -1 ) )	// Si la case de départ est à moi ET que la case d'arrivée est à moi alors mouvement possible
+		printf("##### Je travaille sur la cellule %d, appartenant à %d\n", i, gameState->board[i].owner);
+		if(tirageDes[0] != tirageDes[1])
 		{
-			printf("1 - La cellule %d semble m'appartenir\n", i);
-			printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
-			mouvts[k].mouvement.src_point = i;
-			mouvts[k].mouvement.dest_point = i+tirageDes[0];
-			printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
-			k++;
+			if(gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+tirageDes[0]].owner == OliverJohn.couleur || gameState->board[i+tirageDes[0]].owner == -1 ) )	// Si la case de départ est à moi ET que la case d'arrivée est à moi alors mouvement possible
+			{
+				fait = 1;
+				printf("1 - La cellule %d semble m'appartenir\n", i);
+				printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+tirageDes[0];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[0]].nbDames == 1)  || gameState->board[i+tirageDes[0]].owner == -1 ))	// Si la case de départ est à moi ET que la case d'arrivée n'est pas à moi MAIS qu'il a un seul pion dessus alors mouvement possible
+			{
+				fait = 1;
+				printf("2 - La cellule %d semble m'appartenir\n", i);
+				printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+tirageDes[0];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			
+			if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+tirageDes[1]].owner == OliverJohn.couleur  || gameState->board[i+tirageDes[1]].owner == -1 ) )
+			{
+				printf("3 - La cellule %d semble m'appartenir\n", i);
+				printf("3 - La cellule %d est atteignable\n", i+tirageDes[1]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+tirageDes[1];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			else if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[1]].nbDames == 1)  || gameState->board[i+tirageDes[1]].owner == -1 ))
+			{
+				printf("4 - La cellule %d semble m'appartenir\n", i);
+				printf("4 - La cellule %d non par contre\n", i+tirageDes[1]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+tirageDes[1];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			fait = 0;
 		}
-		else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[0]].nbDames == 1)  || gameState->board[i+tirageDes[0]].owner == -1 ))	// Si la case de départ est à moi ET que la case d'arrivée n'est pas à moi MAIS qu'il a un seul pion dessus alors mouvement possible
+		else
 		{
-			printf("2 - La cellule %d semble m'appartenir\n", i);
-			printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
-			mouvts[k].mouvement.src_point = i;
-			mouvts[k].mouvement.dest_point = i+tirageDes[0];
-			printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
-			k++;
-		}
-		
-		if(gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+tirageDes[1]].owner == OliverJohn.couleur  || gameState->board[i+tirageDes[1]].owner == -1 ) )
-		{
-			printf("3 - La cellule %d semble m'appartenir\n", i);
-			printf("3 - La cellule %d est atteignable\n", i+tirageDes[1]);
-			mouvts[k].mouvement.src_point = i;
-			mouvts[k].mouvement.dest_point = i+tirageDes[1];
-			printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
-			k++;
-		}
-		else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[1]].nbDames == 1)  || gameState->board[i+tirageDes[1]].owner == -1 ))
-		{
-			printf("4 - La cellule %d semble m'appartenir\n", i);
-			printf("4 - La cellule %d non par contre\n", i+tirageDes[1]);
-			mouvts[k].mouvement.src_point = i;
-			mouvts[k].mouvement.dest_point = i+tirageDes[1];
-			printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
-			k++;
+			if(gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+tirageDes[0]].owner == OliverJohn.couleur  || gameState->board[i+tirageDes[0]].owner == -1 ) ) {
+				if(gameState->board[i].nbDames == 1)
+				{
+					fait = 1;
+				}
+				printf("5 - La cellule %d semble m'appartenir\n", i);
+				printf("5 - La cellule %d non par contre\n", i+tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;	// Sauvegarde du numéro de la case de déârt du mouvement (j+1 car l'attribut board de gameState ne comprend pas les bar et out)
+				mouvts[k].mouvement.dest_point = i+tirageDes[0];	// Sauvegarde du numéro de la case d'arrivée du mouvement
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;	// Incrémentation de l'indice du tableau mouvts
+			}
+			else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[0]].nbDames == 1) || gameState->board[i+tirageDes[0]].owner == -1))
+			{
+				if(gameState->board[i].nbDames == 1)
+				{
+					fait = 1;
+				}
+				printf("5' - La cellule %d semble m'appartenir\n", i);
+				printf("5' - La cellule %d non par contre\n", i+tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;	// Sauvegarde du numéro de la case de déârt du mouvement (j+1 car l'attribut board de gameState ne comprend pas les bar et out)
+				mouvts[k].mouvement.dest_point = i+tirageDes[0];	// Sauvegarde du numéro de la case d'arrivée du mouvement
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;	// Incrémentation de l'indice du tableau mouvts
+			}
+			
+			/* ### MOUVEMENTS EN UTILISANT DEUX DÉS ### */
+			
+			if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+2*tirageDes[0]].owner == OliverJohn.couleur  || gameState->board[i+2*tirageDes[0]].owner == -1 ) ) {
+				printf("6 - La cellule %d semble m'appartenir\n", i);
+				printf("6 - La cellule %d non par contre\n", i+2*tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+2*tirageDes[0];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			else if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+2*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+2*tirageDes[0]].nbDames == 1) || gameState->board[i+2*tirageDes[0]].owner == -1))
+			{
+				printf("6' - La cellule %d semble m'appartenir\n", i);
+				printf("6' - La cellule %d non par contre\n", i+tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;	// Sauvegarde du numéro de la case de déârt du mouvement (j+1 car l'attribut board de gameState ne comprend pas les bar et out)
+				mouvts[k].mouvement.dest_point = i+2*tirageDes[0];	// Sauvegarde du numéro de la case d'arrivée du mouvement
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;	// Incrémentation de l'indice du tableau mouvts
+			}
+			
+			/* ### MOUVEMENTS EN UTILISANT TROIS DÉS ### */
+			
+			if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+3*tirageDes[0]].owner == OliverJohn.couleur  || gameState->board[i+3*tirageDes[0]].owner == -1 ) ) {
+				printf("7 - La cellule %d semble m'appartenir\n", i);
+				printf("7 - La cellule %d non par contre\n", i+3*tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+3*tirageDes[0];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			else if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+3*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+3*tirageDes[0]].nbDames == 1) || gameState->board[i+3*tirageDes[0]].owner == -1))
+			{
+				printf("7' - La cellule %d semble m'appartenir\n", i);
+				printf("7' - La cellule %d non par contre\n", i+3*tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;	// Sauvegarde du numéro de la case de déârt du mouvement (j+1 car l'attribut board de gameState ne comprend pas les bar et out)
+				mouvts[k].mouvement.dest_point = i+3*tirageDes[0];	// Sauvegarde du numéro de la case d'arrivée du mouvement
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;	// Incrémentation de l'indice du tableau mouvts
+			}
+			
+			/* ### MOUVEMENTS EN UTILISANT QUATRE DÉS ### */
+			
+			
+			if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+4*tirageDes[0]].owner == OliverJohn.couleur  || gameState->board[i+4*tirageDes[0]].owner == -1 ) ) {
+				printf("8 - La cellule %d semble m'appartenir\n", i);
+				printf("8 - La cellule %d non par contre\n", i+4*tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;
+				mouvts[k].mouvement.dest_point = i+4*tirageDes[0];
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;
+			}
+			else if(fait != 1 && gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+4*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+4*tirageDes[0]].nbDames == 1) || gameState->board[i+4*tirageDes[0]].owner == -1))
+			{
+				printf("8' - La cellule %d semble m'appartenir\n", i);
+				printf("8' - La cellule %d non par contre\n", i+4*tirageDes[0]);
+				mouvts[k].mouvement.src_point = i;	// Sauvegarde du numéro de la case de déârt du mouvement (j+1 car l'attribut board de gameState ne comprend pas les bar et out)
+				mouvts[k].mouvement.dest_point = i+4*tirageDes[0];	// Sauvegarde du numéro de la case d'arrivée du mouvement
+				printf("Mouvement possibles de %d vers %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point);
+				k++;	// Incrémentation de l'indice du tableau mouvts
+			}
 		}
 	}
 	
 	for(i = 0; i < k; i++)	// Parmis les mouvements de mouvts (indice k non remis à zéro donc on a la taille réel des infos de mouvts)
 	{
-		if(tirageDes[0] == tirageDes[1] && j <= 3 && mouvts[i].mouvement.dest_point <= 24)	// Si le tirage est un double ET que je n'ai pas encore indiqué 4 mouvements à effectuer
+		if(tirageDes[0] == tirageDes[1] && j <= 3)	// Si le tirage est un double ET que je n'ai pas encore indiqué 4 mouvements à effectuer
 		{
-			if(noir == 1)
+			if(mouvts[i].mouvement.dest_point > 24)
 			{
-				moves[j].src_point = 24-mouvts[i].mouvement.src_point;
-				moves[j].dest_point = 24-mouvts[i].mouvement.dest_point;
-				printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point+1, mouvts[i].mouvement.dest_point+1);
-				printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
-				*nbMove += 1;
-				printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
-				j++;
+				mouvts[i].mouvement.dest_point = 24;
 			}
-			else
-			{
-				moves[j].src_point = mouvts[i].mouvement.src_point+1;
-				moves[j].dest_point = mouvts[i].mouvement.dest_point+1;
-				printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point+1, mouvts[i].mouvement.dest_point+1);
-				printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
-				*nbMove += 1;
-				printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
-				j++;
-			}
+			moves[j].src_point = mouvts[i].mouvement.src_point+1;
+			moves[j].dest_point = mouvts[i].mouvement.dest_point+1;
+			printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point, mouvts[i].mouvement.dest_point);
+			printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
+			*nbMove += 1;
+			printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
+			j++;
 		}
-		else if (j <= 1 && mouvts[i].mouvement.dest_point <= 24)	// Si le tirage est simple ET que je n'ai pas encore indiqué 2 mouvements
+		else if (j <= 1)	// Si le tirage est simple ET que je n'ai pas encore indiqué 2 mouvements
 		{
-			if(noir == 1)
+			if(mouvts[i].mouvement.dest_point > 24)
 			{
-				moves[j].src_point = 24-mouvts[i].mouvement.src_point;
-				moves[j].dest_point = 24-mouvts[i].mouvement.dest_point;
-				printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point+1, mouvts[i].mouvement.dest_point+1);
-				printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
-				*nbMove += 1;
-				printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
-				j++;
+				mouvts[i].mouvement.dest_point = 24;
 			}
-			else
-			{
-				moves[j].src_point = mouvts[i].mouvement.src_point+1;
-				moves[j].dest_point = mouvts[i].mouvement.dest_point+1;
-				printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point+1, mouvts[i].mouvement.dest_point+1);
-				printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
-				*nbMove += 1;
-				printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
-				j++;
-			}
+			moves[j].src_point = mouvts[i].mouvement.src_point+1;
+			moves[j].dest_point = mouvts[i].mouvement.dest_point+1;
+			printf("Je veux faire le mouvement de %d vers %d\n", mouvts[i].mouvement.src_point, mouvts[i].mouvement.dest_point);
+			printf("IA moves de %d vers %d\n", moves[j].src_point, moves[j].dest_point);
+			*nbMove += 1;
+			printf("Sinon valeur de *nbMoves c'est : %d\n", *nbMove);
+			j++;
 		}
 	}
+	k = 0;
 	
 	printf("Tour IA de test terminé Bouyah ! A toi de jouer.\n");
 	
