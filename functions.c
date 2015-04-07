@@ -541,7 +541,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
 	//25 bar blanc
 
-
+                                          
     for (j=0; j < gamestate->bar[1] ; j++){
         damesTab[z].rectDame->x = 491;
         damesTab[z].rectDame->y = y1;
@@ -565,7 +565,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         damesTab[z].rectDame->y = y4;
         damesTab[z].color=0;
         z++;
-        y4 += 15;
+        y4 -= 15;
     }
 
 
