@@ -179,24 +179,26 @@ int main ( int argc, char** argv )
 
     SDL_Surface *textCurPlayer;
     SDL_Rect fontPosCurPlayer;
-    fontPosCurPlayer.x = 1050;
+    fontPosCurPlayer.x = 1100;
     fontPosCurPlayer.y = 350;
 
     SDL_Surface *textScoreWhite;
     SDL_Rect fontPosScoreWhite;
-    fontPosScoreWhite.x = 1050;
+    fontPosScoreWhite.x = 1100;
     fontPosScoreWhite.y = 50;
 
 
     SDL_Surface *textScoreBlack;
     SDL_Rect fontPosScoreBlack;
-    fontPosScoreBlack.x = 1050;
+    fontPosScoreBlack.x = 1100;
     fontPosScoreBlack.y = 650;
 
     TTF_Font *fontHacked = NULL;
 
 
-    SDL_Color colorFont = {255, 255, 255};
+    SDL_Color colorFont = {145, 122, 205};
+    SDL_Color colorFont1 = {255, 255, 255};
+    SDL_Color colorFont2 = {50, 50, 50};
 
 
         /* Chargement de la police */
@@ -207,7 +209,7 @@ int main ( int argc, char** argv )
         exit(EXIT_FAILURE);
     }
     /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
-    title = TTF_RenderText_Blended(fontHacked, "Backgammon Nantarena Edition", colorFont);
+    title = TTF_RenderText_Blended(fontHacked, "Polygammon Nantarena Edition", colorFont);
 
     if(title == NULL)
     {
@@ -236,7 +238,7 @@ int main ( int argc, char** argv )
     atexit(SDL_Quit);
 
 
-    int sWidth=1241, sHeigth=811;
+    int sWidth=1341, sHeigth=811;
     // create a new window
     SDL_Window * window = SDL_CreateWindow(
         "Polygammon™",                  // window title
@@ -440,7 +442,7 @@ int main ( int argc, char** argv )
 
                         if(j1Sum > j2Sum)
                         {
-                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK", colorFont);
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK BEGINS", colorFont2);
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
                             printf("Player BLACK begins\n");
                             curPlayer = BLACK;
@@ -449,7 +451,7 @@ int main ( int argc, char** argv )
                         else
                         {
 
-                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE BEGINS", colorFont1);
                             printf("j1Sum : %d | j2Sum : %d\n",j1Sum,j2Sum);
                             printf("Player WHITE begins\n");
                             curPlayer = WHITE;
@@ -609,7 +611,7 @@ int main ( int argc, char** argv )
                                     printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
 
 
-                                    textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE", colorFont);
+                                    textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
 
                                     sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
                                     textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
@@ -618,7 +620,7 @@ int main ( int argc, char** argv )
                                     {
                                         curState = SENDGAME;
                                         j1GlobalScore++; // BLACK
-                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont);
+                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont2);
                                     }
                                     else
                                     {
@@ -639,7 +641,7 @@ int main ( int argc, char** argv )
 
                                     printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
 
-                                    textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK", colorFont);
+                                    textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK TURN", colorFont2);
 
 
 
@@ -650,7 +652,7 @@ int main ( int argc, char** argv )
                                     {
                                         curState = SENDGAME;
                                         j2GlobalScore++; // WHITE
-                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont);
+                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
                                     }
                                     else
                                     {
