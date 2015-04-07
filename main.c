@@ -701,9 +701,9 @@ int main ( int argc, char** argv )
                     } // end switch
 
 
-                   // SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+                    SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
-                   // SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+                    SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
                     SDL_BlitSurface(title,0,screen, &fontPosTitle);
                     SDL_BlitSurface(textDices,0,screen, &fontPosDices);

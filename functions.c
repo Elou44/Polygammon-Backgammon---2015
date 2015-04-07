@@ -561,7 +561,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 	//26 out win noir
 
     for (j=0; j < gamestate->out[0] ; j++){
-        damesTab[z].rectDame->x = 1038;
+        damesTab[z].rectDame->x = 1048;
         damesTab[z].rectDame->y = y4;
         damesTab[z].color=0;
         z++;
@@ -572,7 +572,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 	//27 out win blanc
 
     for (j=0; j < gamestate->out[1] ; j++){
-        damesTab[z].rectDame->x = 1038;
+        damesTab[z].rectDame->x = 1048;
         damesTab[z].rectDame->y = y2;
         damesTab[z].color=1;
         z++;
@@ -679,7 +679,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         if(i == 0)
         {
-            hitboxesTab[i].rectHB->x = 932;
+            hitboxesTab[i].rectHB->x = 945;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -687,7 +687,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 1)
         {
-            hitboxesTab[i].rectHB->x = 846;
+            hitboxesTab[i].rectHB->x = 869;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -695,7 +695,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 2)
         {
-            hitboxesTab[i].rectHB->x = 770;
+            hitboxesTab[i].rectHB->x = 793;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -703,7 +703,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 3)
         {
-            hitboxesTab[i].rectHB->x = 694;
+            hitboxesTab[i].rectHB->x = 717;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -711,7 +711,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 4)
         {
-            hitboxesTab[i].rectHB->x = 618;
+            hitboxesTab[i].rectHB->x = 641;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -719,7 +719,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 5)
         {
-            hitboxesTab[i].rectHB->x = 540;
+            hitboxesTab[i].rectHB->x = 563;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -823,7 +823,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 18)
         {
-            hitboxesTab[i].rectHB->x = 540;
+            hitboxesTab[i].rectHB->x = 563;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -831,7 +831,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 19)
         {
-            hitboxesTab[i].rectHB->x = 618;
+            hitboxesTab[i].rectHB->x = 641;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -839,7 +839,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 20)
         {
-            hitboxesTab[i].rectHB->x = 694;
+            hitboxesTab[i].rectHB->x = 717;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -847,7 +847,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 21)
         {
-            hitboxesTab[i].rectHB->x = 770;
+            hitboxesTab[i].rectHB->x = 793;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -855,7 +855,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 22)
         {
-            hitboxesTab[i].rectHB->x = 846;
+            hitboxesTab[i].rectHB->x = 869;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -863,7 +863,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         else if(i == 23)
         {
-            hitboxesTab[i].rectHB->x = 922;
+            hitboxesTab[i].rectHB->x = 945;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -873,7 +873,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 	{
 	    hitboxesTab[i].rectHB->x = 490;
             hitboxesTab[i].rectHB->y = y2;
-            hitboxesTab[i].rectHB->w = 44;
+            hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
 	}
 	//bar blanc
@@ -881,13 +881,13 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 	{
             hitboxesTab[i].rectHB->x = 490;
             hitboxesTab[i].rectHB->y = y1;
-            hitboxesTab[i].rectHB->w = 44;
+            hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
 	}
 	//out blanc
 	else if (i == 26)
 	{
-            hitboxesTab[i].rectHB->x = 1015;
+            hitboxesTab[i].rectHB->x = 1045;
             hitboxesTab[i].rectHB->y = y2;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -895,13 +895,13 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 	//out noir
 	else if (i == 27)
 	{
-            hitboxesTab[i].rectHB->x = 1015;
+            hitboxesTab[i].rectHB->x = 1045;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
 	}
 
-       // SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
+       //SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
 
     }
 
