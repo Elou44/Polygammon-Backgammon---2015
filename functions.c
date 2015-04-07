@@ -1,5 +1,6 @@
 #include "functions.h"
 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -70,7 +71,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 925;
+                damesTab[z].rectDame->x = 948;
                 damesTab[z].rectDame->y = y;
 
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
@@ -93,7 +94,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
             //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 849;
+                damesTab[z].rectDame->x = 872;
                 damesTab[z].rectDame->y = y;
 
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
@@ -114,7 +115,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==2){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 773;
+                damesTab[z].rectDame->x = 796;
                 damesTab[z].rectDame->y = y;
 
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
@@ -134,7 +135,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==3){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 696;
+                damesTab[z].rectDame->x = 719;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -153,7 +154,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==4){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 621;
+                damesTab[z].rectDame->x = 644;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -172,7 +173,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==5){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 543;
+                damesTab[z].rectDame->x = 566;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -408,7 +409,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==18){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 543;
+                damesTab[z].rectDame->x = 566;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -426,7 +427,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==19){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 621;
+                damesTab[z].rectDame->x = 644;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -444,7 +445,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==20){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 696;
+                damesTab[z].rectDame->x = 719;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -462,7 +463,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==21){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 773;
+                damesTab[z].rectDame->x = 796;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -480,7 +481,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==22){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 849;
+                damesTab[z].rectDame->x = 872;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -498,7 +499,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         else if(i==23){
 
             for (j=0; j < gamestate->board[i].nbDames ; j++){
-                damesTab[z].rectDame->x = 925;
+                damesTab[z].rectDame->x = 948;
                 damesTab[z].rectDame->y = y;
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
@@ -560,7 +561,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 	//26 out win noir
 
     for (j=0; j < gamestate->out[0] ; j++){
-        damesTab[z].rectDame->x = 1015;
+        damesTab[z].rectDame->x = 1038;
         damesTab[z].rectDame->y = y4;
         damesTab[z].color=0;
         z++;
@@ -571,7 +572,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 	//27 out win blanc
 
     for (j=0; j < gamestate->out[1] ; j++){
-        damesTab[z].rectDame->x = 1015;
+        damesTab[z].rectDame->x = 1038;
         damesTab[z].rectDame->y = y2;
         damesTab[z].color=1;
         z++;
@@ -678,7 +679,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 
         if(i == 0)
         {
-            hitboxesTab[i].rectHB->x = 922;
+            hitboxesTab[i].rectHB->x = 932;
             hitboxesTab[i].rectHB->y = y1;
             hitboxesTab[i].rectHB->w = width1;
             hitboxesTab[i].rectHB->h = height;
@@ -900,7 +901,7 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
             hitboxesTab[i].rectHB->h = height;
 	}
 
-        //SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
+       // SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
 
     }
 

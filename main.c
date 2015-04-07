@@ -256,7 +256,7 @@ int main ( int argc, char** argv )
         return 1;
     }
 
-    SDL_Surface* backgroundBoard = IMG_Load("boardPolygammon.bmp");
+    SDL_Surface* backgroundBoard = IMG_Load("boardPolygammonNA.png");
     if (!backgroundBoard)
     {
         printf("Unable to load bitmap boardPolygammon.bmp: %s\n", SDL_GetError());
@@ -267,7 +267,7 @@ int main ( int argc, char** argv )
     rectBoard.y = 0;
 
     // load an image
-    SDL_Surface* dameWsurf = IMG_Load("white_dame.png");
+    SDL_Surface* dameWsurf = IMG_Load("white_dame2.png");
     if (!dameWsurf)
     {
         printf("Unable to load bitmap white_dame.bmp: %s\n", SDL_GetError());
@@ -276,7 +276,7 @@ int main ( int argc, char** argv )
 
 
 
-    SDL_Surface* dameBsurf = IMG_Load("black_dame.png");
+    SDL_Surface* dameBsurf = IMG_Load("black_dame2.png");
     if (!dameWsurf)
     {
         printf("Unable to load bitmap black_dame.bmp: %s\n", SDL_GetError());
@@ -291,7 +291,9 @@ int main ( int argc, char** argv )
     int i,j=0;
     Dame *damesTab = (Dame*) malloc (30*sizeof(Dame));
     initDamesTab(damesTab,30);
-
+    
+    
+    SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
     // Initialisation des Hitboxes
 
     Hitbox *hitboxesTab = (Hitbox*) malloc (28*sizeof(Hitbox));
@@ -325,7 +327,7 @@ int main ( int argc, char** argv )
     int j1GlobalScore = 0;
     int j2GlobalScore = 0;
 
-
+  
 
     bool done = false;
 
@@ -699,9 +701,9 @@ int main ( int argc, char** argv )
                     } // end switch
 
 
-                    SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+                   // SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
-                    SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+                   // SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
                     SDL_BlitSurface(title,0,screen, &fontPosTitle);
                     SDL_BlitSurface(textDices,0,screen, &fontPosDices);
