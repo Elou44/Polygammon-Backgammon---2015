@@ -31,14 +31,47 @@ int main ( int argc, char** argv )
 
 
     //************** CHARGEMENT DE L'API ***************//
-
-    //char nomLib[50];
+    GameMode gameMode;
+    int scoreToReach = 1; // score à atteindre pour gagner
+    char *j1NomLib = (char*) malloc (50*sizeof(char));
+    char *j2NomLib = (char*) malloc (50*sizeof(char));
     //nomLib = "backgammonAPI.dll";
+    switch(argc)
+    {
+    case 2:
+	
+	gameMode = MHvsH;
+	scoreToReach = *argv[1] - (int) '0';
+	
+	break;
+	
+    case 3:
+	
+	gameMode = MHvsAI;
+	j1NomLib = argv[1];
+	scoreToReach = *argv[2] - (int) '0';
+	printf("scoreToReach %d\n",scoreToReach);
+	
+	break;
+	
+    case 4:
+	
+	gameMode = MAIvsAI;
+	j1NomLib = argv[1];
+	j2NomLib = argv[2];
+	scoreToReach = *argv[3] - (int) '0';
+	
+	break;
+      
+    }
+
+	  
+  
 
     #if OS == 0
 
     // ON WINDOWS
-        HINSTANCE hGetProcIDDLL = LoadLibrary("backgammonAPI.dll");
+        HINSTANCE hGetProcIDDLL = LoadLibrary(j1NomLib);
 
         if (!hGetProcIDDLL) {
             printf("could not load the lib");
@@ -103,7 +136,7 @@ int main ( int argc, char** argv )
         pfTakeDouble TakeDouble;
         pfPlayTurn PlayTurn;
 
-        if((lib=dlopen("backgammonAPI.so", RTLD_LAZY))==NULL)
+        if((lib=dlopen(j1NomLib, RTLD_LAZY))==NULL)
         {
             // Erreur de chargement de la librairie
             printf("error chargement lib");
@@ -306,7 +339,7 @@ int main ( int argc, char** argv )
     // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
 
 
-    GameMode gameMode; // mode de jeu
+    
 
     Player curPlayer; // joueur courant
 
@@ -324,7 +357,7 @@ int main ( int argc, char** argv )
 
     int lastX=0,lastY=0;
 
-    int scoreToReach = 2; // score à atteindre pour gagner
+    
 
     int j1GlobalScore = 0;
     int j2GlobalScore = 0;
@@ -357,25 +390,27 @@ int main ( int argc, char** argv )
 
                     // appelle de initLib
                     //InitLibrary(nomLib); // pour test
-                    if(argc ==2) // jeu IA vs Humain
+                    if(gameMode==MHvsH) // jeu IA vs Humain
                     {
-                        gameMode = MHvsAI;
-                        // appelle de j1InitLibrary(...);
+                        
+                       
                     }
-                    else if(argc == 3) // jeu IA vs IA
+                    else if(gameMode==MHvsAI)
+		    {
+		       // appelle de j1InitLibrary(...);
+		    }
+                    else if(gameMode==MAIvsAI) // jeu IA vs IA
                     {
                         // appelle de j1InitLibrary(...);
                         // appelle de j2InitLibrary(...);
 
-                        gameMode = MAIvsAI;
+                       
                     }
-                    else // humain vs humain
+                    /*else // humain vs humain
                     {
-
-                        gameMode = MHvsAI;
                         char name[50] = "FreddyTGros";
-                        InitLibrary(name);
-                    }
+                        //InitLibrary(name);
+                    }*/
 
                     curState = SSTARTMATCH;
                     break;
