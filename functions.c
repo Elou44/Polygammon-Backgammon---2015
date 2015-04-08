@@ -942,85 +942,84 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
  int i;
 
  for (i=0;i < *nbMoves;i++){
-  //cas depuis un square vers un autre
-  if ((moves[i].dest_point != 0 && moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
+          //cas depuis un square vers un autre
+        if ((moves[i].dest_point != 0 && moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
 
-      if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY)
-      {
+              if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY)
+              {
 
-	       gamestate->board[moves[i].dest_point-1].nbDames += 1;
+        	       gamestate->board[moves[i].dest_point-1].nbDames += 1;
 
-      }
-      else if(gamestate->board[moves[i].dest_point-1].owner != curPlayer) // si on mange un pion de l'adversaire ou on capture une nouvelle case
-      {
-            if(curPlayer == WHITE)
-            {
-                gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
-            }
-            else if(curPlayer == BLACK)
-            {
-                gamestate->bar[1] += 1; // on rajoute un pion dans la bar du noir
-            }
-	        
-      }
+              }
+              else if(gamestate->board[moves[i].dest_point-1].owner != curPlayer) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+              {
+                    if(curPlayer == WHITE)
+                    {
+                        gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
+                    }
+                    else if(curPlayer == BLACK)
+                    {
+                        gamestate->bar[1] += 1; // on rajoute un pion dans la bar du noir
+                    }
+        	        
+              }
 
-      gamestate->board[moves[i].src_point-1].nbDames -= 1;
-      gamestate->board[moves[i].dest_point-1].owner = curPlayer;
+              gamestate->board[moves[i].src_point-1].nbDames -= 1;
+              gamestate->board[moves[i].dest_point-1].owner = curPlayer;
 
-
-
-  }
-
-  //cas depuis bar vers square
-  else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
-
-
-        if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
-        {
-
-            gamestate->board[moves[i].dest_point-1].nbDames += 1;
 
         }
-        else if(gamestate->board[moves[i].dest_point-1].owner != curPlayer)
-        {
 
-            if(curPlayer == WHITE)
-            {
-                gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
-            }
-            else if(curPlayer == BLACK)
-            {
-                gamestate->bar[1] += 1; // on rajoute un pion dans la bar du noir
-            }
+          //cas depuis bar vers square
+          else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
+
+
+                if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
+                {
+
+                    gamestate->board[moves[i].dest_point-1].nbDames += 1;
+
+                }
+                else if(gamestate->board[moves[i].dest_point-1].owner != curPlayer)
+                {
+
+                    if(curPlayer == WHITE)
+                    {
+                        gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
+                    }
+                    else if(curPlayer == BLACK)
+                    {
+                        gamestate->bar[1] += 1; // on rajoute un pion dans la bar du noir
+                    }
+                }
+
+                if(curPlayer == WHITE)
+                {
+                    gamestate->bar[1] -= 1;
+                }
+                else if(curPlayer == BLACK)
+                {
+                    gamestate->bar[0] -= 1;
+                }
+                
+                gamestate->board[moves[i].dest_point-1].owner = curPlayer;
+
+          }
+          //cas depuis square vers out
+          else if (moves[i].dest_point == 25 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
+
+           if (curPlayer == WHITE){
+
+                gamestate->out[1] += 1;
+                gamestate->board[moves[i].src_point-1].nbDames -= 1;
+           }
+           else if (curPlayer == BLACK){
+
+                gamestate->out[0] += 1;
+                gamestate->board[moves[i].src_point-1].nbDames -= 1;
+           }
         }
-
-        if(curPlayer == WHITE)
-        {
-            gamestate->bar[1] -= 1;
-        }
-        else if(curPlayer == BLACK)
-        {
-            gamestate->bar[0] -= 1;
-        }
-        
-        gamestate->board[moves[i].dest_point-1].owner = curPlayer;
-
-  }
-  //cas depuis square vers out
-  else if (moves[i].dest_point == 25 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
-
-   if (curPlayer == WHITE){
-
-        gamestate->out[1] += 1;
-        gamestate->board[moves[i].src_point-1].nbDames -= 1;
-   }
-   else if (curPlayer == BLACK){
-
-        gamestate->out[0] += 1;
-        gamestate->board[moves[i].src_point-1].nbDames -= 1;
-   }
-  }
- }
+    }
 
     for (i=0;i < 24;i++) // remettre à NOBODY les squares vides
     {
