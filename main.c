@@ -379,23 +379,23 @@ int main ( int argc, char** argv )
 
     SDL_Surface *textDices;
     SDL_Rect fontPosDices;
-    fontPosDices.x = 430;
+    fontPosDices.x = 490;
     fontPosDices.y = 720;
 
     SDL_Surface *textCurPlayer;
     SDL_Rect fontPosCurPlayer;
-    fontPosCurPlayer.x = 1100;
+    fontPosCurPlayer.x = 1150;
     fontPosCurPlayer.y = 350;
 
     SDL_Surface *textScoreWhite;
     SDL_Rect fontPosScoreWhite;
-    fontPosScoreWhite.x = 1100;
+    fontPosScoreWhite.x = 1150;
     fontPosScoreWhite.y = 50;
 
 
     SDL_Surface *textScoreBlack;
     SDL_Rect fontPosScoreBlack;
-    fontPosScoreBlack.x = 1100;
+    fontPosScoreBlack.x = 1150;
     fontPosScoreBlack.y = 650;
 
     TTF_Font *fontHacked = NULL;
@@ -406,7 +406,7 @@ int main ( int argc, char** argv )
     SDL_Color colorFont2 = {50, 50, 50};
 
 
-        /* Chargement de la police */
+    /* Chargement de la police */
     fontHacked = TTF_OpenFont("Digital-Desolation.ttf", 15);
     if(fontHacked == NULL)
     {
@@ -532,6 +532,9 @@ int main ( int argc, char** argv )
 
     int j2Tries = 0;
 
+    char j1Name[50];
+    char j2Name[50];
+
 
     while(!done)
     {
@@ -552,12 +555,15 @@ int main ( int argc, char** argv )
                     else if(gameMode==MHvsAI)
         		    {
         		         // appelle de j1InitLibrary(...);
+                        j1InitLibrary(j1Name);
         		    }
                     else if(gameMode==MAIvsAI) // jeu IA vs IA
                     {
-                        // appelle de j1InitLibrary(...);
-                        // appelle de j2InitLibrary(...);
 
+                        // appelle de j1InitLibrary(...);
+                        j1InitLibrary(j1Name);
+                        // appelle de j2InitLibrary(...);
+                        j2InitLibrary(j2Name);
 
                     }
 
@@ -810,14 +816,17 @@ int main ( int argc, char** argv )
                     break;
 
                 case SENDGAME:
+
                     if(j1GlobalScore >= scoreToReach || j2GlobalScore >= scoreToReach)
                     {
                         curState = SENDMATCH;
+
                         SDL_Delay(1000);
                     }
                     else
                     {
                         curState = SSTARTGAME;
+
                         SDL_Delay(1000);
                     }
 
@@ -827,7 +836,6 @@ int main ( int argc, char** argv )
                 case SENDMATCH:
 
                     done = true;
-
 
                     break;
 
@@ -852,9 +860,12 @@ int main ( int argc, char** argv )
                     // check for messages
                     switch (event.type)
                     {
-                        // exit if the window is closed
+
+                    // exit if the window is closed
                     case SDL_QUIT:
+
                         done = true;
+
                         break;
 
                         // check for keypresses
@@ -877,51 +888,6 @@ int main ( int argc, char** argv )
                                     indiceHBTab[0] = -1; // réinitialisation des Hitboxes cliquées
                                     indiceHBTab[1] = -1;
 
-
-
-                                    /*if(curPlayer == BLACK)
-                                    {
-
-                                        if(gameMode == MHvsAI)
-                                        {
-                                            //j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
-
-
-                                            for(i = 0; i < nbMoves ; i++)
-                                            {
-                                                printf("moves (%d) IA added between %d and %d\n",nbMoves,moves[i].src_point,moves[i].dest_point);
-
-                                            }
-
-                                        }
-
-                                        updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
-                                        setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                        setScore(&gamestate); // on met à jour le score
-
-                                        nbMoves = 0;
-
-                                        printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
-
-
-                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
-
-                                        sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
-                                        textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
-
-                                        if(gamestate.blackScore == 0)
-                                        {
-                                            curState = SENDGAME;
-                                            j1GlobalScore++; // BLACK
-                                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont2);
-                                        }
-                                        else
-                                        {
-                                            curState = SROLLDICES;
-                                            curPlayer = WHITE;
-                                        }
-
-                                    }*/
 
                                     if(curPlayer == WHITE && gameMode == MHvsAI)
                                     {
@@ -1059,6 +1025,9 @@ int main ( int argc, char** argv )
     // all is well ;)
     free(damesTab);
     free(hitboxesTab);
+    free(j1NomLib);
+    free(j2NomLib);
+
     printf("Exited cleanly\n");
     return 0;
 }
