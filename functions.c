@@ -306,7 +306,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -324,7 +324,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -342,7 +342,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -360,7 +360,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -378,7 +378,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -396,7 +396,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -414,7 +414,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -432,7 +432,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -450,7 +450,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -468,7 +468,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -486,7 +486,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -504,7 +504,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
                 z++;
                 if(gamestate->board[i].nbDames>5)
                 {
-                    y -= 225 / gamestate->board[i].nbDames;
+                    y += 225 / gamestate->board[i].nbDames;
                 }
                 else{
                     y += esp;
@@ -948,12 +948,20 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
       if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY)
       {
 
-	  gamestate->board[moves[i].dest_point-1].nbDames += 1;
+	       gamestate->board[moves[i].dest_point-1].nbDames += 1;
 
       }
       else if(gamestate->board[moves[i].dest_point-1].owner != curPlayer) // si on mange un pion de l'adversaire ou on capture une nouvelle case
       {
-	  gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
+            if(curPlayer == WHITE)
+            {
+                gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
+            }
+            else if(curPlayer == BLACK)
+            {
+                gamestate->bar[1] += 1; // on rajoute un pion dans la bar du noir
+            }
+	        
       }
 
       gamestate->board[moves[i].src_point-1].nbDames -= 1;
@@ -975,10 +983,26 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
         }
         else if(gamestate->board[moves[i].dest_point-1].owner != curPlayer)
         {
-            gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
+
+            if(curPlayer == WHITE)
+            {
+                gamestate->bar[0] += 1; // on rajoute un pion dans la bar du noir
+            }
+            else if(curPlayer == BLACK)
+            {
+                gamestate->bar[1] += 1; // on rajoute un pion dans la bar du noir
+            }
         }
 
-        gamestate->bar[1] -= 1;
+        if(curPlayer == WHITE)
+        {
+            gamestate->bar[1] -= 1;
+        }
+        else if(curPlayer == BLACK)
+        {
+            gamestate->bar[0] -= 1;
+        }
+        
         gamestate->board[moves[i].dest_point-1].owner = curPlayer;
 
   }
