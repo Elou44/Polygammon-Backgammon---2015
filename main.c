@@ -69,120 +69,253 @@ int main ( int argc, char** argv )
   
 
     #if OS == 0
+    
+	if(gameMode == MHvsAI)
+	{
+	    // ON WINDOWS
+	    HINSTANCE hGetProcIDDLL = LoadLibrary(j1NomLib);
 
-    // ON WINDOWS
-        HINSTANCE hGetProcIDDLL = LoadLibrary(j1NomLib);
+	    if (!hGetProcIDDLL) {
+		printf("could not load the lib");
+		return EXIT_FAILURE;
+	    }
 
-        if (!hGetProcIDDLL) {
-            printf("could not load the lib");
-            return EXIT_FAILURE;
-        }
+	    // resolve function address here
 
-        // resolve function address here
+	    pfInitLibrary j1InitLibrary = (pfInitLibrary)GetProcAddress(hGetProcIDDLL, "InitLibrary");
+	    if (!j1InitLibrary) {
+		printf("could not locate the function InitLibrary");
+		return EXIT_FAILURE;
+	    }
+	    pfStartMatch j1StartMatch = (pfStartMatch)GetProcAddress(hGetProcIDDLL, "StartMatch");
+	    if (!j1StartMatch) {
+		printf("could not locate the function StartMatch");
+		return EXIT_FAILURE;
+	    }
+	    pfStartGame j1StartGame = (pfStartGame)GetProcAddress(hGetProcIDDLL, "StartGame");
+	    if (!j1StartGame) {
+		printf("could not locate the function StartGame");
+		return EXIT_FAILURE;
+	    }
+	    pfEndGame j1EndGame = (pfEndGame)GetProcAddress(hGetProcIDDLL, "EndGame");
+	    if (!j1EndGame) {
+		printf("could not locate the function EndGame");
+		return EXIT_FAILURE;
+	    }
+	    pfEndMatch j1EndMatch = (pfEndMatch)GetProcAddress(hGetProcIDDLL, "EndMatch");
+	    if (!j1EndMatch) {
+		printf("could not locate the function EndMatch");
+		return EXIT_FAILURE;
+	    }
+	    pfDoubleStack j1DoubleStack = (pfDoubleStack)GetProcAddress(hGetProcIDDLL, "DoubleStack");
+	    if (!j1DoubleStack) {
+		printf("could not locate the function DoubleStack");
+		return EXIT_FAILURE;
+	    }
+	    pfTakeDouble j1TakeDouble = (pfTakeDouble)GetProcAddress(hGetProcIDDLL, "TakeDouble");
+	    if (!j1TakeDouble) {
+		printf("could not locate the function TakeDouble");
+		return EXIT_FAILURE;
+	    }
+	    pfPlayTurn j1PlayTurn = (pfPlayTurn)GetProcAddress(hGetProcIDDLL, "PlayTurn");
+	    if (!j1PlayTurn) {
+		printf("could not locate the function PlayTurn");
+		return EXIT_FAILURE;
+	    }
+	  
+	}
 
-        pfInitLibrary InitLibrary = (pfInitLibrary)GetProcAddress(hGetProcIDDLL, "InitLibrary");
-        if (!InitLibrary) {
-            printf("could not locate the function InitLibrary");
-            return EXIT_FAILURE;
-        }
-        pfStartMatch StartMatch = (pfStartMatch)GetProcAddress(hGetProcIDDLL, "StartMatch");
-        if (!StartMatch) {
-            printf("could not locate the function StartMatch");
-            return EXIT_FAILURE;
-        }
-        pfStartGame StartGame = (pfStartGame)GetProcAddress(hGetProcIDDLL, "StartGame");
-        if (!StartGame) {
-            printf("could not locate the function StartGame");
-            return EXIT_FAILURE;
-        }
-        pfEndGame EndGame = (pfEndGame)GetProcAddress(hGetProcIDDLL, "EndGame");
-        if (!EndGame) {
-            printf("could not locate the function EndGame");
-            return EXIT_FAILURE;
-        }
-        pfEndMatch EndMatch = (pfEndMatch)GetProcAddress(hGetProcIDDLL, "EndMatch");
-        if (!EndMatch) {
-            printf("could not locate the function EndMatch");
-            return EXIT_FAILURE;
-        }
-        pfDoubleStack DoubleStack = (pfDoubleStack)GetProcAddress(hGetProcIDDLL, "DoubleStack");
-        if (!DoubleStack) {
-            printf("could not locate the function DoubleStack");
-            return EXIT_FAILURE;
-        }
-        pfTakeDouble TakeDouble = (pfTakeDouble)GetProcAddress(hGetProcIDDLL, "TakeDouble");
-        if (!TakeDouble) {
-            printf("could not locate the function TakeDouble");
-            return EXIT_FAILURE;
-        }
-        pfPlayTurn PlayTurn = (pfPlayTurn)GetProcAddress(hGetProcIDDLL, "PlayTurn");
-        if (!PlayTurn) {
-            printf("could not locate the function PlayTurn");
-            return EXIT_FAILURE;
-        }
+	
+	if(gameMode == MAIvsAI)
+	{
+	    // ON WINDOWS IA2
+	    HINSTANCE hGetProcIDDLL2 = LoadLibrary(j2NomLib);
 
+	    if (!hGetProcIDDLL2) {
+		printf("could not load the lib");
+		return EXIT_FAILURE;
+	    }
+
+	    // resolve function address here
+
+	    pfInitLibrary j2InitLibrary = (pfInitLibrary)GetProcAddress(hGetProcIDDLL2, "InitLibrary");
+	    if (!j2InitLibrary) {
+		printf("could not locate the function InitLibrary");
+		return EXIT_FAILURE;
+	    }
+	    pfStartMatch j2StartMatch = (pfStartMatch)GetProcAddress(hGetProcIDDLL2, "StartMatch");
+	    if (!j2StartMatch) {
+		printf("could not locate the function StartMatch");
+		return EXIT_FAILURE;
+	    }
+	    pfStartGame j2StartGame = (pfStartGame)GetProcAddress(hGetProcIDDLL2, "StartGame");
+	    if (!j2StartGame) {
+		printf("could not locate the function StartGame");
+		return EXIT_FAILURE;
+	    }
+	    pfEndGame j2EndGame = (pfEndGame)GetProcAddress(hGetProcIDDLL2, "EndGame");
+	    if (!j2EndGame) {
+		printf("could not locate the function EndGame");
+		return EXIT_FAILURE;
+	    }
+	    pfEndMatch j2EndMatch = (pfEndMatch)GetProcAddress(hGetProcIDDLL2, "EndMatch");
+	    if (!j2EndMatch) {
+		printf("could not locate the function EndMatch");
+		return EXIT_FAILURE;
+	    }
+	    pfDoubleStack j2DoubleStack = (pfDoubleStack)GetProcAddress(hGetProcIDDLL2, "DoubleStack");
+	    if (!j2DoubleStack) {
+		printf("could not locate the function DoubleStack");
+		return EXIT_FAILURE;
+	    }
+	    pfTakeDouble j2TakeDouble = (pfTakeDouble)GetProcAddress(hGetProcIDDLL2, "TakeDouble");
+	    if (!j2TakeDouble) {
+		printf("could not locate the function TakeDouble");
+		return EXIT_FAILURE;
+	    }
+	    pfPlayTurn j2PlayTurn = (pfPlayTurn)GetProcAddress(hGetProcIDDLL2, "PlayTurn");
+	    if (!j2PlayTurn) {
+		printf("could not locate the function PlayTurn");
+		return EXIT_FAILURE;
+	    }
+	  
+	}
+	
+	
     #elif OS == 1
+    
+	if(gameMode == MHvsAI)
+	{
+	    // ON LINUX
 
-    // ON LINUX
+	    void * lib;
 
-        void * lib;
+	    pfInitLibrary j1InitLibrary;
+	    pfStartMatch j1StartMatch;
+	    pfStartGame j1StartGame;
+	    pfEndGame j1EndGame;
+	    pfEndMatch j1EndMatch;
+	    pfDoubleStack j1DoubleStack;
+	    pfTakeDouble j1TakeDouble;
+	    pfPlayTurn j1PlayTurn;
 
-        pfInitLibrary InitLibrary;
-        pfStartMatch StartMatch;
-        pfStartGame StartGame;
-        pfEndGame EndGame;
-        pfEndMatch EndMatch;
-        pfDoubleStack DoubleStack;
-        pfTakeDouble TakeDouble;
-        pfPlayTurn PlayTurn;
+	    if((lib=dlopen(j1NomLib, RTLD_LAZY))==NULL)
+	    {
+		// Erreur de chargement de la librairie
+		printf("error chargement lib");
+		return(false);
+	    }
 
-        if((lib=dlopen(j1NomLib, RTLD_LAZY))==NULL)
-        {
-            // Erreur de chargement de la librairie
-            printf("error chargement lib");
-            return(false);
-        }
+	    if((j1InitLibrary=(pfInitLibrary)dlsym(lib,"InitLibrary"))==NULL)
+	    {
+		printf("could not locate the function InitLibrary");
+		return EXIT_FAILURE;
+	    }
+	    if((j1StartMatch=(pfStartMatch)dlsym(lib,"StartMatch"))==NULL)
+	    {
+		printf("could not locate the function StartMatch");
+		return EXIT_FAILURE;
+	    }
+	    if((j1StartGame=(pfStartGame)dlsym(lib,"StartGame"))==NULL)
+	    {
+		printf("could not locate the function StartGame");
+		return EXIT_FAILURE;
+	    }
+	    if((j1EndGame=(pfEndGame)dlsym(lib,"EndGame"))==NULL)
+	    {
+		printf("could not locate the function EndGame");
+		return EXIT_FAILURE;
+	    }
+	    if((j1EndMatch=(pfEndMatch)dlsym(lib,"EndMatch"))==NULL)
+	    {
+		printf("could not locate the function EndMatch");
+		return EXIT_FAILURE;
+	    }
+	    if((j1DoubleStack=(pfDoubleStack)dlsym(lib,"DoubleStack"))==NULL)
+	    {
+		printf("could not locate the function DoubleStack");
+		return EXIT_FAILURE;
+	    }
+	    if((j1TakeDouble=(pfTakeDouble)dlsym(lib,"TakeDouble"))==NULL)
+	    {
+		printf("could not locate the function TakeDouble");
+		return EXIT_FAILURE;
+	    }
+	    if((j1PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTest"))==NULL)
+	    {
+		printf("could not locate the function PlayTurn");
+		return EXIT_FAILURE;
+	    }
+	    
+	}
 
-        if((InitLibrary=(pfInitLibrary)dlsym(lib,"InitLibrary"))==NULL)
-        {
-            printf("could not locate the function InitLibrary");
-            return EXIT_FAILURE;
-        }
-        if((StartMatch=(pfStartMatch)dlsym(lib,"StartMatch"))==NULL)
-        {
-            printf("could not locate the function StartMatch");
-            return EXIT_FAILURE;
-        }
-        if((StartGame=(pfStartGame)dlsym(lib,"StartGame"))==NULL)
-        {
-            printf("could not locate the function StartGame");
-            return EXIT_FAILURE;
-        }
-        if((EndGame=(pfEndGame)dlsym(lib,"EndGame"))==NULL)
-        {
-            printf("could not locate the function EndGame");
-            return EXIT_FAILURE;
-        }
-        if((EndMatch=(pfEndMatch)dlsym(lib,"EndMatch"))==NULL)
-        {
-            printf("could not locate the function EndMatch");
-            return EXIT_FAILURE;
-        }
-        if((DoubleStack=(pfDoubleStack)dlsym(lib,"DoubleStack"))==NULL)
-        {
-            printf("could not locate the function DoubleStack");
-            return EXIT_FAILURE;
-        }
-        if((TakeDouble=(pfTakeDouble)dlsym(lib,"TakeDouble"))==NULL)
-        {
-            printf("could not locate the function TakeDouble");
-            return EXIT_FAILURE;
-        }
-        if((PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTest"))==NULL)
-        {
-            printf("could not locate the function PlayTurn");
-            return EXIT_FAILURE;
-        }
+	
+	if(gameMode == MAIvsAI)
+	{
+	    // ON LINUX IA2
+
+	    void * lib2;
+
+	    pfInitLibrary j2InitLibrary;
+	    pfStartMatch j2StartMatch;
+	    pfStartGame j2StartGame;
+	    pfEndGame j2EndGame;
+	    pfEndMatch j2EndMatch;
+	    pfDoubleStack j2DoubleStack;
+	    pfTakeDouble j2TakeDouble;
+	    pfPlayTurn j2PlayTurn;
+
+	    if((lib2=dlopen(j2NomLib, RTLD_LAZY))==NULL)
+	    {
+		// Erreur de chargement de la librairie
+		printf("error chargement lib");
+		return(false);
+	    }
+
+	    if((j2InitLibrary=(pfInitLibrary)dlsym(lib2,"InitLibrary"))==NULL)
+	    {
+		printf("could not locate the function InitLibrary");
+		return EXIT_FAILURE;
+	    }
+	    if((j2StartMatch=(pfStartMatch)dlsym(lib2,"StartMatch"))==NULL)
+	    {
+		printf("could not locate the function StartMatch");
+		return EXIT_FAILURE;
+	    }
+	    if((j2StartGame=(pfStartGame)dlsym(lib2,"StartGame"))==NULL)
+	    {
+		printf("could not locate the function StartGame");
+		return EXIT_FAILURE;
+	    }
+	    if((j2EndGame=(pfEndGame)dlsym(lib2,"EndGame"))==NULL)
+	    {
+		printf("could not locate the function EndGame");
+		return EXIT_FAILURE;
+	    }
+	    if((j2EndMatch=(pfEndMatch)dlsym(lib2,"EndMatch"))==NULL)
+	    {
+		printf("could not locate the function EndMatch");
+		return EXIT_FAILURE;
+	    }
+	    if((j2DoubleStack=(pfDoubleStack)dlsym(lib2,"DoubleStack"))==NULL)
+	    {
+		printf("could not locate the function DoubleStack");
+		return EXIT_FAILURE;
+	    }
+	    if((j2TakeDouble=(pfTakeDouble)dlsym(lib2,"TakeDouble"))==NULL)
+	    {
+		printf("could not locate the function TakeDouble");
+		return EXIT_FAILURE;
+	    }
+	    if((j2PlayTurn=(pfPlayTurn)dlsym(lib2,"PlayTest"))==NULL)
+	    {
+		printf("could not locate the function PlayTurn");
+		return EXIT_FAILURE;
+	    }
+ 
+	}
+
+
 
     #endif // if
 
@@ -348,21 +481,12 @@ int main ( int argc, char** argv )
     SMove moves[4];
     int indiceHBTab[2]; // indice des hitboxes cliquées pour 1 move
 
-
     unsigned int nbMoves = 0;
-
-
-    // program main loop
-
 
     int lastX=0,lastY=0;
 
-    
-
     int j1GlobalScore = 0;
     int j2GlobalScore = 0;
-
-  
 
     bool done = false;
 
@@ -379,8 +503,6 @@ int main ( int argc, char** argv )
 
     while(!done)
     {
-
-
 
                 switch(curState)
                 {
@@ -406,11 +528,7 @@ int main ( int argc, char** argv )
 
                        
                     }
-                    /*else // humain vs humain
-                    {
-                        char name[50] = "FreddyTGros";
-                        //InitLibrary(name);
-                    }*/
+                    
 
                     curState = SSTARTMATCH;
                     break;
@@ -419,13 +537,15 @@ int main ( int argc, char** argv )
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startMatch();
-                        StartMatch(1);
+                        j1StartMatch(scoreToReach);
 
                     }
                     if(gameMode == MAIvsAI)
                     {
                         // appelle de j1startMatch();
+			j1StartMatch(scoreToReach);
                         // appelle de j2startMatch();
+			j2StartMatch(scoreToReach);
                     }
 
 
@@ -453,12 +573,14 @@ int main ( int argc, char** argv )
                     if(gameMode == MHvsAI)
                     {
                         // appelle de j1startGame(BLACK);
-                        StartGame(BLACK);
+                        j1StartGame(BLACK);
                     }
                     else if(gameMode == MAIvsAI)
                     {
                         // appelle de j1startGame(BLACK);
+                        j1StartGame(BLACK);
                         // appelle de j2startGame(WHITE);
+			j2StartGame(BLACK);
                     }
 
                     curState = SROLLDICES;
@@ -521,7 +643,8 @@ int main ( int argc, char** argv )
                     {
                         if(curPlayer == BLACK)
                         {
-                            // appelle de playturn
+                            // appelle de j1PlayTurn
+			    j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
 
                         } // end if
 
@@ -532,6 +655,26 @@ int main ( int argc, char** argv )
                         } // end if
 
                     }
+                    
+                    else if(gameMode == MAIvsAI)
+                    {
+                        if(curPlayer == BLACK)
+                        {
+                            // appelle de j1Playturn
+			    j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+			    
+                        } // end if
+
+
+                        if(curPlayer == WHITE)
+                        {
+			    // appelle de j1Playturn
+			    j2PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+			    
+                        } // end if
+
+                    }
+                   
 
                     break;
 
@@ -540,7 +683,7 @@ int main ( int argc, char** argv )
                     break;
 
                 case SENDGAME:
-                    if(j1GlobalScore == scoreToReach || j2GlobalScore == scoreToReach)
+                    if(j1GlobalScore >= scoreToReach || j2GlobalScore >= scoreToReach)
                     {
                         curState = SENDMATCH;
                         SDL_Delay(1000);
@@ -626,8 +769,8 @@ int main ( int argc, char** argv )
 
                                     if(gameMode == MHvsAI)
                                     {
-                                        PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
-                                        //clickToSMoves(indiceHBTab,moves,&nbMoves,curPlayer);
+                                        //j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
+                                        
 
                                         for(i = 0; i < nbMoves ; i++)
                                         {
@@ -789,6 +932,7 @@ int main ( int argc, char** argv )
 
     // all is well ;)
     free(damesTab);
+    free(hitboxesTab);
     printf("Exited cleanly\n");
     return 0;
 }
