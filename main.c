@@ -399,8 +399,29 @@ int main ( int argc, char** argv )
     fontPosScoreBlack.y = 650;
 
     TTF_Font *fontHacked = NULL;
-
-
+    
+    // DECLARATION DES BOUTONS //
+    
+    Button *bRollDices = (Button*) malloc (sizeof(Button));
+    bRollDices->rectButton.x = 300;
+    bRollDices->rectButton.y = 800;
+    bRollDices->rectButton.w = 170;
+    bRollDices->rectButton.h = 45;
+    
+    Button *bAccept = (Button*) malloc (sizeof(Button));
+    bAccept->rectButton.x = 1100;
+    bAccept->rectButton.y = 380;
+    bAccept->rectButton.w = 170;
+    bAccept->rectButton.h = 45;
+    
+    Button *bDoubleStack = (Button*) malloc (sizeof(Button));
+    bDoubleStack->rectButton.x = 700;
+    bDoubleStack->rectButton.y = 800;
+    bDoubleStack->rectButton.w = 170;
+    bDoubleStack->rectButton.h = 45;
+    
+    
+    
     SDL_Color colorFont = {145, 122, 205};
     SDL_Color colorFont1 = {255, 255, 255};
     SDL_Color colorFont2 = {50, 50, 50};
@@ -1023,6 +1044,12 @@ int main ( int argc, char** argv )
         SDL_BlitSurface(textScoreWhite,0,screen, &fontPosScoreWhite);
 
         SDL_BlitSurface(textScoreBlack,0,screen, &fontPosScoreBlack);
+	
+	SDL_FillRect(screen, &bRollDices->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
+	
+	SDL_FillRect(screen, &bAccept->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
+	
+	SDL_FillRect(screen, &bDoubleStack->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
 
         drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 

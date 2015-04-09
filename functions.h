@@ -12,6 +12,12 @@ typedef struct {
     SDL_Rect *rectDame; // position de l'image
 } Dame;
 
+typedef struct {
+    SDL_Rect rectButton;
+    char value[50];
+    int state;
+} Button;
+
 // Les différents états de jeu
 typedef enum {
     SINITLIBS, // initialisation des librairies
