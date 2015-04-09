@@ -586,6 +586,9 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 void initGameState(SGameState* gamestate){
 
     //initialisation du plateau pour chaque debut de partie
+
+    gamestate->stake = 1;
+
     int i;
     Square temp;
 
@@ -891,20 +894,20 @@ void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 	else if (i == 26)
 	{
             hitboxesTab[i].rectHB->x = 1045;
-            hitboxesTab[i].rectHB->y = y2;
-            hitboxesTab[i].rectHB->w = width1;
-            hitboxesTab[i].rectHB->h = height;
+            hitboxesTab[i].rectHB->y = 13;
+            hitboxesTab[i].rectHB->w = 78;
+            hitboxesTab[i].rectHB->h = 284;
 	}
 	//out noir
 	else if (i == 27)
 	{
             hitboxesTab[i].rectHB->x = 1045;
-            hitboxesTab[i].rectHB->y = y1;
-            hitboxesTab[i].rectHB->w = width1;
-            hitboxesTab[i].rectHB->h = height;
+            hitboxesTab[i].rectHB->y = 383;
+            hitboxesTab[i].rectHB->w = 78;
+            hitboxesTab[i].rectHB->h = 284;
 	}
 
-       //SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0));
+       //SDL_FillRect(screen, hitboxesTab[i].rectHB, SDL_MapRGB(screen->format, 255, 0, 0)); //Pour afficher les hitboxes
 
     }
 

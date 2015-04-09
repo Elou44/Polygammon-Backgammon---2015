@@ -36,9 +36,6 @@ int main ( int argc, char** argv )
 {
 
 
-
-    //************** CHARGEMENT DE L'API ***************//
-
     SGameState gamestate;
 
     GameMode gameMode;
@@ -89,7 +86,11 @@ int main ( int argc, char** argv )
     }
 
 
-
+    /* ***************************
+     *                           *
+     *   CHARGEMENTS DES LIBS    *
+     *                           *
+     * **************************/
 
     #if OS == 0
 
@@ -374,10 +375,18 @@ int main ( int argc, char** argv )
         exit(EXIT_FAILURE);
     }
 
+
+
+    /* ***************************
+     *                           *
+     *   PLACEMENT DES TEXTES    *
+     *                           *
+     * **************************/
+
     SDL_Surface *title;
     SDL_Rect fontPosTitle;
     fontPosTitle.x = 280;
-    fontPosTitle.y = 770;
+    fontPosTitle.y = 780;
 
     SDL_Surface *textDices;
     SDL_Rect fontPosDices;
@@ -402,25 +411,29 @@ int main ( int argc, char** argv )
 
     TTF_Font *fontHacked = NULL;
     
-    // DECLARATION DES BOUTONS //
+    /* ***************************
+     *                           *
+     *   DECLARATION DES BOUTONS *
+     *                           *
+     * **************************/
     
     Button *bRollDices = (Button*) malloc (sizeof(Button));
-    bRollDices->rectButton.x = 300;
-    bRollDices->rectButton.y = 800;
-    bRollDices->rectButton.w = 170;
-    bRollDices->rectButton.h = 45;
+    bRollDices->rectButton.x = 234;
+    bRollDices->rectButton.y = 706;
+    bRollDices->rectButton.w = 230;
+    bRollDices->rectButton.h = 48;
     
     Button *bAccept = (Button*) malloc (sizeof(Button));
-    bAccept->rectButton.x = 1100;
-    bAccept->rectButton.y = 380;
-    bAccept->rectButton.w = 170;
-    bAccept->rectButton.h = 45;
+    bAccept->rectButton.x = 1053;
+    bAccept->rectButton.y = 317;
+    bAccept->rectButton.w = 50;
+    bAccept->rectButton.h = 50;
     
     Button *bDoubleStack = (Button*) malloc (sizeof(Button));
-    bDoubleStack->rectButton.x = 700;
-    bDoubleStack->rectButton.y = 800;
-    bDoubleStack->rectButton.w = 170;
-    bDoubleStack->rectButton.h = 45;
+    bDoubleStack->rectButton.x = 576;
+    bDoubleStack->rectButton.y = 706;
+    bDoubleStack->rectButton.w = 230;
+    bDoubleStack->rectButton.h = 48;
     
     
     
@@ -510,11 +523,6 @@ int main ( int argc, char** argv )
 
     SDL_SetWindowIcon(window, dameBsurf);
 
-
-
-
-
-
     srand(time(NULL));
     int i,j=0;
     Dame *damesTab = (Dame*) malloc (30*sizeof(Dame));
@@ -522,12 +530,15 @@ int main ( int argc, char** argv )
 
 
     SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
-    // Initialisation des Hitboxes
 
+    // Initialisation des Hitboxes
     Hitbox *hitboxesTab = (Hitbox*) malloc (28*sizeof(Hitbox));
+
     //SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
+
     initHitBoxesTab(hitboxesTab,28,screen);
 
+    
 
     // Par convention, nous dirons que le joueur  BLACK est le j1 et le joueur WHITE est le j2
 
@@ -793,8 +804,14 @@ int main ( int argc, char** argv )
                             if(gamestate.blackScore == 0)
                             {
                                 curState = SENDGAME;
-                                j1GlobalScore++; // BLACK
+                                j1GlobalScore += gamestate.stake; // BLACK
                                 textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont2);
+                            }
+                            else if(j1Tries > 3)
+                            {
+                                curState = SENDGAME;
+                                j2GlobalScore += gamestate.stake; // WHITE
+                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
                             }
                             else
                             {
@@ -844,8 +861,14 @@ int main ( int argc, char** argv )
                             if(gamestate.whiteScore == 0 )
                             {
                                 curState = SENDGAME;
-                                j2GlobalScore++; // WHITE
+                                j2GlobalScore += gamestate.stake; // WHITE
                                 textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
+                            }
+                            else if(j2Tries > 3)
+                            {
+                                curState = SENDGAME;
+                                j1GlobalScore += gamestate.stake; // BLACK
+                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
                             }
                             else
                             {
@@ -972,15 +995,18 @@ int main ( int argc, char** argv )
                                         if(gamestate.whiteScore == 0 )
                                         {
                                             curState = SENDGAME;
-
-                                            j2GlobalScore++; // WHITE
-
+                                            j2GlobalScore += gamestate.stake; // WHITE
                                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
+                                        }
+                                        else if(j2Tries > 3)
+                                        {
+                                            curState = SENDGAME;
+                                            j1GlobalScore += gamestate.stake; // BLACK
+                                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
                                         }
                                         else
                                         {
                                             curState = SROLLDICES;
-
                                             curPlayer = BLACK;
                                         }
                                     }
@@ -1014,9 +1040,15 @@ int main ( int argc, char** argv )
                     					if(gamestate.blackScore == 0)
                     					{
                     					    curState = SENDGAME;
-                    					    j1GlobalScore++; // BLACK
+                    					    j1GlobalScore += gamestate.stake; // BLACK
                     					    textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont2);
                     					}
+                                        else if(j1Tries > 3)
+                                        {
+                                            curState = SENDGAME;
+                                            j2GlobalScore += gamestate.stake; // WHITE
+                                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
+                                        }
                     					else
                     					{
                     					    curState = SROLLDICES;
@@ -1045,7 +1077,7 @@ int main ( int argc, char** argv )
                         }
                     case SDL_MOUSEBUTTONDOWN:
                         {
-                            //printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
+                            printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
                             lastX =  event.button.x;
                             lastY =  event.button.y;
 
@@ -1078,7 +1110,20 @@ int main ( int argc, char** argv )
 
         }
 
+
+        /* ***************************
+         *                           *
+         *    DESSIN DES SURFACES    *
+         *                           *
+         * **************************/
+
         SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+
+        SDL_FillRect(screen, &bRollDices->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
+        
+        SDL_FillRect(screen, &bAccept->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
+        
+        SDL_FillRect(screen, &bDoubleStack->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
 
         SDL_BlitSurface(backgroundBoard,0,screen, &rectBoard);
 
@@ -1091,12 +1136,6 @@ int main ( int argc, char** argv )
         SDL_BlitSurface(textScoreWhite,0,screen, &fontPosScoreWhite);
 
         SDL_BlitSurface(textScoreBlack,0,screen, &fontPosScoreBlack);
-	
-    	SDL_FillRect(screen, &bRollDices->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
-    	
-    	SDL_FillRect(screen, &bAccept->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
-    	
-    	SDL_FillRect(screen, &bDoubleStack->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
 
         drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
 
