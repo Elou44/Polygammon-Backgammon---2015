@@ -309,7 +309,7 @@ int main ( int argc, char** argv )
 	    if((lib2=dlopen(j2NomLib, RTLD_LAZY))==NULL)
 	    {
 		// Erreur de chargement de la librairie
-		printf("error chargement lib");
+		printf("error chargement lib2");
 		return(false);
 	    }
 
@@ -889,7 +889,7 @@ int main ( int argc, char** argv )
                                     indiceHBTab[1] = -1;
 
 
-                                    if(curPlayer == WHITE && gameMode == MHvsAI)
+                                    if(curPlayer == WHITE && (gameMode == MHvsAI || gameMode == MHvsH))
                                     {
                                         printf("nbMoves WHITE : %d\n",nbMoves);
 
@@ -925,6 +925,37 @@ int main ( int argc, char** argv )
                                             curPlayer = BLACK;
                                         }
                                     }
+                                    
+                                    else if(curPlayer == BLACK && gameMode == MHvsH)
+				    {
+				      
+					updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
+					setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
+					setScore(&gamestate); // on met à jour le score
+
+					nbMoves = 0;
+
+					printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
+
+
+					textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
+
+					sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
+					textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
+
+					if(gamestate.blackScore == 0)
+					{
+					    curState = SENDGAME;
+					    j1GlobalScore++; // BLACK
+					    textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont2);
+					}
+					else
+					{
+					    curState = SROLLDICES;
+					    curPlayer = WHITE;
+					}
+				      
+				    }
                                 }
                             }
 

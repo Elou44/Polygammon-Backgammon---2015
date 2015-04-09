@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <SDL2/SDL.h>
 
+//Update l'affiche du score des deux players
 void setScore(SGameState* gamestate){
 
     unsigned int i, scoreB = 0, scoreW = 0;
@@ -18,6 +19,7 @@ void setScore(SGameState* gamestate){
         }
         else
         {
+	    //Black
             scoreB += (unsigned int) gamestate->board[i].nbDames * (unsigned int) (i+1);
         }
 
@@ -27,11 +29,11 @@ void setScore(SGameState* gamestate){
     scoreB += (unsigned int) gamestate->bar[0] * 25;
 
     gamestate->whiteScore = scoreW;
-	gamestate->blackScore = scoreB;
+    gamestate->blackScore = scoreB;
 
 }
 
-
+//Update le propriétaire de chaque square apres chaque move
 void setColor(int i, int z, Dame *damesTab,const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf)
 {
     if(gamestate->board[i].owner == WHITE)
@@ -46,21 +48,21 @@ void setColor(int i, int z, Dame *damesTab,const SGameState* const gamestate, SD
 
     }
 }
-
+//Initialisation de la position des pions sur l'écran
 void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface *dameWsurf, SDL_Surface *dameBsurf){
 
     int i,j,x = 0, y = 615, y1 = 380, y2 = 23, y3 = 260, y4 = 600, z = 0, esp=40;
 
 
     for (i=0;i<24;i++){
-
+	//partie bas du board
         if(i >=0 && i <= 11){
 
             y = 615;
 
         }
         else {
-
+	//partie haut du board
             y = 27;
 
         }
@@ -68,13 +70,14 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         if (i==0){
 
             //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
-
+	    // i designe l'indice des squares et j designe le numero d'un pion
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 948;
                 damesTab[z].rectDame->y = y;
-
+		
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
+		//on va diminuer la distance qui separe chaque pions sur un square en fonctions du nombre de pions present sur ce meme square
                 if(gamestate->board[i].nbDames>5)
                 {
                     y -= 225 / gamestate->board[i].nbDames;
@@ -87,7 +90,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
             }
         }
-
+        
         else if(i==1){
 
             //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
@@ -523,7 +526,7 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         //printf("gamestate->out[0]: %d\n",gamestate->out[0]);
         //printf("gamestate->out[1]: %d\n",gamestate->out[1]);
 
-
+   //initialisation de la position des pions pour les bars
     for (j=0; j < gamestate->bar[0] ; j++){
         damesTab[z].rectDame->x = 491;
         damesTab[z].rectDame->y = y3;
@@ -582,8 +585,8 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
 
 void initGameState(SGameState* gamestate){
 
-
-	int i;
+    //initialisation du plateau pour chaque debut de partie
+    int i;
     Square temp;
 
     for( i = 0; i < 24; i++) // Initialisation de tous les squares à NOBODY et 0 dame
@@ -666,6 +669,7 @@ void initDamesTab(Dame *damesTab, int nbDames)
     }
 }
 
+//fonction qui va permettre de deplacer un pion d'un square a un autre
 void initHitBoxesTab(Hitbox *hitboxesTab, int nbHB, SDL_Surface* screen)
 {
 
@@ -937,10 +941,10 @@ void rollDices(unsigned char* dices)
 
 
 
-
+//fonction qui va permettre de mettre a jour le board apres chaque moves
 void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves, Player curPlayer){
  int i;
-
+//notre fonction suppose que tous les moves qui lui sont transmis sont valides
  for (i=0;i < *nbMoves;i++){
           //cas depuis un square vers un autre
         if ((moves[i].dest_point != 0 && moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
@@ -1024,7 +1028,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
     for (i=0;i < 24;i++) // remettre à NOBODY les squares vides
     {
         if(gamestate->board[i].nbDames == 0) gamestate->board[i].owner = NOBODY;
-        //printf("proprio magueule : i:%d %d\n", i,gamestate->board[i].owner);
+        //printf("proprio yop : i:%d %d\n", i,gamestate->board[i].owner);
     }
 
 }
