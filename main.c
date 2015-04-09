@@ -376,8 +376,8 @@ int main ( int argc, char** argv )
 
     SDL_Surface *title;
     SDL_Rect fontPosTitle;
-    fontPosTitle.x = 200;
-    fontPosTitle.y = 780;
+    fontPosTitle.x = 280;
+    fontPosTitle.y = 770;
 
     SDL_Surface *textDices;
     SDL_Rect fontPosDices;
@@ -386,8 +386,8 @@ int main ( int argc, char** argv )
 
     SDL_Surface *textCurPlayer;
     SDL_Rect fontPosCurPlayer;
-    fontPosCurPlayer.x = 1150;
-    fontPosCurPlayer.y = 350;
+    fontPosCurPlayer.x = 1125;
+    fontPosCurPlayer.y = 332;
 
     SDL_Surface *textScoreWhite;
     SDL_Rect fontPosScoreWhite;
@@ -398,7 +398,7 @@ int main ( int argc, char** argv )
     SDL_Surface *textScoreBlack;
     SDL_Rect fontPosScoreBlack;
     fontPosScoreBlack.x = 1150;
-    fontPosScoreBlack.y = 650;
+    fontPosScoreBlack.y = 613;
 
     TTF_Font *fontHacked = NULL;
     
@@ -424,9 +424,9 @@ int main ( int argc, char** argv )
     
     
     
-    SDL_Color colorFont = {145, 122, 205};
+    SDL_Color colorFont = {145, 122, 205}; // Définition des couleurs
     SDL_Color colorFont1 = {255, 255, 255};
-    SDL_Color colorFont2 = {50, 50, 50};
+    SDL_Color colorFont2 = {0, 0, 0};
 
 
     /* Chargement de la police */
@@ -450,35 +450,15 @@ int main ( int argc, char** argv )
     textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
 
 
-    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE : 167", colorFont);
+    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE : 167", colorFont1);
     char strScoreWhite[15];
 
-    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK : 167", colorFont);
+    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK : 167", colorFont2);
     char strScoreBlack[15];
 
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-
-    int sWidth=1341, sHeigth=811;
-    // create a new window
-    SDL_Window * window = SDL_CreateWindow(
-        "Polygammon™",                  // window title
-        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        sWidth,                               // width, in pixels
-        sHeigth,                               // height, in pixels
-        SDL_WINDOW_OPENGL                  // flags - see below
-    );
-
-    SDL_Surface *screen = SDL_GetWindowSurface(window);
-
-    SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
-    if ( !screen )
-    {
-        printf("Unable to set 1241*811 video: %s\n", SDL_GetError());
-        return 1;
-    }
 
     SDL_Surface* backgroundBoard = IMG_Load("boardPolygammonNA.png");
     if (!backgroundBoard)
@@ -507,8 +487,32 @@ int main ( int argc, char** argv )
         return 1;
     }
 
+    int sWidth=1341, sHeigth=811;
+    // create a new window
+    SDL_Window * window = SDL_CreateWindow(
+        "Polygammon™",                  // window title
+        SDL_WINDOWPOS_UNDEFINED,           // initial x position
+        SDL_WINDOWPOS_UNDEFINED,           // initial y position
+        sWidth,                               // width, in pixels
+        sHeigth,                               // height, in pixels
+        SDL_WINDOW_OPENGL                  // flags - see below
+    );
 
-    // centre the bitmap on screen
+    SDL_Surface *screen = SDL_GetWindowSurface(window);
+
+    SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *screen);
+    if ( !screen )
+    {
+        printf("Unable to set 1241*811 video: %s\n", SDL_GetError());
+        return 1;
+    }
+
+
+    SDL_SetWindowIcon(window, dameBsurf);
+
+
+
+
 
 
     srand(time(NULL));
@@ -784,7 +788,7 @@ int main ( int argc, char** argv )
                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
 
                             sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
-                            textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
+                            textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont2);
 
                             if(gamestate.blackScore == 0)
                             {
@@ -835,7 +839,7 @@ int main ( int argc, char** argv )
 
 
                             sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
-                            textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont);
+                            textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont1);
 
                             if(gamestate.whiteScore == 0 )
                             {
@@ -962,7 +966,7 @@ int main ( int argc, char** argv )
 
                                         sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
 
-                                        textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont);
+                                        textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont1);
 
 
                                         if(gamestate.whiteScore == 0 )
@@ -1005,7 +1009,7 @@ int main ( int argc, char** argv )
                     					textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
 
                     					sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
-                    					textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont);
+                    					textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont2);
 
                     					if(gamestate.blackScore == 0)
                     					{

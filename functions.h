@@ -14,6 +14,7 @@ typedef struct {
 
 typedef struct {
     SDL_Rect rectButton;
+    SDL_Rect rectText;
     char value[50];
     int state;
 } Button;
