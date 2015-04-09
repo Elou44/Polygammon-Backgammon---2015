@@ -160,7 +160,6 @@ typedef void (*pfPlayTurn)(const SGameState * const,  const unsigned char[2], SM
  */
 void setScore(SGameState* gamestate);
 
-void setScore2(SGameState* gamestate);
 
 /**
  * Fonction utilisée dans setDamesPos. Met la bonne SDL_surface à chaque Dame (pion).
@@ -256,6 +255,8 @@ void rollDices(unsigned char* dices);
 void updateSGameState(SGameState* gamestate, SMove* moves, unsigned int *nbMoves, Player curPlayer);
 
 void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player curPlayer);
+
+int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices);
 
 
 

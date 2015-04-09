@@ -1064,3 +1064,197 @@ void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player 
         printf("erreur segmentation fault out of SMoves[4]");
     }
 }
+
+
+int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices)
+{
+    
+    /******************************************************
+    **                                                   **
+    **   déclaration et initialisation des paramêtres    **
+    **                                                   **
+    ******************************************************/
+    
+    SGameState curGameState;
+    curGameState = *gamestate;
+    SMove curMove;
+    int i,j,k,l,dist,nbDices,usedDices,totDames; /*unused k si on garde le commentaire plus bas*/
+
+    
+    
+    
+    /******************************************************
+    **                                                   **
+    **           détermination du nombre de dés          **
+    **                                                   **
+    ******************************************************/
+    
+    if(dices[0] == dices[1])
+    {
+        nbDices = 4;
+    } else {
+        nbDices = 2;
+    }
+
+    
+    /******************************************************
+    **                                                   **
+    **détermination du nombre de coups maximums possibles**
+    **                                                   **
+    ******************************************************/
+    
+    int nbPot = 0;
+    SMove potMove;
+    
+    if (nbPot < nbDices)
+    {
+        
+    }
+    
+    
+    
+    /******************************************************
+    **                                                   **
+    **      détermination de la validité des coups       **
+    **                                                   **
+    ******************************************************/
+    
+    for(i=0;i<nbMoves;i++)
+    {
+        curMove = move[i];
+
+        dist = abs(curMove.dest_point - curMove.src_point);
+        totDames = 0;
+        for(j=0;j<nbDices;j++)
+        {
+            if(dices[j] == dist)
+                {
+                    dices[j] = 0;
+                    usedDices++;
+                    break;
+                }
+            printf("Il faut utiliser les dés !");
+            return(0);
+            /*for(k=0;k<nbDices;k++)
+            {
+                if(k!=j)
+                {
+                    if(dices[j]+dices[k] == dist)
+                    {
+                        dices[j] = 0;
+                        dices[k] = 0;
+                        usedDices += 2;
+                        break;
+                    }
+                    //à voir comment gérer le stockage des dés utilisés
+                    printf("Il faut utiliser les dés !");
+                    return(0);
+                }
+            }*/
+
+        }
+
+        if (curGameState.board[curMove.src_point].owner != curPlayer)
+        {
+            printf("Il faut bouger ses propres pions !");
+            return(0);
+        }
+
+        if (curMove.src_point != 0 && curGameState.bar[curPlayer] != 0)
+        {
+            printf("Il faut sortir les pions du bar avant tout !");
+            return(0);
+        }
+
+        if (curGameState.board[curMove.dest_point].owner != curPlayer && curGameState.board[curMove.dest_point].nbDames > 1)
+        {
+            printf("Il faut déplacer les pions sur des cases libres ou des blots");
+            return(0);
+        }
+        
+        if (curPlayer == WHITE)
+        {
+            if (curMove.dest_point - curMove.src_point < 0)
+            {
+                printf("Il faut aller dans le bon sens !");
+                return(0);
+            }
+        }
+        
+        if (curPlayer == BLACK)
+        {
+            if (curMove.dest_point - curMove.src_point > 0)
+            {
+                printf("Il faut aller dans le bon sens !");
+                return(0);
+            }
+        }
+        
+        
+        if (curPlayer == WHITE)
+        {
+            for(l=19;l<25;l++)
+            {
+                if(curGameState.board[l].owner == curPlayer)
+                {
+                    totDames += curGameState.board[l].owner;
+                }
+            }
+            if (totDames + curGameState.out[curPlayer] != 15)
+            {
+                printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !");
+                return(0);
+            }
+        }
+        
+        if (curPlayer == BLACK)
+        {
+            for(l=1;l<7;l++)
+            {
+                if(curGameState.board[l].owner == curPlayer)
+                {
+                    totDames += curGameState.board[l].owner;
+                }
+            }
+            if (totDames + curGameState.out[curPlayer] != 15)
+            {
+                printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !");
+                return(0);
+            }
+        }
+        
+        
+    
+
+    /******************************************************
+    **                                                   **
+    **        mise à jour du gamestate provisoire        **
+    **                                                   **
+    ******************************************************/
+        
+        curGameState.board[curMove.src_point].nbDames--;
+        if (curGameState.board[curMove.src_point].nbDames == 0) /*si la case de départ n'a plus de dames elle devient neutre*/
+        {
+            curGameState.board[curMove.src_point].owner = -1;
+        }
+
+        if (curGameState.board[curMove.dest_point].owner != curPlayer) /*si la case d'arrivée ne m'appartient pas, elle m'appartient*/
+        {
+            curGameState.board[curMove.dest_point].owner = curPlayer;
+
+            if (curGameState.board[curMove.dest_point].nbDames != 1)/*si aucune dame n'est présente on en ajoute une*/
+            {
+                curGameState.board[curMove.dest_point].nbDames++;
+            }
+        }
+        
+        /*unsigned int nbvalidmove = 1;
+        SMove validMove[1];
+        validMove[0] = curMove;
+        updateSGameState(&curGameState, validMove, &nbValidMoves, curPlayer);*/
+
+    }
+
+
+    return(1);
+}
