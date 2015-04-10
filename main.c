@@ -1432,7 +1432,9 @@ int main ( int argc, char** argv )
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    // all is well ;)
+    freeHitBoxes(hitboxesTab);
+    freeDamesTab(damesTab,30);
+
     free(damesTab);
     free(hitboxesTab);
     free(j1NomLib);
