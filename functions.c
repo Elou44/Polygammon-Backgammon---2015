@@ -1160,8 +1160,7 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
 
         for(j=0;j<nbDices;j++)                              
         {
-            printf("De : %d \n",dices[j]);                          //prints des dés et de la distance
-            printf("dist : %d\n", dist);
+
             if(dices[j] == dist)
                 {
                     dices[j] = 0;                                   //si un dé correspond à la distance on incrémente usedDices et on arrête la boucle
@@ -1175,25 +1174,6 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
             printf("Il faut utiliser les dés !\n");
             return(0);
         }
-
-
-
-
-        printf("curPlayer : %d\n",curPlayer);                                           //print du joueur en cours, 0 = BLACK, 1 = WHITE
-        if (curMove.src_point == 0)                                                     
-        {                                                                               //si on se déplace depuis le bar
-            printf("owner : %d\n",curPlayer);                                           //le proprietaire est le joueur courant
-            printf("nbdames : %d\n", curGameState.bar[curPlayer]);                      //le nombre de dames et le contenu de son bar
-        }                                                                               //cette conditionnelle permet d'éviter un core dumped dans le cas du mouvement partant du bar
-        else                                                                            //(board[-1] --> core dumped)
-        {
-        printf("owner : %d\n",curGameState.board[curMove.src_point-1].owner);           //sinon le propriétaire est celui de la case de départ
-        printf("nbdames : %d\n",curGameState.board[curMove.src_point-1].nbDames);       //et le nombre de dames celui de la case de départ aussi
-        }
-       
-        printf("src_point : %d\n", curMove.src_point);                                  //prints des extremités du mouvement courant
-        printf("dest_point : %d\n", curMove.dest_point);
-
 
 
 
