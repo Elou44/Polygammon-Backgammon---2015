@@ -15,7 +15,6 @@ typedef struct {
 typedef struct {
     SDL_Rect rectButton;
     SDL_Rect rectText;
-    char value[50];
     int state;
 } Button;
 
@@ -24,6 +23,7 @@ typedef enum {
     SINITLIBS, // initialisation des librairies
     SSTARTMATCH, // démarrage du match
     SSTARTGAME, // démarrage de la game
+    SDOUBLESTACK,
     SROLLDICES, // lancé de dés
     SPLAY, // mouvements de l'IA
     SDOUBLETAKEN, // si le double est pris par le joueur
@@ -258,6 +258,8 @@ void updateSGameState(SGameState* gamestate, SMove* moves, unsigned int *nbMoves
 void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player curPlayer);
 
 int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices);
+
+void drawButton(Button *button, SDL_Surface *screen, unsigned int t, SDL_Surface *surfText);
 
 
 

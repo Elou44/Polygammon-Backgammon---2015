@@ -1,11 +1,11 @@
 #include "functions.h"
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <SDL2/SDL.h>
+#include <math.h>
 
 //Update l'affiche du score des deux players
 void setScore(SGameState* gamestate){
@@ -1260,4 +1260,28 @@ int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, u
 
 
     return(1);
+}
+
+
+void drawButton(Button *button, SDL_Surface *screen,unsigned int t, SDL_Surface *surfText)
+{
+    // Calcul du décalage de couleur
+    int x; 
+    if(t<30) x = t;
+    else if(t>=30) x = 60 - t;
+    x = (int) x*1.5;
+  
+
+    if(button->state == 0) // Si le bouton est désactivé
+    {
+        SDL_FillRect(screen, &button->rectButton, SDL_MapRGB(screen->format, 156, 156, 156));
+    }
+    else if(button->state == 1) // Si le bouton est activé
+    {
+        SDL_FillRect(screen, &button->rectButton, SDL_MapRGB(screen->format, 82, 177+x, 185));
+    }
+
+
+    SDL_BlitSurface(surfText,0,screen, &button->rectText);
+    
 }
