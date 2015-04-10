@@ -493,6 +493,21 @@ int main ( int argc, char** argv )
 
     SDL_Surface *bDTextSurf = TTF_RenderText_Blended(fontHacked, "Double Stack", colorFont2);
 
+
+    SDL_Rect j1TriesRect;
+    j1TriesRect.x = 1146;
+    j1TriesRect.y = 46;
+    j1TriesRect.w = 150;
+    j1TriesRect.h = 25;
+    
+
+
+    SDL_Rect j2TriesRect;
+    j2TriesRect.x = 1146;
+    j2TriesRect.y = 612;
+    j2TriesRect.w = 150;
+    j2TriesRect.h = 25;
+
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
@@ -726,6 +741,7 @@ int main ( int argc, char** argv )
                         if(j1DoubleStack(&gamestate) == 1) // Appelle de DoubleStack pour joueur BLACK
                         {
                             curState = SDOUBLETAKEN;
+                            printf("here 2515\n");
                         }
 
                         if(gameMode == MAIvsAI)
@@ -734,6 +750,7 @@ int main ( int argc, char** argv )
                             if(j2DoubleStack(&gamestate) == 1) // Appelle de DoubleStack pour joueur WHITE
                             {
                                 curState = SDOUBLETAKEN;
+                                printf("here 3000\n");
                             }
 
                         }
@@ -787,7 +804,7 @@ int main ( int argc, char** argv )
                     }
 
 
-                    if(curPlayer == BLACK)
+                    else if(curPlayer == BLACK)
                     {
                         rollDices(dices);
                         sprintf(strDices, "%d | %d", dices[0],dices[1]);
@@ -796,9 +813,12 @@ int main ( int argc, char** argv )
 
                     }
 
-                    else if(curPlayer == WHITE)
+                    else/*(curPlayer == WHITE)*/
                     {
                         rollDices(dices);
+
+                        
+
                         sprintf(strDices, "%d | %d", dices[0],dices[1]);
                         textDices = TTF_RenderText_Blended(fontHacked,strDices, colorFont);
                         curState = SPLAY;
@@ -816,6 +836,7 @@ int main ( int argc, char** argv )
                         if(curPlayer == BLACK)
                         {
                             // appelle de j1Playturn
+                        
 			                 j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
 
 
@@ -858,6 +879,7 @@ int main ( int argc, char** argv )
                             }
                             else
                             {
+                                
                                 curState = SDOUBLESTACK;
                                 curPlayer = WHITE;
                             }
@@ -870,6 +892,7 @@ int main ( int argc, char** argv )
                         {
 
 			                 // appelle de j1Playturn
+          
 			                 j2PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
 
                             printf("nbMoves WHITE : %d\n",nbMoves);
@@ -1336,7 +1359,7 @@ int main ( int argc, char** argv )
 
                             }
 
-                            //printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
+                            printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
                             lastX =  event.button.x;
                             lastY =  event.button.y;
 
@@ -1378,6 +1401,11 @@ int main ( int argc, char** argv )
 
         SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
+        /*SDL_FillRect(screen, &j1TriesRect, SDL_MapRGB(screen->format, 255, 0, 0));
+        SDL_FillRect(screen, &j2TriesRect, SDL_MapRGB(screen->format, 255, 0, 0));*/
+
+
+
         drawButton(bRollDices, screen, t, bRTextSurf);
 
         drawButton(bAccept, screen, t, bATextSurf);
@@ -1392,11 +1420,16 @@ int main ( int argc, char** argv )
 
         SDL_BlitSurface(textCurPlayer,0,screen, &fontPosCurPlayer);
 
+        displayTries(&j1TriesRect,j1Tries, screen);
+
+        displayTries(&j2TriesRect,j2Tries, screen);
+
         SDL_BlitSurface(textScoreWhite,0,screen, &fontPosScoreWhite);
 
         SDL_BlitSurface(textScoreBlack,0,screen, &fontPosScoreBlack);
 
         drawDames(damesTab,dameWsurf,dameBsurf,screen,30);
+
 
         SDL_UpdateWindowSurface(window);
 

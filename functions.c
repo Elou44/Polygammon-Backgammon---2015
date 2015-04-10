@@ -1388,3 +1388,29 @@ void scoreLog(int j1ScoreGlobal, int j2ScoreGlobal)
         printf("Fichier introuvable.\n");
     }
 }
+
+void displayTries(SDL_Rect *rect,int tries, SDL_Surface *screen)
+{
+    if(tries == 0)
+    {
+        rect->w = 0;
+        SDL_FillRect(screen, rect, SDL_MapRGB(screen->format, 255, 0, 0));
+    }
+    else if(tries == 1)
+    {
+        rect->w = 50;
+        SDL_FillRect(screen, rect, SDL_MapRGB(screen->format, 255, 0, 0));
+    }
+    else if(tries == 2)
+    {
+        rect->w = 100;
+        SDL_FillRect(screen, rect, SDL_MapRGB(screen->format, 255, 0, 0));
+    }
+    else if(tries == 3)
+    {
+        rect->w = 150;
+        SDL_FillRect(screen, rect, SDL_MapRGB(screen->format, 255, 0, 0));
+    }
+
+    
+}

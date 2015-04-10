@@ -265,6 +265,10 @@ void freeHitBoxes(Hitbox *hitboxesTab);
 
 void freeDamesTab(Dame *damesTab, int nbDames);
 
+void scoreLog(int j1ScoreGlobal, int j2ScoreGlobal); // Ecrit le score de chaque game dans un fichier 
+
+void displayTries(SDL_Rect *rect, int tries, SDL_Surface *screen);
+
 
 
 
