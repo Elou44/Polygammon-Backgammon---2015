@@ -1231,9 +1231,9 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
 
 
         
-        if (curPlayer == WHITE)                                                     //si le joueur est 
+        if (curPlayer == WHITE)                                                     //si le joueur est blanc
         {
-            if (curMove.src_point == 0)
+            if (curMove.src_point == 0)                                             //on définit les différents sens pour les cas extremes et le cas général
             {
                 sens = curMove.dest_point;
             }
@@ -1246,11 +1246,11 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
                 sens = curMove.dest_point - curMove.src_point;
             }
             
-            printf("sens : %d\n", sens);
+            printf("sens : %d\n", sens);                                            //print du sens
 
-            if (curMove.dest_point - curMove.src_point < 0)
+            if (sens < 0)                                                           //si le sens n'est pas bon on renvoie erreur
             {
-                printf("Il faut aller dans le bon sens joueur blanc !\n");
+                printf("Il faut aller dans le bon sens joueur blanc !\n");          
                 return(0);
             }
         }
@@ -1259,7 +1259,7 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
 
 
 
-        if (curPlayer == BLACK)
+        if (curPlayer == BLACK)                                                     //idem pour le joueur noir
         {
             
             if (curMove.src_point == 0)
@@ -1288,19 +1288,19 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
 
 
 
-        totDames = 0;
+        totDames = 0;                                                                                   //on fixe le total des dames à 0
         
         if (curPlayer == WHITE && curMove.dest_point == 25)
         {
-            for(l=18;l<24;l++)
+            for(l=18;l<24;l++)                                                                          //on compte les pions sur le jan interieur du joueur blanc
             {
                 if(curGameState.board[l].owner == curPlayer)
                 {
                     totDames += curGameState.board[l].nbDames;
                 }
             }
-            if (totDames + curGameState.out[curPlayer] != 15)
-            {
+            if (totDames + curGameState.out[curPlayer] != 15)                                           //si ses 15 pions ne sont pas dans son jan interieur + son out
+            {                                                                                           //on renvoie erreur
                 printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !\n");
                 return(0);
             }
@@ -1310,7 +1310,7 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
 
 
         
-        if (curPlayer == BLACK && curMove.dest_point == 25)
+        if (curPlayer == BLACK && curMove.dest_point == 25)                                             //idem pour le noir
         {
             for(l=0;l<6;l++)
             {
