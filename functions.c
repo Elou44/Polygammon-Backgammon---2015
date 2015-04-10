@@ -1327,25 +1327,7 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
             }
         }
 
-void freeHitBoxes(Hitbox *hitboxesTab)
-{
-    int i;
-    for (i=0;i<28;i++)
-    {
-      free(hitboxesTab[i].rectHB);
-    }
 
-}
-
-void freeDamesTab(Dame *damesTab, int nbDames)
-{
-   int i;
-   for (i=0; i<nbDames; i++)
-   {
-     free(damesTab[i].rectDame);
-   }
-}        
-        
     
 
     /******************************************************
@@ -1387,4 +1369,42 @@ void drawButton(Button *button, SDL_Surface *screen,unsigned int t, SDL_Surface 
 
     SDL_BlitSurface(surfText,0,screen, &button->rectText);
     
+}
+
+void freeHitBoxes(Hitbox *hitboxesTab)
+{
+    int i;
+    for (i=0;i<28;i++)
+    {
+      free(hitboxesTab[i].rectHB);
+    }
+
+}
+
+void freeDamesTab(Dame *damesTab, int nbDames)
+{
+   int i;
+   for (i=0; i<nbDames; i++)
+   {
+     free(damesTab[i].rectDame);
+   }
+}        
+
+        
+void scoreLog(int j1ScoreGlobal, int j2ScoreGlobal)
+{
+    FILE* fichier;
+    fichier = NULL;
+
+    fichier = fopen("log.txt", "a+");
+
+    if (fichier != NULL)
+    {
+        fprintf(fichier,"Le joueur 1 (BLACK) a %d points // Le joueur 2 (WHITE) a %d points\n", j1ScoreGlobal, j2ScoreGlobal);
+        fclose(fichier);
+    }
+    else
+    {
+        printf("Fichier introuvable.\n");
+    }
 }
