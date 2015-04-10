@@ -40,7 +40,7 @@ void StartMatch(const unsigned int target_score)
 // Fonction initialisant la structure IA pour un début de manche
 void StartGame(Player p)
 {
-	//printf("StartGame\n");
+	////printf("StartGame\n");
 	OliverJohn.couleur = p;									// Attribution de la couleur de l'IA
 	if(OliverJohn.couleur == 0) OliverJohn.opponent = 1;	// Attribution de la couleur du joueur adverse
 	else OliverJohn.opponent = 0;
@@ -131,52 +131,52 @@ int TakeDouble(const SGameState * const gameState)
 // Fonction calculant le coefficient de priorité selon la position des pions ennemis et la position des pions alliés
 int definePriority(const SGameState * const gameState, SMove mov)
 {
-	//printf("### Dans definePriority de %d | %d dames vers %d | %d dames \n", mov.src_point, gameState->board[mov.src_point].nbDames, mov.dest_point, gameState->board[mov.dest_point].nbDames);
+	////printf("### Dans definePriority de %d | %d dames vers %d | %d dames \n", mov.src_point, gameState->board[mov.src_point].nbDames, mov.dest_point, gameState->board[mov.dest_point].nbDames);
 	
 	// PRIORITE 1 : mouvement d'un pion depuis notre bar
 	if(mov.src_point == -1)
 	{
-		//printf("1 - Sortir pion du bar\n");
+		////printf("1 - Sortir pion du bar\n");
 		return 1;
 	}
 	
 	// PRIORITE 2 : mouvement d'un pion isolé vers une case conquise
 	if(gameState->board[mov.src_point].nbDames == 1 && gameState->board[mov.dest_point].owner == OliverJohn.couleur)
 	{
-		//printf("2 - Pion isolé vers case conquise\n");
+		////printf("2 - Pion isolé vers case conquise\n");
 		return 2;
 	}
 
 	// PRIORITE 3 : mouvement d'un pion sécurisé vers une case sécurisée
 	if(gameState->board[mov.src_point].nbDames > 2 && gameState->board[mov.dest_point].nbDames > 2 && gameState->board[mov.dest_point].owner == OliverJohn.couleur)
 	{
-		//printf("3 - Pion sécurisé vers case conquise\n");
+		////printf("3 - Pion sécurisé vers case conquise\n");
 		return 3;
 	}
 				
 	// PRIORITE 4 : mouvement d'un pion non sécurisé pour manger un pion adverse
 	if(gameState->board[mov.src_point].nbDames == 1 && gameState->board[mov.dest_point].owner != OliverJohn.couleur && gameState->board[mov.dest_point].nbDames == 1)
 	{
-		//printf("4 - Pion non sécurisé mangeant un pion\n");
+		////printf("4 - Pion non sécurisé mangeant un pion\n");
 		return 4;
 	}
 		
 	// PRIORITE 5 : mouvement d'un pion sécurisé pour manger un adversaire
 	if(gameState->board[mov.src_point].nbDames > 1 && gameState->board[mov.dest_point].owner != OliverJohn.couleur && gameState->board[mov.dest_point].nbDames == 1)
 	{
-		//printf("5 - Pion sécurisé mangeant un pion\n");
+		////printf("5 - Pion sécurisé mangeant un pion\n");
 		return 5;
 	}
 		
 	// PRIORITE 6 : mouvement d'un pion vers le out
 	if(mov.dest_point >= 25 || mov.dest_point < 0)
 	{
-		//printf("6 - Sortie de pion\n");
+		////printf("6 - Sortie de pion\n");
 		return 6;
 	}
 	
 	// PRIORITE 7 : mouvement par défaut
-	//printf("7 - Défault\n");
+	////printf("7 - Défault\n");
 	return 7;
 }
 
@@ -212,7 +212,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 
 	static int nbTour = 1;
 
-	//printf("Tour %d : Début du tour IA de test. On est les %d et les des sont : %d/%d\n",nbTour, OliverJohn.couleur, dices[0], dices[1]);
+	////printf("Tour %d : Début du tour IA de test. On est les %d et les des sont : %d/%d\n",nbTour, OliverJohn.couleur, dices[0], dices[1]);
 	nbTour++;	// Incrémentation du nombre de tours
 	
 	// Si nous sommes les pions noirs alors on inverse les résultats des dés pour partir vers notre but sans changer tous les calculs
@@ -245,7 +245,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 
 	// Listing mouvements à faire depuis le bar si il y en a
 	// Attribution des mouvements depuis le bar
-	//printf("Videau : %d pions\n", gameState->bar[OliverJohn.couleur]);
+	////printf("Videau : %d pions\n", gameState->bar[OliverJohn.couleur]);
 
 	// Si on a des pions dans le bar
 	if(gameState->bar[OliverJohn.couleur] > 0)
@@ -258,29 +258,29 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 				// EN UTILISANT 1 DE
 				for(m = 0; m < 2; m++)	// Boucle pour prendre en compte les deux dés séparément (d'abord en utilisant le premier puis le deuxième)
 				{
-					//printf("BAR : m : %d pion : %d, avec %d\n", m, i, i-tirageDes[m]);
+					////printf("BAR : m : %d pion : %d, avec %d\n", m, i, i-tirageDes[m]);
 					// Si la case d'arrivée est à moi OU neutre alors mouvement possible
 					if(gameState->board[ajustement+tirageDes[m]].owner == OliverJohn.couleur || gameState->board[ajustement+tirageDes[m]].owner == -1)
 					{
-						//printf("1 - La cellule %d semble m'appartenir\n", i);
-						//printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
+						////printf("1 - La cellule %d semble m'appartenir\n", i);
+						////printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
 						mouvts[k].mouvement.src_point = -1;										// Sauvegarde du numéro de la case de départ
 						mouvts[k].mouvement.dest_point = ajustement+tirageDes[m];				// Sauvegarde du numéro de la case d'arrivée
 						mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
 
-						//printf("Mouvement possibles de %d vers %d de prio : %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point, mouvts[k].priorite);
+						////printf("Mouvement possibles de %d vers %d de prio : %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point, mouvts[k].priorite);
 						k++;																	// Incrémentation de l'indice de remplissage du tableau des mouvements possibles
 					}
 					// Si la case d'arrivée n'est pas à moi ET qu'il n'y a qu'un seul pion ennemi dessus OU si la case est neutre alors mouvement possible
 					else if((gameState->board[ajustement+tirageDes[m]].owner != OliverJohn.couleur && gameState->board[ajustement+tirageDes[m]].nbDames == 1)  || gameState->board[ajustement+tirageDes[m]].owner == -1)
 					{
-						//printf("2 - La cellule %d semble m'appartenir\n", i);
-						//printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
+						////printf("2 - La cellule %d semble m'appartenir\n", i);
+						////printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
 						mouvts[k].mouvement.src_point = -1;										// Sauvegarde du numéro de la case de départ
 						mouvts[k].mouvement.dest_point = ajustement+tirageDes[m];				// Sauvegarde du numéro de la case d'arrivée
 						mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
 
-						//printf("Mouvement possibles de %d vers %d de prio : %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point, mouvts[k].priorite);
+						////printf("Mouvement possibles de %d vers %d de prio : %d\n", mouvts[k].mouvement.src_point, mouvts[k].mouvement.dest_point, mouvts[k].priorite);
 						k++;																	// Incrémentation de l'indice de remplissage du tableau des mouvements possibles
 					}
 				}
@@ -288,8 +288,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 				// Si la case d'arrivée est à moi OU neutre alors mouvement possible
 				if(gameState->board[ajustement+tirageDes[0]+tirageDes[1]].owner == OliverJohn.couleur || gameState->board[ajustement+tirageDes[0]+tirageDes[1]].owner == -1)
 				{
-					//printf("1 - La cellule %d semble m'appartenir\n", i);
-					//printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
+					////printf("1 - La cellule %d semble m'appartenir\n", i);
+					////printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
 					mouvts[k].mouvement.src_point = -1;											// Sauvegarde du numéro de la case de départ
 					mouvts[k].mouvement.dest_point = ajustement+tirageDes[0]+tirageDes[1];		// Sauvegarde du numéro de la case d'arrivée
 					mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);		// Calcul du coefficient de priorité de ce mouvement
@@ -301,8 +301,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 				// Si la case d'arrivée n'est pas à moi ET qu'il n'y a qu'un seul pion ennemi dessus OU si la case est neutre alors mouvement possible
 				else if((gameState->board[ajustement+tirageDes[0]+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[ajustement+tirageDes[0]+tirageDes[1]].nbDames == 1)  || gameState->board[ajustement+tirageDes[0]+tirageDes[1]].owner == -1)
 				{
-					//printf("2 - La cellule %d semble m'appartenir\n", i);
-					//printf("2 - La cellule %d non par contre\n",
+					////printf("2 - La cellule %d semble m'appartenir\n", i);
+					////printf("2 - La cellule %d non par contre\n",
 					//i+tirageDes[0]);
 					mouvts[k].mouvement.src_point = -1;											// Sauvegarde du numéro de la case de départ
 					mouvts[k].mouvement.dest_point = ajustement+tirageDes[0]+tirageDes[1];		// Sauvegarde du numéro de la case d'arrivée
@@ -319,8 +319,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					// SOIT la case d'arrivée m'appartient SOIT elle est neutre
 					if(gameState->board[ajustement+m*tirageDes[0]].owner == OliverJohn.couleur  || gameState->board[ajustement+m*tirageDes[0]].owner == -1)
 					{
-						//printf("5 - La cellule %d semble m'appartenir\n", i);
-						//printf("5 - La cellule %d non par contre\n", i+tirageDes[0]);
+						////printf("5 - La cellule %d semble m'appartenir\n", i);
+						////printf("5 - La cellule %d non par contre\n", i+tirageDes[0]);
 						mouvts[k].mouvement.src_point = -1;										// Sauvegarde du numéro de la case de départ
 						mouvts[k].mouvement.dest_point = ajustement+m*tirageDes[0];				// Sauvegarde du numéro de la case d'arrivée
 						mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -331,8 +331,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					// SOIT la case d'arrivée ne m'appartient pas ET il n'y a qu'un pion ennemi dessus OU elle est neutre
 					else if((gameState->board[ajustement+m*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[ajustement+m*tirageDes[0]].nbDames == 1) || gameState->board[ajustement+m*tirageDes[0]].owner == -1)
 					{
-						//printf("5' - La cellule %d semble m'appartenir\n", i);
-						//printf("5' - La cellule %d non par contre\n", i+tirageDes[0]);
+						////printf("5' - La cellule %d semble m'appartenir\n", i);
+						////printf("5' - La cellule %d non par contre\n", i+tirageDes[0]);
 						mouvts[k].mouvement.src_point = -1;										// Sauvegarde du numéro de la case de départ
 						mouvts[k].mouvement.dest_point = ajustement+m*tirageDes[0];				// Sauvegarde du numéro de la case d'arrivée
 						mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement						
@@ -358,8 +358,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			// Si la case de départ est à moi ET que la case d'arrivée est à moi alors mouvement possible
 			if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[0]].owner == OliverJohn.couleur || gameState->board[i+tirageDes[0]].owner == -1) || (i+tirageDes[0] < 0)))
 			{
-				//printf("1 - La cellule %d semble m'appartenir\n", i);
-				//printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
+				////printf("1 - La cellule %d semble m'appartenir\n", i);
+				////printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
 				mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 				mouvts[k].mouvement.dest_point = i+tirageDes[0];						// Sauvegarde du numéro de la case d'arrivée
 				mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -370,8 +370,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			// Si la case de départ est à moi ET que la case d'arrivée n'est pas à moi MAIS qu'il a un seul pion dessus alors mouvement possible
 			else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[0]].nbDames == 1)  || gameState->board[i+tirageDes[0]].owner == -1 || (i+tirageDes[0] < 0)))
 			{
-				//printf("2 - La cellule %d semble m'appartenir\n", i);
-				//printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
+				////printf("2 - La cellule %d semble m'appartenir\n", i);
+				////printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
 				mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 				mouvts[k].mouvement.dest_point = i+tirageDes[0];						// Sauvegarde du numéro de la case d'arrivée
 				mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -383,8 +383,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			// Si la case de départ est à moi ET que la case d'arrivée est à moi alors mouvement possible
 			if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[1]].owner == OliverJohn.couleur || gameState->board[i+tirageDes[1]].owner == -1) || (i+tirageDes[1] < 0)))
 			{
-				//printf("1 - La cellule %d semble m'appartenir\n", i);
-				//printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
+				////printf("1 - La cellule %d semble m'appartenir\n", i);
+				////printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
 				mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 				mouvts[k].mouvement.dest_point = i+tirageDes[1];						// Sauvegarde du numéro de la case d'arrivée
 				mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -395,8 +395,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			// Si la case de départ est à moi ET que la case d'arrivée n'est pas à moi MAIS qu'il a un seul pion dessus alors mouvement possible
 			else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[1]].nbDames == 1)  || gameState->board[i+tirageDes[1]].owner == -1 || (i+tirageDes[1] < 0)))
 			{
-				//printf("2 - La cellule %d semble m'appartenir\n", i);
-				//printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
+				////printf("2 - La cellule %d semble m'appartenir\n", i);
+				////printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
 				mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 				mouvts[k].mouvement.dest_point = i+tirageDes[1];						// Sauvegarde du numéro de la case d'arrivée
 				mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -409,8 +409,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			// Si la case d'arrivée est à moi OU neutre alors mouvement possible
 			if(gameState->board[i].owner == OliverJohn.couleur && (gameState->board[i+tirageDes[0]+tirageDes[1]].owner == OliverJohn.couleur || gameState->board[i+tirageDes[0]+tirageDes[1]].owner == -1 || (i+tirageDes[0]+tirageDes[1] < 0)))
 			{
-				//printf("1 - La cellule %d semble m'appartenir\n", i);
-				//printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
+				////printf("1 - La cellule %d semble m'appartenir\n", i);
+				////printf("1 - La cellule %d est atteignable\n", i+tirageDes[0]);
 				mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 				mouvts[k].mouvement.dest_point = i+tirageDes[0]+tirageDes[1];						// Sauvegarde du numéro de la case d'arrivée
 				mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -421,8 +421,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 			// Si la case d'arrivée n'est pas à moi ET qu'il n'y a qu'un seul pion ennemi dessus OU si la case est neutre alors mouvement possible
 			else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+tirageDes[0]+tirageDes[1]].owner != OliverJohn.couleur && gameState->board[i+tirageDes[0]+tirageDes[1]].nbDames == 1)  || gameState->board[i+tirageDes[0]+tirageDes[1]].owner == -1 || (i+tirageDes[0]+tirageDes[1] < 0)))
 			{
-				//printf("2 - La cellule %d semble m'appartenir\n", i);
-				//printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
+				////printf("2 - La cellule %d semble m'appartenir\n", i);
+				////printf("2 - La cellule %d non par contre\n", i+tirageDes[0]);
 				mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 				mouvts[k].mouvement.dest_point = i+tirageDes[0]+tirageDes[1];						// Sauvegarde du numéro de la case d'arrivée
 				mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -436,12 +436,12 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 		{
 			for(m = 1; m < 5; m++)	// Boucle pour prendre en compte les trois utilisations possibles des dés (en utilisant 1 dé, 2 dés, puis 3 dés puis 4 dés)
 			{
-				//printf("m : %d, case : %d, dest : %d\n", m, i, i+m*tirageDes[0]);
+				////printf("m : %d, case : %d, dest : %d\n", m, i, i+m*tirageDes[0]);
 				// Si la case de départ m'appartient ET SOIT la case d'arrivée m'appartient SOIT elle est neutre
 				if(gameState->board[i].owner == OliverJohn.couleur && ( gameState->board[i+m*tirageDes[0]].owner == OliverJohn.couleur  || gameState->board[i+m*tirageDes[0]].owner == -1 || (i+m*tirageDes[0] < 0)))
 				{
-					//printf("5 - La cellule %d semble m'appartenir\n", i);
-					//printf("5 - La cellule %d non par contre\n", i+tirageDes[0]);
+					////printf("5 - La cellule %d semble m'appartenir\n", i);
+					////printf("5 - La cellule %d non par contre\n", i+tirageDes[0]);
 					mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 					mouvts[k].mouvement.dest_point = i+m*tirageDes[0];						// Sauvegarde du numéro de la case d'arrivée
 					mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -452,8 +452,8 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 				// Si la case de départ m'appartient ET si la case d'arrivée n'est pas à moi ET qu'il n'y a qu'un seul pion ennemi dessus OU si la case est neutre alors mouvement possible
 				else if(gameState->board[i].owner == OliverJohn.couleur && ((gameState->board[i+m*tirageDes[0]].owner != OliverJohn.couleur && gameState->board[i+m*tirageDes[0]].nbDames == 1) || gameState->board[i+m*tirageDes[0]].owner == -1 || (i+m*tirageDes[0] < 0)))
 				{
-					//printf("5' - La cellule %d semble m'appartenir\n", i);
-					//printf("5' - La cellule %d non par contre\n", i+tirageDes[0]);
+					////printf("5' - La cellule %d semble m'appartenir\n", i);
+					////printf("5' - La cellule %d non par contre\n", i+tirageDes[0]);
 					mouvts[k].mouvement.src_point = i;										// Sauvegarde du numéro de la case de départ
 					mouvts[k].mouvement.dest_point = i+m*tirageDes[0];						// Sauvegarde du numéro de la case d'arrivée
 					mouvts[k].priorite = definePriority(gameState, mouvts[k].mouvement);	// Calcul du coefficient de priorité de ce mouvement
@@ -489,12 +489,12 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 				// Si l'indice de la case d'arrivée est inférieure à 0, c'est à dire si le mouvement est en dehors du plateau après le out
 				if(mouvts[i].mouvement.dest_point < 0)
 				{
-					//printf("# Calcul distance dest < 0\n");
+					////printf("# Calcul distance dest < 0\n");
 					distance = -mouvts[i].mouvement.dest_point - mouvts[i].mouvement.src_point;	// Calcul de la distance en prenant l'opposé de chaque indice pour obtenir un résultat correct pour l'étude avec les dés
 				}
 				else
 				{
-					//printf("# Distance sinon...");
+					////printf("# Distance sinon...");
 					distance = mouvts[i].mouvement.dest_point - mouvts[i].mouvement.src_point;	// Sinon calcul de la distance en prenant uniquement l'opposé de l'indice de la case de départ
 				}
 
@@ -513,7 +513,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					}
 
 					nbPions = copieGameState.bar[OliverJohn.couleur];
-					//printf("# Distance videau ! avec %d pions\n", nbPions);
+					////printf("# Distance videau ! avec %d pions\n", nbPions);
 				}
 
 				/*
@@ -529,7 +529,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 						// Si la distance du mouvement en étude utilise 2 ou 3 ou 4 dés
 						if((distance == tirageDes[0]+tirageDes[1]) || (distance == 3*tirageDes[0]) || (distance == 4*tirageDes[0]))
 						{
-							printf("J'ai décrémenté pour %d à %d\n", tempMoves[n-1].mouvement.src_point, tempMoves[n-1].mouvement.dest_point);
+							//printf("J'ai décrémenté pour %d à %d\n", tempMoves[n-1].mouvement.src_point, tempMoves[n-1].mouvement.dest_point);
 							indiceTempMoves = j;													// Affectation de l'indice du mouvement tempMoves n'utilisant qu'un seul dé pour le remplacer par un mouvement utilisant plus de dés
 							nbDes++;																// Incrémentation du dé que l'on récupère en remplaçant ce mouvement
 							copieGameState.board[tempMoves[j].mouvement.src_point].nbDames--;		// Incrémentation du nombre de pions sur la case du mouvement en étude
@@ -550,7 +550,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 						// Si le pion le plus éloigné du out se situe dans le dernier Jan (et donc tous les pions sont bien regroupés dans le dernier Jan et on peut sortir sur le out)
 						if(indiceDernierPion < 6)
 						{
-							//printf("\t\t----- Mouvement vers out\n");
+							////printf("\t\t----- Mouvement vers out\n");
 							tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;		// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 							tempMoves[n].mouvement.dest_point = 25;									// Sauvegarde de la case d'arrivée dans tempMoves (25 car le mouvement peut avoir une case négative)
 							tempMoves[n].priorite = mouvts[i].priorite;								// Sauvegarde du coefficient de priorité dans tempMoves
@@ -581,7 +581,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					// Si la case d'arrivée du mouvement est comprise entre 24 et 0, donc un mouvement sur le plateau de jeu
 					else
 					{
-						//printf("\t\t----- Mouvement normal\n");
+						////printf("\t\t----- Mouvement normal\n");
 						tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;			// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].mouvement.dest_point = mouvts[i].mouvement.dest_point+1;		// Sauvegarde de la case d'arrivée dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].priorite = mouvts[i].priorite;;								// Sauvegarde du coefficient de priorité dans tempMoves
@@ -618,7 +618,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					{
 						if(indiceDernierPion < 6)
 						{
-							//printf("\t\t----- Mouvement vers out\n");
+							////printf("\t\t----- Mouvement vers out\n");
 							tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;			// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 							tempMoves[n].mouvement.dest_point = 25;										// Sauvegarde de la case d'arrivée dans tempMoves (25 car le mouvement peut avoir une case négative)
 							tempMoves[n].priorite = mouvts[i].priorite;									// Sauvegarde du coefficient de priorité dans tempMoves
@@ -647,7 +647,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					// Si la case d'arrivée de ce mouvement est comprise dans le plateau de jeu
 					else
 					{
-						//printf("\t\t----- Mouvement normal\n");
+						////printf("\t\t----- Mouvement normal\n");
 						tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;			// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].mouvement.dest_point = mouvts[i].mouvement.dest_point+1;		// Sauvegarde de la case d'arrivée dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].priorite = mouvts[i].priorite;;								// Sauvegarde du coefficient de priorité dans tempMoves
@@ -681,7 +681,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					{
 						if(indiceDernierPion < 6)
 						{
-							//printf("\t\t----- Mouvement vers out\n");
+							////printf("\t\t----- Mouvement vers out\n");
 							tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;			// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 							tempMoves[n].mouvement.dest_point = 25;										// Sauvegarde de la case d'arrivée dans tempMoves (25 car le mouvement peut avoir une case négative)
 							tempMoves[n].priorite = mouvts[i].priorite;									// Sauvegarde du coefficient de priorité dans tempMoves
@@ -700,7 +700,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					// Si la case d'arrivée de ce mouvement est comprise dans le plateau de jeu
 					else
 					{
-						//printf("\t\t----- Mouvement normal\n");
+						////printf("\t\t----- Mouvement normal\n");
 						tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;				// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].mouvement.dest_point = mouvts[i].mouvement.dest_point+1;			// Sauvegarde de la case d'arrivée dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].priorite = mouvts[i].priorite;;									// Sauvegarde du coefficient de priorité dans tempMoves
@@ -725,7 +725,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					{
 						if(indiceDernierPion < 6)
 						{
-							//printf("\t\t----- Mouvement vers out\n");
+							////printf("\t\t----- Mouvement vers out\n");
 							tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;			// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 							tempMoves[n].mouvement.dest_point = 25;										// Sauvegarde de la case d'arrivée dans tempMoves (25 car le mouvement peut avoir une case négative)
 							tempMoves[n].priorite = mouvts[i].priorite;									// Sauvegarde du coefficient de priorité dans tempMoves
@@ -744,7 +744,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 					// Si la case d'arrivée de ce mouvement est comprise dans le plateau de jeu
 					else
 					{
-						//printf("\t\t----- Mouvement normal\n");
+						////printf("\t\t----- Mouvement normal\n");
 						tempMoves[n].mouvement.src_point = mouvts[i].mouvement.src_point+1;				// Sauvegarde de la case de départ dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].mouvement.dest_point = mouvts[i].mouvement.dest_point+1;			// Sauvegarde de la case d'arrivée dans tempMoves (+1 pour correspondre avecl'indexage de l'interface graphique)
 						tempMoves[n].priorite = mouvts[i].priorite;;									// Sauvegarde du coefficient de priorité dans tempMoves
@@ -768,7 +768,7 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	// Si il reste des dés non utilisés ET  que le pion le plus éloigné n'est pas dans le dernier Jan
 	/*if(nbDes > 0 && (indiceDernierPion < 6))
 	{
-		//printf("JE NE PEUX PAS BOUGER !\n");
+		////printf("JE NE PEUX PAS BOUGER !\n");
 		return;		// Je ne peux donc pas faire de déplacements, je quitte la fonction PlayTurn
 	}*/
 
