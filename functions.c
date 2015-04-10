@@ -1227,7 +1227,6 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
                 sens = curMove.dest_point - curMove.src_point;
             }
             
-            printf("sens : %d\n", sens);                                            //print du sens
 
             if (sens < 0)                                                           //si le sens n'est pas bon on renvoie erreur
             {
