@@ -102,7 +102,7 @@ int calculScoreIA(const SGameState * const gameState)
 int DoubleStack(const SGameState * const gameState)
 {
 	// Si le score de l'IA est supérieur au score de l'adversaire
-	if((OliverJohn.scoreManche = calculScoreIA(gameState)) >= calculScoreEnnemi(gameState))
+	if((OliverJohn.scoreManche = calculScoreIA(gameState)) >= 100 +  calculScoreEnnemi(gameState))
 	{
 		return 1;	// Je demande un double
 	}
@@ -766,11 +766,11 @@ void PlayTurn(const SGameState * const gameState, const unsigned char dices[2], 
 	}
 
 	// Si il reste des dés non utilisés ET  que le pion le plus éloigné n'est pas dans le dernier Jan
-	if(nbDes > 0 && (indiceDernierPion > 6))
+	/*if(nbDes > 0 && (indiceDernierPion < 6))
 	{
 		//printf("JE NE PEUX PAS BOUGER !\n");
 		return;		// Je ne peux donc pas faire de déplacements, je quitte la fonction PlayTurn
-	}
+	}*/
 
 	// Remplissage du tableau final des mouvements à faire
 	for(i = 0; i < n; i++)	// Parmis les mouvements du tableau tempMoves
