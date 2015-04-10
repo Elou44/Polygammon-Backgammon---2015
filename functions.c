@@ -1326,16 +1326,22 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
                 return(0);
             }
         }
-void freeHitBoxes(Hitbox *hitboxesTab){
+
+void freeHitBoxes(Hitbox *hitboxesTab)
+{
     int i;
-g    for (i=0;i<28;i++){
+    for (i=0;i<28;i++)
+    {
       free(hitboxesTab[i].rectHB);
     }
+
 }
 
-void freeDamesTab(Dame *damesTab, int nbDames){
+void freeDamesTab(Dame *damesTab, int nbDames)
+{
    int i;
-   for (i=0; i<nbDames; i++){
+   for (i=0; i<nbDames; i++)
+   {
      free(damesTab[i].rectDame);
    }
 }        
