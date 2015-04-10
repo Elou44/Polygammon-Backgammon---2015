@@ -59,7 +59,7 @@ void EndGame()
 // Fonction mettant à jour la structure IA pour une fin de match
 void EndMatch()
 {
-	OliverJohn.target_score = 0;							// Remise à zéro du score à atteindre
+
 }
 
 // Fonction calculant le score de l'adversaire pour la manche actuelle
@@ -102,7 +102,7 @@ int calculScoreIA(const SGameState * const gameState)
 int DoubleStack(const SGameState * const gameState)
 {
 	// Si le score de l'IA est supérieur au score de l'adversaire
-	if((OliverJohn.scoreManche = calculScoreIA(&gameState)) >= calculScoreEnnemi(&gameState))
+	if((OliverJohn.scoreManche = calculScoreIA(gameState)) >= calculScoreEnnemi(gameState))
 	{
 		return 1;	// Je demande un double
 	}
@@ -116,7 +116,7 @@ int DoubleStack(const SGameState * const gameState)
 int TakeDouble(const SGameState * const gameState)
 {
 	// Si le score de l'IA est supérieur au score de l'adversaire
-	if((OliverJohn.scoreManche = calculScoreIA(&gameState)) >= calculScoreEnnemi(&gameState))
+	if((OliverJohn.scoreManche = calculScoreIA(gameState)) >= calculScoreEnnemi(gameState))
 	{
 		return 1;	// J'accepte le double
 	}
