@@ -285,7 +285,7 @@ int main ( int argc, char** argv )
 		printf("could not locate the function TakeDouble");
 		return EXIT_FAILURE;
 	    }
-	    if((j1PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTest"))==NULL)
+	    if((j1PlayTurn=(pfPlayTurn)dlsym(lib,"PlayTurn"))==NULL)
 	    {
 		printf("could not locate the function PlayTurn");
 		return EXIT_FAILURE;
@@ -351,7 +351,7 @@ int main ( int argc, char** argv )
 		printf("could not locate the function TakeDouble");
 		return EXIT_FAILURE;
 	    }
-	    if((j2PlayTurn=(pfPlayTurn)dlsym(lib2,"PlayTest"))==NULL)
+	    if((j2PlayTurn=(pfPlayTurn)dlsym(lib2,"PlayTurn"))==NULL)
 	    {
 		printf("could not locate the function PlayTurn");
 		return EXIT_FAILURE;
@@ -440,10 +440,10 @@ int main ( int argc, char** argv )
     textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
 
 
-    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE : 167", colorFont1);
+    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE:167(0)", colorFont1);
     char strScoreWhite[15];
 
-    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK : 167", colorFont2);
+    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK:167(0)", colorFont2);
     char strScoreBlack[15];
 
 
@@ -656,9 +656,8 @@ int main ( int argc, char** argv )
                     }
 
                     // Réinitialisation des textes
-                    textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
-                    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE : 167", colorFont1);
-                    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK : 167", colorFont2);
+                    
+
 
 
                     curState = SSTARTGAME;
@@ -666,7 +665,20 @@ int main ( int argc, char** argv )
 
                 case SSTARTGAME:
 
+                    gamestate.whiteScore = 167;
+                    gamestate.blackScore = 167;
+
+
                     textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
+
+                    sprintf(strScoreWhite, "WHITE:%d(%d)", gamestate.whiteScore, j2GlobalScore);
+                    textScoreWhite = TTF_RenderText_Blended(fontHacked, strScoreWhite, colorFont1);
+
+                    sprintf(strScoreBlack, "BLACK:%d(%d)", gamestate.blackScore, j1GlobalScore);
+                    textScoreBlack = TTF_RenderText_Blended(fontHacked, strScoreBlack, colorFont2);
+
+                    bDTextSurf = TTF_RenderText_Blended(fontHacked, "Double Stack", colorFont2);
+                    textDices = TTF_RenderText_Blended(fontHacked, " | ", colorFont);
 
                     curPlayer = NOBODY;
 
@@ -680,7 +692,6 @@ int main ( int argc, char** argv )
                     j2DoubleTaken = 0;
                     bDoubleStack->state = 0;
 
-                    //char *myStr = "hello%d", 1000;
 
                     initGameState(&gamestate);
 
@@ -711,7 +722,22 @@ int main ( int argc, char** argv )
                         curState = SROLLDICES;
                         bRollDices->state = 0;
                         bDoubleStack->state = 0;
-                        printf("here11111\n");
+
+                        if(j1DoubleStack(&gamestate) == 1) // Appelle de DoubleStack pour joueur BLACK
+                        {
+                            curState = SDOUBLETAKEN;
+                        }
+
+                        if(gameMode == MAIvsAI)
+                        {
+
+                            if(j2DoubleStack(&gamestate) == 1) // Appelle de DoubleStack pour joueur WHITE
+                            {
+                                curState = SDOUBLETAKEN;
+                            }
+
+                        }
+                        
                     }
                     else
                     {
@@ -793,7 +819,7 @@ int main ( int argc, char** argv )
 			                 j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
 
 
-                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 1) // Si l'arbitre accepte les mouvements
                             {
 
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -803,7 +829,7 @@ int main ( int argc, char** argv )
                             }
                             else
                             {
-                                //j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
+                                j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
                             }
 
                             nbMoves = 0;
@@ -813,7 +839,7 @@ int main ( int argc, char** argv )
 
                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
 
-                            sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
+                            sprintf(strScoreBlack, "BLACK:%d(%d)", gamestate.blackScore, j1GlobalScore);
                             textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont2);
 
                             SDL_Delay(delay); // Delay en ms
@@ -837,8 +863,6 @@ int main ( int argc, char** argv )
                             }
 
 
-
-
                         } // end if
 
 
@@ -851,7 +875,7 @@ int main ( int argc, char** argv )
                             printf("nbMoves WHITE : %d\n",nbMoves);
 
 
-                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 1) // Si l'arbitre accepte les mouvements
                             {
 
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -861,7 +885,7 @@ int main ( int argc, char** argv )
                             }
                             else
                             {
-                                //j2Tries++; // on incrémente le compteur de pénalité du joueur courant 
+                                j2Tries++; // on incrémente le compteur de pénalité du joueur courant 
                             }
 
                             nbMoves = 0;
@@ -872,7 +896,7 @@ int main ( int argc, char** argv )
 
 
 
-                            sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
+                            sprintf(strScoreWhite, "WHITE:%d(%d)", gamestate.whiteScore, j2GlobalScore);
                             textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont1);
 
                             SDL_Delay(delay); // Delay en ms
@@ -976,7 +1000,7 @@ int main ( int argc, char** argv )
 
                             j1DoubleTaken = 0; // Réinitialisation des variables 
                             j2DoubleTaken = 0;
-                            printf("reinit---------------\n");
+                            
 
                         }
                         else if(j1DoubleTaken == 1 && j2DoubleTaken == 3) // j1 propose double | j2 refuse
@@ -994,7 +1018,7 @@ int main ( int argc, char** argv )
 
                             j1DoubleTaken = 0; // Réinitialisation des variables 
                             j2DoubleTaken = 0;
-                            printf("reinit---------------\n");
+                            
 
                         }
                         else if(j2DoubleTaken == 1 && j1DoubleTaken == 3) // j2 propose double | j1 refuse
@@ -1025,12 +1049,34 @@ int main ( int argc, char** argv )
                         SDL_Delay(1000);
                     }
 
+                    if(gameMode == MHvsAI)
+                    {
+                        j1EndGame();
+                    }
+                    else if(gameMode == MAIvsAI)
+                    {
+                        j1EndGame();
+                        j2EndGame();
+                    }
+
+
+
 
                     break;
 
                 case SENDMATCH:
 
                     done = true;
+
+                    if(gameMode == MHvsAI)
+                    {
+                        j1EndMatch();
+                    }
+                    else if(gameMode == MAIvsAI)
+                    {
+                        j1EndMatch();
+                        j2EndMatch();
+                    }
 
                     break;
 
@@ -1043,9 +1089,6 @@ int main ( int argc, char** argv )
          *                           *
          * **************************/
 
-
-        /*if(curState == SPLAY)
-        {*/
 
             while (SDL_PollEvent(&event))
             {
@@ -1073,110 +1116,10 @@ int main ( int argc, char** argv )
                             }
 
 
-                            if(event.key.keysym.sym == SDLK_n) // CHANGEMENT DE JOUEUR
+                            if(event.key.keysym.sym == SDLK_n) 
                             {
 
-                                /*if(gameMode != MAIvsAI) // si on est dans un mode de jeu autre que IAvsIA alors on accepte l'appui sur la touche N (changement de joueur)
-                                {
-
-
-                                    indiceHBTab[0] = -1; // réinitialisation des Hitboxes cliquées
-                                    indiceHBTab[1] = -1;
-
-
-                                    if(curPlayer == WHITE && (gameMode == MHvsAI || gameMode == MHvsH))
-                                    {
-                                        printf("nbMoves WHITE : %d\n",nbMoves);
-
-                                        if(arbitre(&gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
-                                        {
-
-                                            updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
-                                            setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                            setScore(&gamestate); // on met à jour le score
-
-                                        }
-                                        else
-                                        {
-                                            //j2Tries++; // on incrémente le compteur de pénalité du joueur courant 
-                                        }
-
-                                        nbMoves = 0;
-
-                                        printf("Player BLACK is playing (BLACK:%d)\n", gamestate.blackScore);
-
-                                        textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK TURN", colorFont2);
-
-                                        sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
-
-                                        textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont1);
-
-
-                                        if(gamestate.whiteScore == 0 )
-                                        {
-                                            curState = SENDGAME;
-                                            j2GlobalScore += gamestate.stake; // WHITE
-                                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
-                                        }
-                                        else if(j2Tries > 3)
-                                        {
-                                            curState = SENDGAME;
-                                            j1GlobalScore += gamestate.stake; // BLACK
-                                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
-                                        }
-                                        else
-                                        {
-                                            curState = SROLLDICES;
-                                            curPlayer = BLACK;
-                                        }
-                                    }
-                                    
-                                    else if(curPlayer == BLACK && gameMode == MHvsH)
-                				    {
-                				      
-                                        if(arbitre(&gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
-                                        {
-
-                                            updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
-                                            setDamesPos(damesTab,&gamestate, dameWsurf, dameBsurf);
-                                            setScore(&gamestate); // on met à jour le score
-
-                                        }
-                                        else
-                                        {
-                                            j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
-                                        }
-
-                    					nbMoves = 0;
-
-                    					printf("Player WHITE is playing (WHITE: %d)\n", gamestate.whiteScore);
-
-
-                    					textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
-
-                    					sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
-                    					textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont2);
-
-                    					if(gamestate.blackScore == 0)
-                    					{
-                    					    curState = SENDGAME;
-                    					    j1GlobalScore += gamestate.stake; // BLACK
-                    					    textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont2);
-                    					}
-                                        else if(j1Tries > 3)
-                                        {
-                                            curState = SENDGAME;
-                                            j2GlobalScore += gamestate.stake; // WHITE
-                                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
-                                        }
-                    					else
-                    					{
-                    					    curState = SROLLDICES;
-                    					    curPlayer = WHITE;
-                    					}
-                				      
-                				    }
-                                }*/
+                                
                             }
 
                             if(event.key.keysym.sym == SDLK_r) // Réinitialiser les mouvements
@@ -1215,7 +1158,7 @@ int main ( int argc, char** argv )
                                         {
                                             printf("nbMoves WHITE : %d\n",nbMoves);
 
-                                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 1) // Si l'arbitre accepte les mouvements
                                             {
 
                                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -1225,7 +1168,7 @@ int main ( int argc, char** argv )
                                             }
                                             else
                                             {
-                                                //j2Tries++; // on incrémente le compteur de pénalité du joueur courant 
+                                                j2Tries++; // on incrémente le compteur de pénalité du joueur courant 
                                             }
 
                                             nbMoves = 0;
@@ -1234,7 +1177,7 @@ int main ( int argc, char** argv )
 
                                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK TURN", colorFont2);
 
-                                            sprintf(strScoreWhite, "WHITE : %d", gamestate.whiteScore);
+                                            sprintf(strScoreWhite, "WHITE:%d(%d)", gamestate.whiteScore, j2GlobalScore);
 
                                             textScoreWhite = TTF_RenderText_Blended(fontHacked,strScoreWhite, colorFont1);
 
@@ -1266,7 +1209,7 @@ int main ( int argc, char** argv )
                                         else if(curPlayer == BLACK && gameMode == MHvsH)
                                         {
                                           
-                                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 1) // Si l'arbitre accepte les mouvements
                                             {
 
                                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -1276,7 +1219,7 @@ int main ( int argc, char** argv )
                                             }
                                             else
                                             {
-                                                //j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
+                                                j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
                                             }
 
                                             nbMoves = 0;
@@ -1286,7 +1229,7 @@ int main ( int argc, char** argv )
 
                                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE TURN", colorFont1);
 
-                                            sprintf(strScoreBlack, "BLACK : %d", gamestate.blackScore);
+                                            sprintf(strScoreWhite, "BLACK:%d(%d)", gamestate.blackScore, j1GlobalScore);
                                             textScoreBlack = TTF_RenderText_Blended(fontHacked,strScoreBlack, colorFont2);
 
                                             if(gamestate.blackScore == 0)
@@ -1385,14 +1328,14 @@ int main ( int argc, char** argv )
                                                                     
                                     }
 
-                                    printf("j1DoubleTaken: %d\n", j1DoubleTaken);
-                                    printf("j2DoubleTaken: %d\n", j2DoubleTaken);
+                                    //printf("j1DoubleTaken: %d\n", j1DoubleTaken);
+                                    //printf("j2DoubleTaken: %d\n", j2DoubleTaken);
 
                                 }
 
                             }
 
-                            printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
+                            //printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
                             lastX =  event.button.x;
                             lastY =  event.button.y;
 
@@ -1433,12 +1376,6 @@ int main ( int argc, char** argv )
          * **************************/
 
         SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-        /*SDL_FillRect(screen, &bRollDices->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
-        
-        SDL_FillRect(screen, &bAccept->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));
-        
-        SDL_FillRect(screen, &bDoubleStack->rectButton, SDL_MapRGB(screen->format, 255, 0, 0));*/
 
         drawButton(bRollDices, screen, t, bRTextSurf);
 
