@@ -261,6 +261,10 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
 
 void drawButton(Button *button, SDL_Surface *screen, unsigned int t, SDL_Surface *surfText);
 
+void freeHitBoxes(Hitbox *hitboxesTab);
+
+void freeDamesTab(Dame *damesTab, int nbDames);
+
 
 
 
