@@ -933,7 +933,7 @@ int main ( int argc, char** argv )
                     if((gameMode == MHvsAI && curPlayer == BLACK))
                     {
                         // call tDoubleTaken
-                        if(j2TakeDouble(&gamestate) == 1)
+                        /*if(j2TakeDouble(&gamestate) == 1)
                         {
                             gamestate.stake = gamestate.stake * 2;
                             bDoubleStack->state = 0;
@@ -947,7 +947,7 @@ int main ( int argc, char** argv )
                             curState = SENDGAME;
                             j1GlobalScore += gamestate.stake; // WHITE
                             textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
-                        }
+                        }*/
                     }
                     else if(gameMode == MAIvsAI)
                     {
@@ -1078,6 +1078,7 @@ int main ( int argc, char** argv )
                         j2EndMatch();
                     }
 
+                    scoreLog(j1GlobalScore,j2GlobalScore);
                     break;
 
                 }
