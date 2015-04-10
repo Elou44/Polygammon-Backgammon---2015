@@ -1078,12 +1078,18 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
     **                                                   **
     ******************************************************/
     
-    SGameState curGameState;
-    curGameState = gamestate;
-    SMove curMove;
-    int i,j,k,l,dist,nbDices,usedDices,totDames; /*unused k si on garde le commentaire plus bas*/
+    SGameState curGameState;    //on créé une copie du gamestate, on aurait pu directement utiliser le gamestate utilisé en parametre
+    curGameState = gamestate;   //mais on avait utilisé un pointeur vers le gamestate à la base (d'où la copie) mais pour une raison obscure celà ne fonctionnait pas (copie vide et valeur pointée erronée)
 
-    printf("________________________________curG : %d\n",curGameState.board[0].owner);    
+    SMove curMove;              //mouvement courant, en cours d'étude
+
+    int i, j, l;                //variables de boucle
+    int dist;                   //distance entre le point de départ et d'arrivée du mouvement courant
+    int nbDices;                //nombre de dés à jouer
+    int usedDices;              //variable pour évaluer l'utilisation d'un dé
+    int totDames;               //variable pour évaluer le nombre de dames restantes sur le plateau (utilisée pour voir si l'on peut sortir ses pions ou non)
+    int sens;                   //sens du mouvement (on ne peut pas reculer)
+
     
     /******************************************************
     **                                                   **
@@ -1093,7 +1099,7 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
     
     if(dices[0] == dices[1])
     {
-        nbDices = 4;
+        nbDices = 4;        //on définit le nombre de dés à jouer en fonction que ce soit un double (4) ou non (2);
     } else {
         nbDices = 2;
     }
@@ -1110,7 +1116,10 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
     
     if (nbPot < nbDices)
     {
-        
+                            //pas traité car pas trouvé comment générer tous les mouvements possibles
+                            //dans l'idée je voulais compter s'il y avait autant de mouvements possibles que de dés à jouer pour éviter les mouvements bloquants
+                            //je voulais aussi définir une somme des dés utilisés pour faire les mouvements afin de voir, dans le cas où le nombre de mouvements potentiels nbPot
+                            //soit inferieur au nombre de dés après avoir parcourru tous les mouvements, si la valeur des dés était maximisée (préférer utiliser un 6 qu'un 3)
     }
     
     
@@ -1124,103 +1133,195 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
     for(i=0;i<nbMoves;i++)
     {
         curMove = move[i];
-
-        dist = abs(curMove.dest_point - curMove.src_point);
-        totDames = 0;
-        for(j=0;j<nbDices;j++)
+        if (curMove.dest_point == 25 && curPlayer == WHITE)
         {
+            dist = 25 - curMove.src_point;
+        }
+        else if (curMove.src_point == 0 && curPlayer == BLACK)      //si notre mouvement est un mouvement particulier (partant du bar ou arrivant dans le out)
+        {                                                           //on calcule la distance differemment pour s'adapter aux cases du plateau (out = 25 et bar = 0 dans tous les cas)
+            dist = 25 - curMove.dest_point;
+        } 
+        else if (curMove.dest_point == 25 && curPlayer == BLACK)
+        {
+            dist = curMove.src_point;
+        }
+        else if (curMove.src_point == 0 && curPlayer == WHITE)
+        {
+            dist = 25 - curMove.dest_point;
+        }
+        else 
+        {
+            dist = abs(curMove.dest_point - curMove.src_point);     //si on est dans un mouvement normal, on calcule la distance par la valeur absolue de la différence
+        }
+
+
+
+
+        for(j=0;j<nbDices;j++)                              
+        {
+            printf("De : %d \n",dices[j]);                          //prints des dés et de la distance
+            printf("dist : %d\n", dist);
             if(dices[j] == dist)
                 {
-                    dices[j] = 0;
+                    dices[j] = 0;                                   //si un dé correspond à la distance on incrémente usedDices et on arrête la boucle
                     usedDices++;
                     break;
                 }
-            printf("Il faut utiliser les dés !");
-            return(0);
-            /*for(k=0;k<nbDices;k++)
-            {
-                if(k!=j)
-                {
-                    if(dices[j]+dices[k] == dist)
-                    {
-                        dices[j] = 0;
-                        dices[k] = 0;
-                        usedDices += 2;
-                        break;
-                    }
-                    //à voir comment gérer le stockage des dés utilisés
-                    printf("Il faut utiliser les dés !");
-                    return(0);
-                }
-            }*/
-
         }
 
-        if (curGameState.board[curMove.src_point].owner != curPlayer)
+        if (usedDices < 1)                                          //si aucun dé n'a pu être utilisé on renvoie une erreur
         {
-            printf("Il faut bouger ses propres pions !");
+            printf("Il faut utiliser les dés !\n");
             return(0);
         }
 
-        if (curMove.src_point != 0 && curGameState.bar[curPlayer] != 0)
+
+
+
+        printf("curPlayer : %d\n",curPlayer);                                           //print du joueur en cours, 0 = BLACK, 1 = WHITE
+        if (curMove.src_point == 0)                                                     
+        {                                                                               //si on se déplace depuis le bar
+            printf("owner : %d\n",curPlayer);                                           //le proprietaire est le joueur courant
+            printf("nbdames : %d\n", curGameState.bar[curPlayer]);                      //le nombre de dames et le contenu de son bar
+        }                                                                               //cette conditionnelle permet d'éviter un core dumped dans le cas du mouvement partant du bar
+        else                                                                            //(board[-1] --> core dumped)
         {
-            printf("Il faut sortir les pions du bar avant tout !");
+        printf("owner : %d\n",curGameState.board[curMove.src_point-1].owner);           //sinon le propriétaire est celui de la case de départ
+        printf("nbdames : %d\n",curGameState.board[curMove.src_point-1].nbDames);       //et le nombre de dames celui de la case de départ aussi
+        }
+       
+        printf("src_point : %d\n", curMove.src_point);                                  //prints des extremités du mouvement courant
+        printf("dest_point : %d\n", curMove.dest_point);
+
+
+
+
+
+
+        if (curMove.src_point !=0)
+        {
+            if (curGameState.board[curMove.src_point-1].owner != curPlayer )        //si je ne suis pas le propriétaire de la source
+            {                                                                       //on renvoie une erreur
+                printf("Il faut bouger ses propres pions !\n");
+                return(0);
+            }
+        }
+
+
+
+
+
+        if (curMove.src_point != 0 && curGameState.bar[curPlayer] != 0)             //si j'effectue un mouvement avant de sortir mon pion du bar
+        {                                                                           //on renvoie une erreur
+            printf("Il faut sortir les pions du bar avant tout !\n");
             return(0);
         }
 
-        if (curGameState.board[curMove.dest_point].owner != curPlayer && curGameState.board[curMove.dest_point].nbDames > 1)
-        {
-            printf("Il faut déplacer les pions sur des cases libres ou des blots");
+
+
+
+
+        if (curGameState.board[curMove.dest_point-1].owner != curPlayer && curGameState.board[curMove.dest_point-1].nbDames > 1)        //si je me déplace sur une case adverse possedant + d'une dame
+        {                                                                                                                               //on renvoie erreur
+            printf("Il faut déplacer les pions sur des cases libres ou des blots\n");
             return(0);
         }
+
+
+
+
         
-        if (curPlayer == WHITE)
+        if (curPlayer == WHITE)                                                     //si le joueur est 
         {
+            if (curMove.src_point == 0)
+            {
+                sens = curMove.dest_point;
+            }
+            else if (curMove.dest_point == 25)
+            {
+                sens = 25 - curMove.src_point;
+            }
+            else
+            {
+                sens = curMove.dest_point - curMove.src_point;
+            }
+            
+            printf("sens : %d\n", sens);
+
             if (curMove.dest_point - curMove.src_point < 0)
             {
-                printf("Il faut aller dans le bon sens !");
+                printf("Il faut aller dans le bon sens joueur blanc !\n");
                 return(0);
             }
         }
         
+
+
+
+
         if (curPlayer == BLACK)
         {
-            if (curMove.dest_point - curMove.src_point > 0)
+            
+            if (curMove.src_point == 0)
             {
-                printf("Il faut aller dans le bon sens !");
+                sens = curMove.dest_point - 25;
+            }
+            else if (curMove.dest_point == 25)
+            {
+                sens = curMove.src_point - 25;
+            }
+            else 
+            {
+                sens = curMove.dest_point - curMove.src_point;
+
+            }
+
+            printf("sens : %d\n", sens);
+            if (sens > 0)
+            {
+                printf("Il faut aller dans le bon sens joueur noir !\n");
                 return(0);
             }
         }
         
+
+
+
+
+        totDames = 0;
         
-        if (curPlayer == WHITE)
+        if (curPlayer == WHITE && curMove.dest_point == 25)
         {
-            for(l=19;l<25;l++)
+            for(l=18;l<24;l++)
             {
                 if(curGameState.board[l].owner == curPlayer)
                 {
-                    totDames += curGameState.board[l].owner;
+                    totDames += curGameState.board[l].nbDames;
                 }
             }
             if (totDames + curGameState.out[curPlayer] != 15)
             {
-                printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !");
+                printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !\n");
                 return(0);
             }
         }
+
+
+
+
         
-        if (curPlayer == BLACK)
+        if (curPlayer == BLACK && curMove.dest_point == 25)
         {
-            for(l=1;l<7;l++)
+            for(l=0;l<6;l++)
             {
                 if(curGameState.board[l].owner == curPlayer)
                 {
-                    totDames += curGameState.board[l].owner;
+                    totDames += curGameState.board[l].nbDames;
                 }
             }
             if (totDames + curGameState.out[curPlayer] != 15)
             {
-                printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !");
+                printf("Il faut avoir tous ses pions dans son jan interieur pour les sortir !\n");
                 return(0);
             }
         }
@@ -1233,27 +1334,11 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
     **        mise à jour du gamestate provisoire        **
     **                                                   **
     ******************************************************/
-        
-        curGameState.board[curMove.src_point].nbDames--;
-        if (curGameState.board[curMove.src_point].nbDames == 0) /*si la case de départ n'a plus de dames elle devient neutre*/
-        {
-            curGameState.board[curMove.src_point].owner = -1;
-        }
 
-        if (curGameState.board[curMove.dest_point].owner != curPlayer) /*si la case d'arrivée ne m'appartient pas, elle m'appartient*/
-        {
-            curGameState.board[curMove.dest_point].owner = curPlayer;
-
-            if (curGameState.board[curMove.dest_point].nbDames != 1)/*si aucune dame n'est présente on en ajoute une*/
-            {
-                curGameState.board[curMove.dest_point].nbDames++;
-            }
-        }
-        
-        /*unsigned int nbvalidmove = 1;
+        unsigned int nbValidMoves = 1;
         SMove validMove[1];
         validMove[0] = curMove;
-        updateSGameState(&curGameState, validMove, &nbValidMoves, curPlayer);*/
+        updateSGameState(&curGameState, validMove, &nbValidMoves, curPlayer);
 
     }
 
