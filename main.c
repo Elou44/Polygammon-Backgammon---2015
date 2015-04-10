@@ -496,7 +496,7 @@ int main ( int argc, char** argv )
 
     SDL_Rect j1TriesRect;
     j1TriesRect.x = 1146;
-    j1TriesRect.y = 46;
+    j1TriesRect.y = 612;
     j1TriesRect.w = 150;
     j1TriesRect.h = 25;
     
@@ -504,7 +504,7 @@ int main ( int argc, char** argv )
 
     SDL_Rect j2TriesRect;
     j2TriesRect.x = 1146;
-    j2TriesRect.y = 612;
+    j2TriesRect.y = 46;
     j2TriesRect.w = 150;
     j2TriesRect.h = 25;
 
