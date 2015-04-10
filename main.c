@@ -434,7 +434,7 @@ int main ( int argc, char** argv )
         printf("Erreur d'initialisation de RenderText : %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
-    textDices = TTF_RenderText_Blended(fontHacked, "Dice1 | Dice2", colorFont);
+    textDices = TTF_RenderText_Blended(fontHacked, " | ", colorFont);
     char strDices[10];
 
     textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
@@ -571,6 +571,9 @@ int main ( int argc, char** argv )
 
     Player curPlayer; // joueur courant
 
+    unsigned int j1DoubleTaken = 0; // 1 : Double Cliqué  2 : Double Taken  3 : Double not taken
+    unsigned int j2DoubleTaken = 0; // 1 : Double Cliqué  2 : Double Taken  3 : Double not taken
+
     unsigned char dices[2]; // dernier lanc� de d�s du j1
 
     SMove moves[4];
@@ -649,15 +652,21 @@ int main ( int argc, char** argv )
 
                         // appelle de j2startMatch();
 			             j2StartMatch(scoreToReach);
-                         
 
                     }
+
+                    // Réinitialisation des textes
+                    textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
+                    textScoreWhite = TTF_RenderText_Blended(fontHacked, "WHITE : 167", colorFont1);
+                    textScoreBlack = TTF_RenderText_Blended(fontHacked, "BLACK : 167", colorFont2);
 
 
                     curState = SSTARTGAME;
                     break;
 
                 case SSTARTGAME:
+
+                    textCurPlayer = TTF_RenderText_Blended(fontHacked, "NOBODY", colorFont);
 
                     curPlayer = NOBODY;
 
@@ -666,6 +675,10 @@ int main ( int argc, char** argv )
 
                     j1Tries = 0;
                     j2Tries = 0;
+
+                    j1DoubleTaken = 0;
+                    j2DoubleTaken = 0;
+                    bDoubleStack->state = 0;
 
                     //char *myStr = "hello%d", 1000;
 
@@ -703,7 +716,7 @@ int main ( int argc, char** argv )
                     else
                     {
                         bRollDices->state = 1;
-                        bDoubleStack->state = 1;
+                        
                         bAccept->state = 0;
                     }
 
@@ -893,6 +906,107 @@ int main ( int argc, char** argv )
                 case SDOUBLETAKEN:
 
                     // call tDoubleTaken
+                    if((gameMode == MHvsAI && curPlayer == BLACK))
+                    {
+                        // call tDoubleTaken
+                        if(j2TakeDouble(&gamestate) == 1)
+                        {
+                            gamestate.stake = gamestate.stake * 2;
+                            bDoubleStack->state = 0;
+                            curState == SDOUBLESTACK;
+
+                            j1DoubleTaken = 0; // Réinitialisation des variables 
+                            j2DoubleTaken = 0;
+                        }
+                        else // si le joueur WHITE refuse, il perd la partie
+                        {
+                            curState = SENDGAME;
+                            j1GlobalScore += gamestate.stake; // WHITE
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
+                        }
+                    }
+                    else if(gameMode == MAIvsAI)
+                    {
+                        if(curPlayer == BLACK) // Joueur BLACK
+                        {
+                            if(j2TakeDouble(&gamestate) == 1) // On appelle la fonction TakeDouble de l'autre joueur
+                            {
+                                gamestate.stake = gamestate.stake * 2;
+                                bDoubleStack->state = 0;
+                                curState == SDOUBLESTACK;
+
+                                j1DoubleTaken = 0; // Réinitialisation des variables 
+                                j2DoubleTaken = 0;
+                            }
+                            else // si le joueur WHITE refuse, il perd la partie
+                            {
+                                curState = SENDGAME;
+                                j1GlobalScore += gamestate.stake; // WHITE
+                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
+                            }
+                        }
+                        else // Joueur WHITE
+                        {
+                            if(j1TakeDouble(&gamestate) == 1)
+                            {
+                                gamestate.stake = gamestate.stake * 2;
+                                bDoubleStack->state = 0;
+                                curState == SDOUBLESTACK;
+
+                                j1DoubleTaken = 0; // Réinitialisation des variables 
+                                j2DoubleTaken = 0;
+
+                            }
+                            else // si le joueur BLACK refuse, il perd la partie
+                            {
+                                curState = SENDGAME;
+                                j2GlobalScore += gamestate.stake; // BLACK
+                                textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
+                            }
+                        }
+                    }
+                    else if(gameMode == MHvsH)
+                    {
+
+                        if(j1DoubleTaken == 1 && j2DoubleTaken == 2) // j1 propose double | j2 accepte
+                        {
+                            gamestate.stake = gamestate.stake * 2;
+                            bDoubleStack->state = 0;
+                            curState == SDOUBLESTACK;
+
+                            j1DoubleTaken = 0; // Réinitialisation des variables 
+                            j2DoubleTaken = 0;
+                            printf("reinit---------------\n");
+
+                        }
+                        else if(j1DoubleTaken == 1 && j2DoubleTaken == 3) // j1 propose double | j2 refuse
+                        {
+                            curState = SENDGAME;
+                            j1GlobalScore += gamestate.stake; // BLACK
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"BLACK won !", colorFont1);
+                        }
+
+                        else if(j2DoubleTaken == 1 && j1DoubleTaken == 2) // j2 propose double | j1 accepte
+                        {
+                            gamestate.stake = gamestate.stake * 2;
+                            bDoubleStack->state = 0;
+                            curState == SDOUBLESTACK;
+
+                            j1DoubleTaken = 0; // Réinitialisation des variables 
+                            j2DoubleTaken = 0;
+                            printf("reinit---------------\n");
+
+                        }
+                        else if(j2DoubleTaken == 1 && j1DoubleTaken == 3) // j2 propose double | j1 refuse
+                        {
+                            curState = SENDGAME;
+                            j2GlobalScore += gamestate.stake; // BLACK
+                            textCurPlayer = TTF_RenderText_Blended(fontHacked,"WHITE won !", colorFont1);
+                        }
+
+
+                    }
+
 
                     break;
 
@@ -1162,7 +1276,7 @@ int main ( int argc, char** argv )
                                             }
                                             else
                                             {
-                                                j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
+                                                //j1Tries++; // on incrémente le compteur de pénalité du joueur courant 
                                             }
 
                                             nbMoves = 0;
@@ -1211,7 +1325,71 @@ int main ( int argc, char** argv )
                                     curState = SROLLDICES;
                                     bRollDices->state = 0;
                                     bDoubleStack->state = 0; 
+
+                                    if(curPlayer == BLACK && j1DoubleTaken == 1) // Si BLACK à pris le double et WHITE refuse
+                                    {
+                                        j2DoubleTaken = 3;
+                                        curState = SDOUBLETAKEN;
+                                        printf("BLACK à pris le double et WHITE refuse\n");
+                                    }
+                                    else if(curPlayer == WHITE && j2DoubleTaken == 1) // Si WHITE à pris le double et BLACK refuse
+                                    {
+                                        j1DoubleTaken = 3;
+                                        curState = SDOUBLETAKEN;
+                                        printf("WHITE à pris le double et BLACK refuse\n");
+                                    }
+
+                                    printf("j1DoubleTaken: %d\n", j1DoubleTaken);
+                                    printf("j2DoubleTaken: %d\n", j2DoubleTaken);
+
                                 }
+
+                            }
+
+                            // Détection de clic sur le bouton DoubleStack
+                            if(((event.button.x >= bDoubleStack->rectButton.x) && (event.button.x <= bDoubleStack->rectButton.x + bDoubleStack->rectButton.w)) && ((event.button.y >= bDoubleStack->rectButton.y) && (event.button.y <= bDoubleStack->rectButton.y + bDoubleStack->rectButton.h)))
+                            {
+                                if(bDoubleStack->state==1) // Si le bouton est activé
+                                {
+                                    //printf("j1DoubleTaken: %d\n", j1DoubleTaken);
+                                    //printf("j2DoubleTaken: %d\n", j2DoubleTaken);
+
+                                    if(curState != SDOUBLETAKEN) // le joueur prend le double
+                                    {
+                                        bDTextSurf = TTF_RenderText_Blended(fontHacked, "Take Double ?", colorFont2);
+                                        curState = SDOUBLETAKEN;
+
+                                        if(curPlayer == BLACK)
+                                        {
+                                            j1DoubleTaken = 1;
+                                        }
+                                        else // WHITE
+                                        {
+                                            j2DoubleTaken = 1;
+                                        }
+                                    }
+                                    else if(curState == SDOUBLETAKEN) // le Double a été pris
+                                    {
+                                        bDTextSurf = TTF_RenderText_Blended(fontHacked, "Double Taken", colorFont2);
+                                        bDoubleStack->state = 0;
+
+                                        if(curPlayer == BLACK)
+                                        {
+                                            j2DoubleTaken = 2; // WHITE prend Double
+                                        }
+
+                                        if(curPlayer == WHITE) // WHITE
+                                        {
+                                            j1DoubleTaken = 2; // BLACK prend Double
+                                        }
+                                                                    
+                                    }
+
+                                    printf("j1DoubleTaken: %d\n", j1DoubleTaken);
+                                    printf("j2DoubleTaken: %d\n", j2DoubleTaken);
+
+                                }
+
                             }
 
                             printf("mouse position2 : %d %d diffX : %d diffY : %d\n",event.button.x,event.button.y,event.button.x-lastX,event.button.y-lastY);
@@ -1219,7 +1397,7 @@ int main ( int argc, char** argv )
                             lastY =  event.button.y;
 
 
-                            if(gameMode == MHvsH || (gameMode == MHvsAI && curPlayer == WHITE))
+                            if((gameMode == MHvsH || (gameMode == MHvsAI && curPlayer == WHITE)) && curState == SPLAY)
                             {
                                 if(detectClickIntoHitbox(hitboxesTab,28,event.button.x,event.button.y) != -1) // on vérifie qu'on clique bien sur une hitbox
                                 {
