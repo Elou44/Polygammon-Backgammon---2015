@@ -70,14 +70,14 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
         if (i==0){
 
             //printf("il y a %d dame(s) sur %d",gamestate->board[i].nbDames,i);
-	    // i designe l'indice des squares et j designe le numero d'un pion
+	        // i designe l'indice des squares et j designe le numero d'un pion
             for (j=0; j < gamestate->board[i].nbDames ; j++){
                 damesTab[z].rectDame->x = 948;
                 damesTab[z].rectDame->y = y;
 		
                 setColor(i,z,damesTab,gamestate,dameWsurf,dameBsurf);
                 z++;
-		//on va diminuer la distance qui separe chaque pions sur un square en fonctions du nombre de pions present sur ce meme square
+		        //on va diminuer la distance qui separe chaque pions sur un square en fonctions du nombre de pions present sur ce meme square
                 if(gamestate->board[i].nbDames>5)
                 {
                     y -= 225 / gamestate->board[i].nbDames;
@@ -519,14 +519,14 @@ void setDamesPos(Dame *damesTab, const SGameState* const gamestate, SDL_Surface 
     }
 
 
-    //24 bar noir milieu
+        //24 bar noir milieu
 
         //printf("gamestate->bar[0]: %d\n",gamestate->bar[0]);
         //printf("gamestate->bar[1]: %d\n",gamestate->bar[1]);
         //printf("gamestate->out[0]: %d\n",gamestate->out[0]);
         //printf("gamestate->out[1]: %d\n",gamestate->out[1]);
 
-   //initialisation de la position des pions pour les bars
+    //initialisation de la position des pions pour les bars
     for (j=0; j < gamestate->bar[0] ; j++){
         damesTab[z].rectDame->x = 491;
         damesTab[z].rectDame->y = y3;
@@ -592,7 +592,8 @@ void initGameState(SGameState* gamestate){
     int i;
     Square temp;
 
-    for( i = 0; i < 24; i++) // Initialisation de tous les squares à NOBODY et 0 dame
+    for( i = 0; i < 24; i++) 
+    // Initialisation de tous les squares à NOBODY et 0 dame
     {
         temp.nbDames = 0;
         temp.owner = NOBODY;
@@ -949,7 +950,7 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
  int i;
 //notre fonction suppose que tous les moves qui lui sont transmis sont valides
  for (i=0;i < *nbMoves;i++){
-          //cas depuis un square vers un autre
+        //cas depuis un square vers un autre
         if ((moves[i].dest_point != 0 && moves[i].dest_point !=25) && (moves[i].src_point > 0 && moves[i].src_point < 25)){
 
               if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY)
@@ -977,8 +978,8 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
 
         }
 
-          //cas depuis bar vers square
-          else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
+            //cas depuis bar vers square
+            else if (moves[i].src_point == 0 && (moves[i].dest_point < 25 && moves[i].dest_point > 0)){
 
 
                 if(gamestate->board[moves[i].dest_point-1].owner == curPlayer || gamestate->board[moves[i].dest_point-1].owner == NOBODY) // si on mange un pion de l'adversaire ou on capture une nouvelle case
@@ -1012,8 +1013,8 @@ void updateSGameState(SGameState* gamestate, SMove *moves,unsigned int *nbMoves,
                 gamestate->board[moves[i].dest_point-1].owner = curPlayer;
 
           }
-          //cas depuis square vers out
-          else if (moves[i].dest_point == 25 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
+        //cas depuis square vers out
+        else if (moves[i].dest_point == 25 && (moves[i].src_point < 25 && moves[i].src_point > 0)){
 
            if (curPlayer == WHITE){
 
@@ -1325,7 +1326,19 @@ int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, un
                 return(0);
             }
         }
-        
+void freeHitBoxes(Hitbox *hitboxesTab){
+    int i;
+g    for (i=0;i<28;i++){
+      free(hitboxesTab[i].rectHB);
+    }
+}
+
+void freeDamesTab(Dame *damesTab, int nbDames){
+   int i;
+   for (i=0; i<nbDames; i++){
+     free(damesTab[i].rectDame);
+   }
+}        
         
     
 
