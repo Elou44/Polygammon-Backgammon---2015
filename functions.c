@@ -1069,7 +1069,7 @@ void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player 
 }
 
 
-int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices)
+int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices)
 {
     
     /******************************************************
@@ -1079,12 +1079,11 @@ int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, u
     ******************************************************/
     
     SGameState curGameState;
-    curGameState = *gamestate;
+    curGameState = gamestate;
     SMove curMove;
     int i,j,k,l,dist,nbDices,usedDices,totDames; /*unused k si on garde le commentaire plus bas*/
 
-    
-    
+    printf("________________________________curG : %d\n",curGameState.board[0].owner);    
     
     /******************************************************
     **                                                   **

@@ -257,7 +257,7 @@ void updateSGameState(SGameState* gamestate, SMove* moves, unsigned int *nbMoves
 
 void clickToSMoves(int* indiceHBTab, SMove* moves,unsigned int *nbMoves, Player curPlayer);
 
-int arbitre(SGameState* gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices);
+int arbitre(SGameState gamestate, Player curPlayer, int nbMoves, SMove* move, unsigned char* dices);
 
 void drawButton(Button *button, SDL_Surface *screen, unsigned int t, SDL_Surface *surfText);
 

@@ -780,7 +780,7 @@ int main ( int argc, char** argv )
 			                 j1PlayTurn(&gamestate, dices, moves, &nbMoves, j1Tries);
 
 
-                            if(arbitre(&gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
                             {
 
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -838,7 +838,7 @@ int main ( int argc, char** argv )
                             printf("nbMoves WHITE : %d\n",nbMoves);
 
 
-                            if(arbitre(&gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
                             {
 
                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -1101,7 +1101,7 @@ int main ( int argc, char** argv )
                                         {
                                             printf("nbMoves WHITE : %d\n",nbMoves);
 
-                                            if(arbitre(&gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
                                             {
 
                                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
@@ -1152,7 +1152,7 @@ int main ( int argc, char** argv )
                                         else if(curPlayer == BLACK && gameMode == MHvsH)
                                         {
                                           
-                                            if(arbitre(&gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
+                                            if(arbitre(gamestate, curPlayer, nbMoves, moves, dices) == 0) // Si l'arbitre accepte les mouvements
                                             {
 
                                                 updateSGameState(&gamestate,moves,&nbMoves,curPlayer);
